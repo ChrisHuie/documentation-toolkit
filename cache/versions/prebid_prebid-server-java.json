@@ -1,0 +1,29 @@
+{
+  "repo_name": "prebid/prebid-server-java",
+  "default_branch": "master",
+  "major_versions": {
+    "3": {
+      "major": 3,
+      "first_version": "3.0.0",
+      "last_version": "3.27.0"
+    },
+    "2": {
+      "major": 2,
+      "first_version": "2.0.0",
+      "last_version": "2.15.0"
+    },
+    "1": {
+      "major": 1,
+      "first_version": "1.17.1",
+      "last_version": "1.130.0"
+    }
+  },
+  "latest_versions": [
+    "3.27.0",
+    "3.26.0",
+    "3.25.0",
+    "3.24.0",
+    "3.23.0"
+  ],
+  "last_updated": "2025-06-25T19:49:03.710053+00:00"
+}

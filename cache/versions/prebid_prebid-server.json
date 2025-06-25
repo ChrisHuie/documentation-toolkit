@@ -1,0 +1,29 @@
+{
+  "repo_name": "prebid/prebid-server",
+  "default_branch": "master",
+  "major_versions": {
+    "3": {
+      "major": 3,
+      "first_version": "v3.0.0",
+      "last_version": "v3.19.0"
+    },
+    "2": {
+      "major": 2,
+      "first_version": "v2.0.0",
+      "last_version": "v2.32.0"
+    },
+    "0": {
+      "major": 0,
+      "first_version": "0.0.1",
+      "last_version": "v0.275.0"
+    }
+  },
+  "latest_versions": [
+    "v3.19.0",
+    "v3.18.0",
+    "v3.17.0",
+    "v3.16.0",
+    "v3.15.0"
+  ],
+  "last_updated": "2025-06-25T19:49:31.751204+00:00"
+}

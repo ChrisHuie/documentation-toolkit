@@ -229,9 +229,12 @@ class TestMainFunction:
         assert exc_info.value.code == 0
 
     @patch("src.repo_modules_by_version.main.GitHubClient")
+    @patch("src.repo_modules_by_version.main.get_repo_config_with_versions")
     @patch("src.repo_modules_by_version.main.get_available_repos")
     @patch("sys.argv", ["main.py", "--repo", "test-repo", "--version", "v1.0.0"])
-    def test_main_with_preconfigured_repo(self, mock_get_repos, mock_github_client):
+    def test_main_with_preconfigured_repo(
+        self, mock_get_repos, mock_get_config, mock_github_client
+    ):
         """Test main function with preconfigured repository."""
         mock_get_repos.return_value = {
             "test-repo": RepoConfig(
@@ -242,6 +245,14 @@ class TestMainFunction:
                 parser_type="default",
             )
         }
+
+        mock_get_config.return_value = RepoConfig(
+            repo="test/repo",
+            directory="docs",
+            description="Test repository",
+            versions=["v1.0.0"],
+            parser_type="default",
+        )
 
         mock_client_instance = Mock()
         mock_client_instance.fetch_repository_data.return_value = {
