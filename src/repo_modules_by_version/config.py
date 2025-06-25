@@ -2,9 +2,13 @@
 Repository configuration system
 """
 
-from dataclasses import dataclass
+import json
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 from .github_client import GitHubClient
+
+CONFIG_FILE = Path(__file__).parent / "repos.json"
 
 
 @dataclass
@@ -18,43 +22,18 @@ class RepoConfig:
     parser_type: str = "default"  # Parser type identifier
 
 
+def _load_repos() -> dict[str, dict]:
+    """Load repository configurations from JSON file."""
+    if not CONFIG_FILE.exists():
+        return {}
+    with open(CONFIG_FILE) as f:
+        return json.load(f)
+
+
 def get_available_repos() -> dict[str, RepoConfig]:
     """Get dictionary of available preconfigured repositories."""
-
-    # Use static versions to avoid rate limiting during repo listing
-    # Versions will be dynamically fetched when a specific repo is selected
-    repos = {
-        "prebid-js": RepoConfig(
-            repo="prebid/Prebid.js",
-            directory="modules",
-            description="Prebid.js - Header bidding wrapper for publishers",
-            versions=["master"],  # Will be dynamically updated when selected
-            parser_type="default",
-        ),
-        "prebid-server-java": RepoConfig(
-            repo="prebid/prebid-server-java",
-            directory="src/main/java/org/prebid/server",
-            description="Prebid Server Java implementation",
-            versions=["master"],  # Will be dynamically updated when selected
-            parser_type="default",
-        ),
-        "prebid-server": RepoConfig(
-            repo="prebid/prebid-server",
-            directory="adapters",
-            description="Prebid Server Go implementation",
-            versions=["master"],  # Will be dynamically updated when selected
-            parser_type="default",
-        ),
-        "prebid-docs": RepoConfig(
-            repo="prebid/prebid.github.io",
-            directory="dev-docs",
-            description="Prebid documentation site",
-            versions=["master"],  # Special case - no semantic versioning
-            parser_type="markdown",
-        ),
-    }
-
-    return repos
+    repos_data = _load_repos()
+    return {name: RepoConfig(**data) for name, data in repos_data.items()}
 
 
 def get_repo_config_with_versions(name: str) -> RepoConfig:
@@ -87,9 +66,11 @@ def get_repo_config_with_versions(name: str) -> RepoConfig:
 
 
 def add_repo_config(name: str, config: RepoConfig) -> None:
-    """Add a new repository configuration (runtime only)."""
-    # This could be extended to persist configurations
-    pass
+    """Add a new repository configuration and save to file."""
+    repos = _load_repos()
+    repos[name] = asdict(config)
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(repos, f, indent=4)
 
 
 def get_repo_config(name: str) -> RepoConfig:

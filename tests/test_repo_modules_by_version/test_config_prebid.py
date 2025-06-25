@@ -146,7 +146,7 @@ class TestPrebidRepoConfig:
         """Test that all repository configurations have required fields."""
         repos = get_available_repos()
 
-        for name, config in repos.items():
+        for config in repos.values():
             assert isinstance(config.repo, str)
             assert "/" in config.repo  # Should be in owner/repo format
             assert isinstance(config.directory, str)

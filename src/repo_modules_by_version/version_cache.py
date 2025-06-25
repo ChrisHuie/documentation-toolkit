@@ -24,7 +24,6 @@ class RepoVersionCache:
     default_branch: str
     major_versions: dict[int, MajorVersionInfo]
     latest_versions: list[str]  # 5 most recent versions
-    last_updated: str  # ISO timestamp
 
 
 class VersionCacheManager:
@@ -67,7 +66,6 @@ class VersionCacheManager:
                 default_branch=data["default_branch"],
                 major_versions=major_versions,
                 latest_versions=data["latest_versions"],
-                last_updated=data["last_updated"],
             )
         except (json.JSONDecodeError, KeyError, TypeError):
             # Invalid cache file, return None

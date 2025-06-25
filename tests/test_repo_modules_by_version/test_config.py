@@ -2,6 +2,9 @@
 Tests for the config module.
 """
 
+import json
+from unittest.mock import mock_open, patch
+
 import pytest
 
 from src.repo_modules_by_version.config import (
@@ -10,6 +13,28 @@ from src.repo_modules_by_version.config import (
     get_available_repos,
     get_repo_config,
 )
+
+# Sample JSON content to be used in mocks
+SAMPLE_REPOS_JSON = """
+{
+    "prebid-js": {
+        "repo": "prebid/Prebid.js",
+        "directory": "modules",
+        "description": "Prebid.js - Header bidding wrapper for publishers",
+        "versions": ["master"],
+        "parser_type": "default"
+    },
+    "prebid-server": {
+        "repo": "prebid/prebid-server",
+        "directory": "adapters",
+        "description": "Prebid Server Go implementation",
+        "versions": ["master"],
+        "parser_type": "default"
+    }
+}
+"""
+
+MOCK_CONFIG_PATH = "src.repo_modules_by_version.config.CONFIG_FILE"
 
 
 class TestRepoConfig:
@@ -41,64 +66,104 @@ class TestRepoConfig:
         assert config.parser_type == "markdown"
 
 
+@patch(f"{MOCK_CONFIG_PATH}.exists", return_value=True)
+@patch("builtins.open", new_callable=mock_open, read_data=SAMPLE_REPOS_JSON)
 class TestGetAvailableRepos:
-    """Test get_available_repos function."""
+    """Test get_available_repos function with mocked file."""
 
-    def test_returns_dict_of_repo_configs(self):
+    def test_returns_dict_of_repo_configs(self, mock_file, mock_exists):
         """Test that get_available_repos returns a dictionary of RepoConfig objects."""
         repos = get_available_repos()
         assert isinstance(repos, dict)
+        assert len(repos) == 2
 
         for name, config in repos.items():
             assert isinstance(name, str)
             assert isinstance(config, RepoConfig)
 
-    def test_contains_expected_default_repos(self):
-        """Test that default repositories are included."""
+    def test_contains_expected_repos(self, mock_file, mock_exists):
+        """Test that the correct repos are loaded from the mock JSON."""
         repos = get_available_repos()
-
-        # Check that we have some repositories configured
-        assert len(repos) > 0
-
-        # Check that each repo has the required fields
-        for config in repos.values():
-            assert config.repo
-            assert config.directory is not None  # Can be empty string
-            assert config.description
-            assert isinstance(config.versions, list)
-            assert config.parser_type
+        assert "prebid-js" in repos
+        assert "prebid-server" in repos
+        assert repos["prebid-js"].repo == "prebid/Prebid.js"
 
 
+@patch(f"{MOCK_CONFIG_PATH}.exists", return_value=True)
+@patch("builtins.open", new_callable=mock_open, read_data=SAMPLE_REPOS_JSON)
 class TestGetRepoConfig:
-    """Test get_repo_config function."""
+    """Test get_repo_config function with mocked file."""
 
-    def test_get_existing_repo_config(self):
+    def test_get_existing_repo_config(self, mock_file, mock_exists):
         """Test getting configuration for an existing repository."""
-        available_repos = get_available_repos()
-        if available_repos:
-            repo_name = list(available_repos.keys())[0]
-            config = get_repo_config(repo_name)
-            assert isinstance(config, RepoConfig)
-            assert config == available_repos[repo_name]
+        config = get_repo_config("prebid-js")
+        assert isinstance(config, RepoConfig)
+        assert config.repo == "prebid/Prebid.js"
 
-    def test_get_nonexistent_repo_config_raises_error(self):
+    def test_get_nonexistent_repo_config_raises_error(self, mock_file, mock_exists):
         """Test that getting a non-existent repo raises ValueError."""
         with pytest.raises(ValueError, match="Repository 'nonexistent' not found"):
             get_repo_config("nonexistent")
 
 
+@patch(f"{MOCK_CONFIG_PATH}.exists", return_value=True)
+@patch("builtins.open", new_callable=mock_open, read_data=SAMPLE_REPOS_JSON)
 class TestAddRepoConfig:
-    """Test add_repo_config function."""
+    """Test add_repo_config function with mocked file."""
 
-    def test_add_repo_config_exists(self):
-        """Test that add_repo_config function exists and can be called."""
-        config = RepoConfig(
-            repo="test/repo",
-            directory="docs",
-            description="Test",
-            versions=["v1.0.0"],
+    def test_add_new_repo_config(self, mock_file, mock_exists):
+        """Test that add_repo_config writes the new config to the file."""
+        new_config = RepoConfig(
+            repo="test/new-repo",
+            directory="src",
+            description="A new test repo",
+            versions=["1.0"],
+            parser_type="default",
         )
 
-        # Function should exist and not raise an error when called
-        # Currently it's a placeholder implementation
-        add_repo_config("test", config)
+        add_repo_config("new-repo", new_config)
+
+        # Check that open was called in write mode to the correct path
+        # The mock_open needs to be configured to handle the path object
+        mock_file.assert_called_with("src/repo_modules_by_version/repos.json", "w")
+
+        # Check that the written data is correct
+        handle = mock_file()
+        written_data = handle.write.call_args[0][0]
+
+        expected_data = json.loads(SAMPLE_REPOS_JSON)
+        expected_data["new-repo"] = {
+            "repo": "test/new-repo",
+            "directory": "src",
+            "description": "A new test repo",
+            "versions": ["1.0"],
+            "parser_type": "default",
+        }
+
+        assert json.loads(written_data) == expected_data
+
+    def test_update_existing_repo_config(self, mock_file, mock_exists):
+        """Test that add_repo_config updates an existing config."""
+        updated_config = RepoConfig(
+            repo="prebid/Prebid.js",
+            directory="modules/updated",
+            description="Updated description",
+            versions=["master", "9.0"],
+            parser_type="default",
+        )
+
+        add_repo_config("prebid-js", updated_config)
+
+        handle = mock_file()
+        written_data = handle.write.call_args[0][0]
+
+        expected_data = json.loads(SAMPLE_REPOS_JSON)
+        expected_data["prebid-js"] = {
+            "repo": "prebid/Prebid.js",
+            "directory": "modules/updated",
+            "description": "Updated description",
+            "versions": ["master", "9.0"],
+            "parser_type": "default",
+        }
+
+        assert json.loads(written_data) == expected_data

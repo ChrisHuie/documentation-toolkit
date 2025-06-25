@@ -161,9 +161,9 @@ class ParserFactory:
     def get_parser(self, config: RepoConfig) -> BaseParser:
         """Get appropriate parser for the given configuration."""
         parser_class = self._parsers.get(config.parser_type, DefaultParser)
-        return parser_class(config)
+        return parser_class(config)  # type: ignore[abstract]
 
-    def register_parser(self, parser_type: str, parser_class: type) -> None:
+    def register_parser(self, parser_type: str, parser_class: type[BaseParser]) -> None:
         """Register a new parser type."""
         if not issubclass(parser_class, BaseParser):
             raise ValueError("Parser class must inherit from BaseParser")
