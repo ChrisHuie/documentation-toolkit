@@ -4,11 +4,7 @@ Tests for version caching system
 
 import json
 import tempfile
-from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import Mock, patch
-
-import pytest
 
 from src.repo_modules_by_version.version_cache import (
     MajorVersionInfo,
@@ -44,7 +40,6 @@ class TestRepoVersionCache:
             default_branch="master",
             major_versions=major_versions,
             latest_versions=["9.51.0", "9.50.0", "9.49.1"],
-            last_updated="2025-06-25T19:48:09.772470+00:00",
         )
 
         assert cache.repo_name == "test/repo"
@@ -73,7 +68,6 @@ class TestVersionCacheManager:
             default_branch="master",
             major_versions=self.major_versions,
             latest_versions=["9.51.0", "9.50.0", "9.49.1", "9.49.0", "9.48.0"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
 
     def test_cache_manager_initialization_with_custom_dir(self):
@@ -155,7 +149,6 @@ class TestVersionCacheManager:
             default_branch="main",
             major_versions={},
             latest_versions=[],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
 
         needs_update = self.cache_manager.needs_update(empty_cache, 1)
@@ -182,7 +175,6 @@ class TestVersionCacheManager:
             default_branch="main",
             major_versions={1: MajorVersionInfo(1, "1.0.0", "1.5.0")},
             latest_versions=["1.5.0"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
         self.cache_manager.save_cache(cache2)
 
@@ -210,7 +202,6 @@ class TestVersionCacheManager:
         assert "default_branch" in data
         assert "major_versions" in data
         assert "latest_versions" in data
-        assert "last_updated" in data
 
         # Verify major versions are string keys (for JSON compatibility)
         assert "9" in data["major_versions"]

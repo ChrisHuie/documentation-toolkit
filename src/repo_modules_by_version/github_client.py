@@ -4,7 +4,6 @@ GitHub API client for fetching repository data
 
 import os
 import re
-from datetime import UTC, datetime
 from typing import Any
 
 from github import Github, GithubException
@@ -222,7 +221,6 @@ class GitHubClient:
             latest_versions.sort(
                 key=lambda x: (x["major"], x["minor"], x["patch"]), reverse=True
             )
-            latest_5 = [v["name"] for v in latest_versions[:5]]
 
             # Check if we can use cached data or need to rebuild
             if cache and not self.cache_manager.needs_update(
@@ -235,7 +233,7 @@ class GitHubClient:
 
                 # Build chronological version list with context
                 return self._build_chronological_version_list(
-                    default_branch, latest_5, updated_cache
+                    default_branch, updated_cache.latest_versions, updated_cache
                 )
 
             # Need to rebuild cache - fetch more comprehensive data
@@ -309,7 +307,6 @@ class GitHubClient:
             default_branch=default_branch,
             major_versions=major_version_info,
             latest_versions=latest_5,
-            last_updated=datetime.now(UTC).isoformat(),
         )
         self.cache_manager.save_cache(cache)
 
@@ -363,9 +360,6 @@ class GitHubClient:
             default_branch=cache.default_branch,
             major_versions=updated_major_versions,
             latest_versions=[v["name"] for v in latest_versions[:5]],
-            last_updated=(
-                datetime.now(UTC).isoformat() if cache_updated else cache.last_updated
-            ),
         )
 
         # Save if updated

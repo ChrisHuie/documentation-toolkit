@@ -3,10 +3,7 @@ Tests for GitHub client caching functionality
 """
 
 import tempfile
-from datetime import datetime, timezone
 from unittest.mock import Mock, patch
-
-import pytest
 
 from src.repo_modules_by_version.github_client import GitHubClient
 from src.repo_modules_by_version.version_cache import (
@@ -49,7 +46,7 @@ class TestGitHubClientCaching:
             mock_tag = Mock()
             mock_tag.name = tag_name
             mock_tags.append(mock_tag)
-        
+
         self.mock_repo.get_tags.return_value = mock_tags
         self.mock_cache_manager.load_cache.return_value = None  # No cache
 
@@ -76,7 +73,6 @@ class TestGitHubClientCaching:
                 8: MajorVersionInfo(8, "8.0.0", "8.52.2"),
             },
             latest_versions=["9.51.0", "9.50.0", "9.49.1", "9.49.0", "9.48.0"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
         self.client.cache_manager.save_cache(cache)
 
@@ -86,7 +82,7 @@ class TestGitHubClientCaching:
             mock_tag = Mock()
             mock_tag.name = tag_name
             mock_tags.append(mock_tag)
-        
+
         self.mock_repo.get_tags.return_value = iter(mock_tags)
         self.mock_cache_manager.load_cache.return_value = cache
         self.mock_cache_manager.needs_update.return_value = False
@@ -108,7 +104,6 @@ class TestGitHubClientCaching:
                 8: MajorVersionInfo(8, "8.0.0", "8.52.2"),
             },
             latest_versions=["8.52.2", "8.52.1", "8.52.0"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
         self.client.cache_manager.save_cache(cache)
 
@@ -118,7 +113,7 @@ class TestGitHubClientCaching:
             mock_tag = Mock()
             mock_tag.name = tag_name
             mock_tags.append(mock_tag)
-        
+
         self.mock_repo.get_tags.return_value = mock_tags
         self.mock_cache_manager.load_cache.return_value = cache
         self.mock_cache_manager.needs_update.return_value = True
@@ -142,7 +137,6 @@ class TestGitHubClientCaching:
                 7: MajorVersionInfo(7, "7.0.0", "7.54.5"),  # Should not update
             },
             latest_versions=["9.50.0", "9.49.1"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
 
         # Mock latest versions with newer releases
@@ -155,7 +149,7 @@ class TestGitHubClientCaching:
         with patch("builtins.print") as mock_print:
             # Mock the cache manager save method
             self.mock_cache_manager.save_cache = Mock()
-            
+
             updated_cache = self.client._update_recent_major_versions(
                 cache, latest_versions, 9
             )
@@ -167,7 +161,7 @@ class TestGitHubClientCaching:
 
         # Should print update messages
         assert mock_print.call_count == 2
-        
+
         # Should have called save_cache since updates were made
         self.mock_cache_manager.save_cache.assert_called_once()
 
@@ -181,7 +175,6 @@ class TestGitHubClientCaching:
                 8: MajorVersionInfo(8, "8.0.0", "8.52.2"),
             },
             latest_versions=["9.51.0", "9.50.0"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
 
         # Mock latest versions (same as cached)
@@ -193,7 +186,7 @@ class TestGitHubClientCaching:
         with patch("builtins.print") as mock_print:
             # Mock the cache manager save method
             self.mock_cache_manager.save_cache = Mock()
-            
+
             updated_cache = self.client._update_recent_major_versions(
                 cache, latest_versions, 9
             )
@@ -204,7 +197,7 @@ class TestGitHubClientCaching:
 
         # Should not print update messages
         assert mock_print.call_count == 0
-        
+
         # Should not have called save_cache since no updates were made
         self.mock_cache_manager.save_cache.assert_not_called()
 
@@ -219,7 +212,6 @@ class TestGitHubClientCaching:
                 7: MajorVersionInfo(7, "7.0.0", "7.54.5"),
             },
             latest_versions=["9.51.0", "9.50.0", "9.49.1"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
 
         latest_5 = ["9.51.0", "9.50.0", "9.49.1", "9.49.0", "9.48.0"]
@@ -247,7 +239,6 @@ class TestGitHubClientCaching:
                 9: MajorVersionInfo(9, "9.0.0", "9.51.0"),  # Same as current latest
             },
             latest_versions=["9.51.0", "9.50.0"],
-            last_updated=datetime.now(timezone.utc).isoformat(),
         )
 
         latest_5 = ["9.51.0", "9.50.0", "9.49.1"]
@@ -274,7 +265,7 @@ class TestGitHubClientCaching:
             mock_tag = Mock()
             mock_tag.name = tag_name
             mock_tags.append(mock_tag)
-        
+
         self.mock_repo.get_tags.return_value = mock_tags
         self.mock_cache_manager.load_cache.return_value = None  # No cache
 

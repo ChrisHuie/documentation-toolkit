@@ -1,0 +1,30 @@
+{
+    "prebid-js": {
+        "repo": "prebid/Prebid.js",
+        "directory": "modules",
+        "description": "Prebid.js - Header bidding wrapper for publishers",
+        "versions": ["master"],
+        "parser_type": "default"
+    },
+    "prebid-server-java": {
+        "repo": "prebid/prebid-server-java",
+        "directory": "src/main/java/org/prebid/server",
+        "description": "Prebid Server Java implementation",
+        "versions": ["master"],
+        "parser_type": "default"
+    },
+    "prebid-server": {
+        "repo": "prebid/prebid-server",
+        "directory": "adapters",
+        "description": "Prebid Server Go implementation",
+        "versions": ["master"],
+        "parser_type": "default"
+    },
+    "prebid-docs": {
+        "repo": "prebid/prebid.github.io",
+        "directory": "dev-docs",
+        "description": "Prebid documentation site",
+        "versions": ["master"],
+        "parser_type": "markdown"
+    }
+}

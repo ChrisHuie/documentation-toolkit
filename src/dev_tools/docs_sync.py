@@ -92,7 +92,7 @@ class DocumentationSyncer:
 
         # Find the most recently modified file with content
         most_recent = None
-        most_recent_time = 0
+        most_recent_time = 0.0
 
         for name, path in self.files.items():
             if path.exists() and contents[name].strip():

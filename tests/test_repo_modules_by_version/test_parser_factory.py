@@ -27,7 +27,7 @@ class TestBaseParser:
         )
 
         with pytest.raises(TypeError):
-            BaseParser(config)
+            BaseParser(config)  # type: ignore[abstract]
 
     def test_base_parser_subclass_implementation(self):
         """Test that subclasses must implement parse method."""
@@ -43,7 +43,7 @@ class TestBaseParser:
         )
 
         with pytest.raises(TypeError):
-            IncompleteParser(config)
+            IncompleteParser(config)  # type: ignore[abstract]
 
 
 class TestDefaultParser:
