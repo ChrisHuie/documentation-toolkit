@@ -9,7 +9,7 @@ import sys
 from dotenv import load_dotenv
 from loguru import logger
 
-from .config import RepoConfig, get_available_repos
+from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
 from .github_client import GitHubClient
 from .parser_factory import ParserFactory
 
@@ -129,7 +129,7 @@ def main():
         if repos:
             logger.info("Available repositories:")
             for name, config in repos.items():
-                logger.info("- %s: %s", name, config.repo)
+                logger.info(f"- {name}: {config.repo}")
         else:
             logger.error("No preconfigured repositories available.")
         sys.exit(0)
@@ -143,7 +143,7 @@ def main():
         repos = get_available_repos()
         if args.repo in repos:
             repo_name = args.repo
-            repo_config = repos[args.repo]
+            repo_config = get_repo_config_with_versions(args.repo)
         else:
             # Treat as custom GitHub repo
             repo_config = RepoConfig(
@@ -158,8 +158,8 @@ def main():
         if not repo_name:
             sys.exit(0)
 
-        repos = get_available_repos()
-        repo_config = repos[repo_name]
+        # Get repo config with dynamic versions
+        repo_config = get_repo_config_with_versions(repo_name)
 
     # Determine version
     version = args.version

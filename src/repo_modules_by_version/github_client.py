@@ -3,11 +3,15 @@ GitHub API client for fetching repository data
 """
 
 import os
+import re
+from datetime import UTC, datetime
 from typing import Any
 
 from github import Github, GithubException
 from github.ContentFile import ContentFile
 from github.Repository import Repository
+
+from .version_cache import MajorVersionInfo, RepoVersionCache, VersionCacheManager
 
 
 class GitHubClient:
@@ -21,6 +25,9 @@ class GitHubClient:
         else:
             # Use unauthenticated client (rate limited)
             self.github = Github()
+
+        # Initialize version cache manager
+        self.cache_manager = VersionCacheManager()
 
     def fetch_repository_data(
         self, repo_name: str, version: str, directory: str
@@ -174,3 +181,244 @@ class GitHubClient:
             raise Exception(
                 f"Error listing tags: {e.data.get('message', str(e))}"
             ) from e
+
+    def get_semantic_versions(self, repo_name: str) -> list[str]:
+        """
+        Get semantic versions for a repository with caching.
+        Returns master/main branch + 5 latest versions + first/last of each major release.
+        Uses caching to minimize API calls - only updates when new major versions are detected.
+        """
+        try:
+            # Try to load from cache first
+            cache = self.cache_manager.load_cache(repo_name)
+
+            # Get basic repo info (always needed)
+            repo = self.github.get_repo(repo_name)
+            default_branch = repo.default_branch
+
+            # Get recent tags to check for new versions (minimal API call)
+            recent_tags = list(repo.get_tags())[:10]  # Only get first 10 tags
+
+            # Parse recent tags to find current latest major version
+            semver_pattern = re.compile(r"^v?(\d+)\.(\d+)\.(\d+)(?:-.*)?$")
+            current_latest_major = 0
+            latest_versions = []
+
+            for tag in recent_tags:
+                match = semver_pattern.match(tag.name)
+                if match:
+                    major, minor, patch = map(int, match.groups())
+                    current_latest_major = max(current_latest_major, major)
+                    latest_versions.append(
+                        {
+                            "name": tag.name,
+                            "major": major,
+                            "minor": minor,
+                            "patch": patch,
+                        }
+                    )
+
+            # Sort latest versions
+            latest_versions.sort(
+                key=lambda x: (x["major"], x["minor"], x["patch"]), reverse=True
+            )
+            latest_5 = [v["name"] for v in latest_versions[:5]]
+
+            # Check if we can use cached data or need to rebuild
+            if cache and not self.cache_manager.needs_update(
+                cache, current_latest_major
+            ):
+                # Update current and previous major versions if they have newer releases
+                updated_cache = self._update_recent_major_versions(
+                    cache, latest_versions, current_latest_major
+                )
+
+                # Build chronological version list with context
+                return self._build_chronological_version_list(
+                    default_branch, latest_5, updated_cache
+                )
+
+            # Need to rebuild cache - fetch more comprehensive data
+            return self._rebuild_version_cache(
+                repo_name, repo, default_branch, semver_pattern
+            )
+
+        except GithubException as e:
+            raise Exception(
+                f"Error getting semantic versions: {e.data.get('message', str(e))}"
+            ) from e
+
+    def _rebuild_version_cache(
+        self, repo_name: str, repo, default_branch: str, semver_pattern
+    ) -> list[str]:
+        """Rebuild version cache from scratch."""
+        print(f"Rebuilding version cache for {repo_name}...")
+
+        # Get comprehensive tag list
+        all_tags = list(repo.get_tags())
+        semantic_tags = []
+
+        # Process all tags to get complete picture
+        for tag in all_tags:
+            match = semver_pattern.match(tag.name)
+            if match:
+                major, minor, patch = map(int, match.groups())
+                semantic_tags.append(
+                    {
+                        "name": tag.name,
+                        "major": major,
+                        "minor": minor,
+                        "patch": patch,
+                    }
+                )
+
+        # Sort by version
+        semantic_tags.sort(
+            key=lambda x: (x["major"], x["minor"], x["patch"]), reverse=True
+        )
+
+        # Build major version mapping
+        major_versions: dict[int, list] = {}
+        for tag in semantic_tags:
+            major = tag["major"]
+            if major not in major_versions:
+                major_versions[major] = []
+            major_versions[major].append(tag)
+
+        # Create major version info
+        major_version_info = {}
+        for major, tags_in_major in major_versions.items():
+            # Sort by version (newest first)
+            tags_in_major.sort(
+                key=lambda x: (x["major"], x["minor"], x["patch"]), reverse=True
+            )
+
+            first_version = tags_in_major[-1]["name"]  # Oldest (lowest version)
+            last_version = tags_in_major[0]["name"]  # Newest (highest version)
+
+            major_version_info[major] = MajorVersionInfo(
+                major=major, first_version=first_version, last_version=last_version
+            )
+
+        # Get latest 5 versions overall
+        latest_5 = [tag["name"] for tag in semantic_tags[:5]]
+
+        # Save to cache
+        cache = RepoVersionCache(
+            repo_name=repo_name,
+            default_branch=default_branch,
+            major_versions=major_version_info,
+            latest_versions=latest_5,
+            last_updated=datetime.now(UTC).isoformat(),
+        )
+        self.cache_manager.save_cache(cache)
+
+        # Build chronological version list with context
+        return self._build_chronological_version_list(default_branch, latest_5, cache)
+
+    def _update_recent_major_versions(
+        self, cache: RepoVersionCache, latest_versions: list, current_latest_major: int
+    ) -> RepoVersionCache:
+        """
+        Update current and previous major versions' last versions if they have newer releases.
+        Only updates current major (maintenance active) and previous major (maintenance period).
+        """
+        updated_major_versions = cache.major_versions.copy()
+        cache_updated = False
+
+        # Check current major and previous major only
+        majors_to_check = [current_latest_major, current_latest_major - 1]
+
+        for major in majors_to_check:
+            if major < 0 or major not in cache.major_versions:
+                continue
+
+            # Find latest version for this major in recent releases
+            latest_for_major = None
+            for version_info in latest_versions:
+                if version_info["major"] == major:
+                    if latest_for_major is None or (
+                        version_info["minor"],
+                        version_info["patch"],
+                    ) > (latest_for_major["minor"], latest_for_major["patch"]):
+                        latest_for_major = version_info
+
+            if latest_for_major:
+                cached_info = cache.major_versions[major]
+                if latest_for_major["name"] != cached_info.last_version:
+                    print(
+                        f"Updating {cache.repo_name} v{major}.x: {cached_info.last_version} → {latest_for_major['name']}"
+                    )
+
+                    updated_major_versions[major] = MajorVersionInfo(
+                        major=cached_info.major,
+                        first_version=cached_info.first_version,  # Never change
+                        last_version=latest_for_major["name"],  # Update to newer
+                    )
+                    cache_updated = True
+
+        # Create updated cache
+        updated_cache = RepoVersionCache(
+            repo_name=cache.repo_name,
+            default_branch=cache.default_branch,
+            major_versions=updated_major_versions,
+            latest_versions=[v["name"] for v in latest_versions[:5]],
+            last_updated=(
+                datetime.now(UTC).isoformat() if cache_updated else cache.last_updated
+            ),
+        )
+
+        # Save if updated
+        if cache_updated:
+            self.cache_manager.save_cache(updated_cache)
+
+        return updated_cache
+
+    def _build_chronological_version_list(
+        self, default_branch: str, latest_5: list[str], cache: RepoVersionCache
+    ) -> list[str]:
+        """
+        Build a chronologically ordered version list with contextual labels.
+        Order: master -> latest 5 -> major versions (newest to oldest)
+        """
+        versions = [default_branch]
+
+        # Add latest 5 versions with context for the most recent
+        for i, version in enumerate(latest_5):
+            if i == 0:
+                versions.append(f"{version} (current latest)")
+            else:
+                versions.append(version)
+
+        # Sort major versions by major number (newest first)
+        sorted_majors = sorted(
+            cache.major_versions.items(), key=lambda x: int(x[0]), reverse=True
+        )
+
+        # Add first/last of each major version with context
+        for major_str, major_info in sorted_majors:
+            major_num = int(major_str)
+
+            # Add last version of this major (if not already included)
+            if major_info.last_version not in versions:
+                # Check if this is already labeled as current latest
+                version_without_label = major_info.last_version
+                already_has_current_label = any(
+                    v.startswith(f"{version_without_label} (current latest)")
+                    for v in versions
+                )
+
+                if not already_has_current_label:
+                    # Only add if it's not already the current latest
+                    versions.append(
+                        f"{major_info.last_version} (latest v{major_num}.x)"
+                    )
+
+            # Add first version of this major (if not already included and different from last)
+            if (
+                major_info.first_version not in versions
+                and major_info.first_version != major_info.last_version.split(" ")[0]
+            ):  # Remove context for comparison
+                versions.append(f"{major_info.first_version} (first v{major_num}.x)")
+
+        return versions
