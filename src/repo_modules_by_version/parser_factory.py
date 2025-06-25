@@ -5,7 +5,7 @@ Parser factory for creating repository-specific parsers
 from abc import ABC, abstractmethod
 from typing import Any
 
-from config import RepoConfig
+from .config import RepoConfig
 
 
 class BaseParser(ABC):

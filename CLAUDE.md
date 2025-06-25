@@ -2,12 +2,6 @@
 
 This file contains instructions and context for Claude when working on this project.
 
-This file contains instructions and context for Claude when working on this project.
-
-This file contains instructions and context for Gemini when working on this project.
-
-This file contains instructions and context for Claude when working on this project.
-
 ## Project Overview
 Collection of tools for working with documentation and repository analysis.
 
@@ -101,8 +95,6 @@ This script performs the following steps automatically:
 4. **Run tests** - Executes pytest test suite
 5. **Update README** - Updates timestamp and ensures README exists
 6. **Sync docs** - Syncs all agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)
-
-**NOTE**: Automatic file cleanup has been removed for safety after accidentally deleting .git directory.
 
 ### When to Run Validation
 - After completing ALL file changes for a task

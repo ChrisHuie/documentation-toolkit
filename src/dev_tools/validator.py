@@ -14,18 +14,14 @@ from .docs_sync import DocumentationSyncer
 class ValidationResult:
     """Result of a validation step."""
 
-    def __init__(
-        self, name: str, passed: bool, output: str = "", critical: bool = True
-    ):
+    def __init__(self, name: str, passed: bool, output: str = ""):
         self.name = name
         self.passed = passed
         self.output = output
-        self.critical = critical
 
     def __str__(self) -> str:
         status = "✅ PASSED" if self.passed else "❌ FAILED"
-        criticality = "" if self.critical else " (non-critical)"
-        return f"{status} {self.name}{criticality}"
+        return f"{status} {self.name}"
 
 
 class ProjectValidator:
@@ -53,17 +49,13 @@ class ProjectValidator:
         success, output = self.run_command(
             ["uv", "run", "ruff", "format", "."], "Formatting with ruff"
         )
-        results.append(
-            ValidationResult("Code formatting (ruff)", success, output, critical=True)
-        )
+        results.append(ValidationResult("Code formatting (ruff)", success, output))
 
         # Black formatting (backup)
         success, output = self.run_command(
             ["uv", "run", "black", "."], "Formatting with black"
         )
-        results.append(
-            ValidationResult("Code formatting (black)", success, output, critical=False)
-        )
+        results.append(ValidationResult("Code formatting (black)", success, output))
 
         return results
 
@@ -72,21 +64,21 @@ class ProjectValidator:
         success, output = self.run_command(
             ["uv", "run", "ruff", "check", "."], "Linting with ruff"
         )
-        return ValidationResult("Code linting", success, output, critical=True)
+        return ValidationResult("Code linting", success, output)
 
     def type_check(self) -> ValidationResult:
         """Run type checking with mypy."""
         success, output = self.run_command(
             ["uv", "run", "mypy", "src/"], "Type checking with mypy"
         )
-        return ValidationResult("Type checking", success, output, critical=False)
+        return ValidationResult("Type checking", success, output)
 
     def run_tests(self) -> ValidationResult:
         """Run tests with pytest."""
         success, output = self.run_command(
             ["uv", "run", "pytest", "-v"], "Running tests"
         )
-        return ValidationResult("Tests", success, output, critical=False)
+        return ValidationResult("Tests", success, output)
 
     def update_readme_timestamp(self) -> ValidationResult:
         """Update README.md with current timestamp."""
@@ -94,9 +86,7 @@ class ProjectValidator:
 
         try:
             if not readme_path.exists():
-                return ValidationResult(
-                    "README update", False, "README.md not found", critical=True
-                )
+                return ValidationResult("README update", False, "README.md not found")
 
             content = readme_path.read_text()
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -119,7 +109,7 @@ class ProjectValidator:
             )
 
         except Exception as e:
-            return ValidationResult("README update", False, str(e), critical=True)
+            return ValidationResult("README update", False, str(e))
 
     def sync_documentation(self) -> ValidationResult:
         """Sync agent documentation files."""
@@ -135,7 +125,7 @@ class ProjectValidator:
             return ValidationResult("Documentation sync", True, output)
 
         except Exception as e:
-            return ValidationResult("Documentation sync", False, str(e), critical=True)
+            return ValidationResult("Documentation sync", False, str(e))
 
     # Cleanup functionality removed for safety - manual cleanup only
 
@@ -167,9 +157,9 @@ class ProjectValidator:
         Print validation results in a nice format.
 
         Returns:
-            True if all critical validations passed.
+            True if all validations passed.
         """
-        all_critical_passed = True
+        all_passed = True
 
         print("🚀 Project Validation Results\n")
 
@@ -186,15 +176,15 @@ class ProjectValidator:
                         if line.strip():
                             print(f"      {line}")
 
-                if not result.passed and result.critical:
-                    all_critical_passed = False
+                if not result.passed:
+                    all_passed = False
 
             print()
 
         print("=" * 50)
-        if all_critical_passed:
-            print("🎉 All critical validations passed!")
+        if all_passed:
+            print("🎉 All validations passed!")
         else:
-            print("💥 Some critical validations failed. Please review and fix.")
+            print("💥 Some validations failed. Please review and fix.")
 
-        return all_critical_passed
+        return all_passed

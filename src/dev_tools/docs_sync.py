@@ -19,7 +19,7 @@ class DocumentationSyncer:
         }
         self.headers = {
             "claude": "# Claude Instructions\n\nThis file contains instructions and context for Claude when working on this project.",
-            "agents": "# Claude Instructions\n\nThis file contains instructions and context for Claude when working on this project.",
+            "agents": "# Agent Instructions\n\nThis file contains instructions and context for AI agents when working on this project.",
             "gemini": "# Gemini Instructions\n\nThis file contains instructions and context for Gemini when working on this project.",
         }
 
@@ -31,13 +31,25 @@ class DocumentationSyncer:
             return ""
 
     def extract_content_after_header(self, content: str) -> str:
-        """Extract content after the first heading, preserving everything else."""
+        """Extract content after the header section, preserving everything else."""
         lines = content.split("\n")
         if not lines:
             return ""
 
-        # Skip the first line (title) and any empty lines after it
+        # Skip the first line (title), empty lines, and the description line
         content_start = 1
+
+        # Skip empty lines after title
+        while content_start < len(lines) and not lines[content_start].strip():
+            content_start += 1
+
+        # Skip the description line if it exists
+        if content_start < len(lines) and lines[content_start].startswith(
+            "This file contains instructions"
+        ):
+            content_start += 1
+
+        # Skip any remaining empty lines
         while content_start < len(lines) and not lines[content_start].strip():
             content_start += 1
 
@@ -47,6 +59,20 @@ class DocumentationSyncer:
         """Create file content with specified header and shared content."""
         return f"{header}\n\n{content}"
 
+    def validate_headers(self) -> None:
+        """Validate that headers are correct for each file type."""
+        expected_patterns = {
+            "claude": "# Claude Instructions",
+            "agents": "# Agent Instructions",
+            "gemini": "# Gemini Instructions",
+        }
+
+        for name, header in self.headers.items():
+            if not header.startswith(expected_patterns[name]):
+                raise ValueError(
+                    f"Invalid header for {name}: expected to start with '{expected_patterns[name]}', got '{header.split()[0]} {header.split()[1]}'"
+                )
+
     def sync(self) -> dict[str, bool]:
         """
         Sync all documentation files.
@@ -54,6 +80,9 @@ class DocumentationSyncer:
         Returns:
             Dict mapping file names to whether they were updated.
         """
+        # Validate headers before proceeding
+        self.validate_headers()
+
         results = {}
 
         # Read all files

@@ -2,12 +2,6 @@
 
 This file contains instructions and context for Gemini when working on this project.
 
-This file contains instructions and context for Claude when working on this project.
-
-This file contains instructions and context for Gemini when working on this project.
-
-This file contains instructions and context for Claude when working on this project.
-
 ## Project Overview
 Collection of tools for working with documentation and repository analysis.
 
@@ -95,13 +89,12 @@ uv run validate-project
 ```
 
 This script performs the following steps automatically:
-1. **Cleanup artifacts** - Removes build files, cache, and temporary files
-2. **Format code** - Runs ruff and black formatting
-3. **Lint code** - Runs ruff linting checks
-4. **Type checking** - Runs mypy type checking
-5. **Run tests** - Executes pytest test suite
-6. **Update README** - Updates timestamp and ensures README exists
-7. **Sync docs** - Syncs all agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)
+1. **Format code** - Runs ruff and black formatting
+2. **Lint code** - Runs ruff linting checks
+3. **Type checking** - Runs mypy type checking
+4. **Run tests** - Executes pytest test suite
+5. **Update README** - Updates timestamp and ensures README exists
+6. **Sync docs** - Syncs all agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)
 
 ### When to Run Validation
 - After completing ALL file changes for a task

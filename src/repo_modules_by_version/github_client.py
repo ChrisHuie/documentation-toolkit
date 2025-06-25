@@ -54,9 +54,9 @@ class GitHubClient:
             }
 
         except GithubException as e:
-            raise Exception(f"GitHub API error: {e.data.get('message', str(e))}")
+            raise Exception(f"GitHub API error: {e.data.get('message', str(e))}") from e
         except Exception as e:
-            raise Exception(f"Error fetching repository data: {str(e)}")
+            raise Exception(f"Error fetching repository data: {str(e)}") from e
 
     def _get_reference(self, repo: Repository, version: str) -> str:
         """Get the commit SHA for a given version reference."""
@@ -78,8 +78,10 @@ class GitHubClient:
             # Try as commit SHA
             commit = repo.get_commit(version)
             return commit.sha
-        except GithubException:
-            raise Exception(f"Could not find reference '{version}' in repository")
+        except GithubException as e:
+            raise Exception(
+                f"Could not find reference '{version}' in repository"
+            ) from e
 
     def _fetch_directory_contents(
         self, repo: Repository, directory: str, ref: str
@@ -113,10 +115,12 @@ class GitHubClient:
 
         except GithubException as e:
             if e.status == 404:
-                raise Exception(f"Directory '{directory}' not found in repository")
+                raise Exception(
+                    f"Directory '{directory}' not found in repository"
+                ) from e
             raise Exception(
                 f"Error accessing directory '{directory}': {e.data.get('message', str(e))}"
-            )
+            ) from e
 
         return files_data
 
@@ -149,7 +153,7 @@ class GitHubClient:
         except GithubException as e:
             raise Exception(
                 f"Error fetching repository info: {e.data.get('message', str(e))}"
-            )
+            ) from e
 
     def list_branches(self, repo_name: str) -> list[str]:
         """List all branches in a repository."""
@@ -157,7 +161,9 @@ class GitHubClient:
             repo = self.github.get_repo(repo_name)
             return [branch.name for branch in repo.get_branches()]
         except GithubException as e:
-            raise Exception(f"Error listing branches: {e.data.get('message', str(e))}")
+            raise Exception(
+                f"Error listing branches: {e.data.get('message', str(e))}"
+            ) from e
 
     def list_tags(self, repo_name: str) -> list[str]:
         """List all tags in a repository."""
@@ -165,4 +171,6 @@ class GitHubClient:
             repo = self.github.get_repo(repo_name)
             return [tag.name for tag in repo.get_tags()]
         except GithubException as e:
-            raise Exception(f"Error listing tags: {e.data.get('message', str(e))}")
+            raise Exception(
+                f"Error listing tags: {e.data.get('message', str(e))}"
+            ) from e

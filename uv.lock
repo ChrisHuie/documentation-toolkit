@@ -144,7 +144,7 @@ wheels = [
 ]
 
 [[package]]
-name = "docs-tools"
+name = "documentation-toolkit"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
