@@ -1,6 +1,6 @@
-# docs-tools
+# documentation-toolkit
 
-Collection of tools for working with documentation and repository analysis.
+Professional toolkit for documentation analysis and repository management.
 
 ## Installation
 

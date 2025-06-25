@@ -1,7 +1,7 @@
 [project]
-name = "docs-tools"
+name = "documentation-toolkit"
 version = "0.1.0"
-description = "Add your description here"
+description = "Professional toolkit for documentation analysis and repository management"
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.1.0",
