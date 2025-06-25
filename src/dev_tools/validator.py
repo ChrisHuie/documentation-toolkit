@@ -8,7 +8,6 @@ import datetime
 import subprocess
 from pathlib import Path
 
-from .cleanup import ProjectCleaner
 from .docs_sync import DocumentationSyncer
 
 
@@ -34,7 +33,6 @@ class ProjectValidator:
 
     def __init__(self, project_root: Path):
         self.project_root = project_root
-        self.cleaner = ProjectCleaner(project_root)
         self.syncer = DocumentationSyncer(project_root)
 
     def run_command(self, cmd: list[str], description: str) -> tuple[bool, str]:
@@ -139,39 +137,16 @@ class ProjectValidator:
         except Exception as e:
             return ValidationResult("Documentation sync", False, str(e), critical=True)
 
-    def cleanup_artifacts(self, dry_run: bool = False) -> ValidationResult:
-        """Clean up project artifacts."""
-        try:
-            removed = self.cleaner.clean(dry_run=dry_run)
+    # Cleanup functionality removed for safety - manual cleanup only
 
-            if removed:
-                action = "Would remove" if dry_run else "Removed"
-                output = f"{action} {len(removed)} artifacts: {', '.join(str(p.name) for p in removed[:5])}"
-                if len(removed) > 5:
-                    output += f" and {len(removed) - 5} more"
-            else:
-                output = "No artifacts to clean"
-
-            return ValidationResult("Artifact cleanup", True, output, critical=False)
-
-        except Exception as e:
-            return ValidationResult("Artifact cleanup", False, str(e), critical=False)
-
-    def validate_all(self, cleanup: bool = True) -> dict[str, list[ValidationResult]]:
+    def validate_all(self) -> dict[str, list[ValidationResult]]:
         """
         Run all validation steps.
-
-        Args:
-            cleanup: Whether to clean up artifacts.
 
         Returns:
             Dictionary of validation results grouped by category.
         """
         results = {}
-
-        # Cleanup first (optional)
-        if cleanup:
-            results["cleanup"] = [self.cleanup_artifacts()]
 
         # Code quality
         results["formatting"] = self.format_code()

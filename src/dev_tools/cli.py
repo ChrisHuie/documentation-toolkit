@@ -13,8 +13,8 @@ def main():
     project_root = Path(__file__).parent.parent.parent
     validator = ProjectValidator(project_root)
 
-    # Run full validation
-    results = validator.validate_all(cleanup=True)
+    # Run full validation (cleanup removed for safety)
+    results = validator.validate_all()
     all_passed = validator.print_results(results)
 
     # Exit with appropriate code

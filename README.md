@@ -37,13 +37,14 @@ validate-project
 ```
 
 This will:
-- Clean up build artifacts and temporary files
 - Format code with ruff and black
 - Run linting with ruff
 - Run type checking with mypy
 - Run tests with pytest
 - Update documentation timestamps
 - Sync agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)
+
+**Note**: Automatic cleanup functionality has been removed for safety.
 
 ### Development Commands
 
