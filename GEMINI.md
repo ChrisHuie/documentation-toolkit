@@ -9,38 +9,52 @@ Collection of tools for working with documentation and repository analysis.
 ```
 src/
 ├── __init__.py
-└── repo_modules_by_version/    # Tool for extracting data from GitHub repos by version
+├── dev_tools/                  # Development and validation tools
+│   ├── __init__.py
+│   ├── cli.py                 # CLI entry point for validation
+│   ├── validator.py           # Project validation logic
+│   ├── docs_sync.py          # Documentation synchronization
+│   └── cleanup.py            # Artifact cleanup utilities
+└── repo_modules_by_version/    # Configuration-driven GitHub repository analysis tool
     ├── __init__.py
-    ├── main.py                 # CLI entry point
-    ├── config.py              # Repository configuration system
-    ├── github_client.py       # GitHub API client
-    └── parser_factory.py      # Extensible parsing framework
+    ├── main.py                 # CLI entry point with configuration-driven architecture
+    ├── config.py              # Repository configuration system with new fields
+    ├── github_client.py       # Generic GitHub API client (no hardcoded logic)
+    ├── parser_factory.py      # Extensible parsing framework
+    ├── repos.json             # Repository configurations with fetch strategies
+    ├── parsers/               # Specialized parsers for different repository types
+    └── version_cache.py       # Version caching system for performance
 ```
 
 ## Tools
 
 ### repo-modules-by-version
-CLI tool that allows users to:
-- Pass in a GitHub repository and version
-- Parse through specified directories in the repo
-- Extract data using configurable parsers
-- Supports interactive menus for preconfigured repos
-- Extensible parsing system with specialized parsers for Prebid repositories
-- Multi-path parsing for complex repository structures
-- Automatic filename generation with consistent naming conventions
+**Configuration-driven CLI tool** that allows users to:
+- Extract data from GitHub repositories using configurable fetch strategies
+- Parse through directories using specialized parsers
+- Support interactive menus for preconfigured repositories
+- Generate consistent output filenames with custom slugs
+- Override versions per repository configuration
 
-**Supported Repositories:**
-- **Prebid.js** - JavaScript ad serving framework modules and adapters
-- **Prebid Server Go** - Go implementation with bid adapters, analytics, and modules
-- **Prebid Server Java** - Java implementation with bidders, privacy, and general modules  
-- **Prebid Documentation** - Documentation site with adapter and module documentation
+**Architecture:**
+- **No hardcoded repository logic** - All behavior driven by `repos.json` configuration
+- **Flexible fetch strategies** - `full_content`, `filenames_only`, `directory_names`
+- **Version override system** - Force specific versions (e.g., master for documentation)
+- **Configurable filename generation** - Custom output naming with fallback logic
+- **Multi-path parsing** - Support for complex repository structures
 
-**Features:**
-- Underscore to space conversion for better readability
-- Category-based organization (Bid Adapters, Analytics Adapters, etc.)
-- Master version override for documentation repository
-- Special suffix handling (RtdProvider, AnalyticsAdapter, VideoProvider)
-- JSON output for programmatic access
+**Supported Repositories (via configuration):**
+- **Prebid.js** - Modules and adapters (filenames-only strategy, prebid.js output slug)
+- **Prebid Server Go** - Bid adapters, analytics, modules (directory-names strategy, prebid.server.go slug)
+- **Prebid Server Java** - Bidders, privacy, general modules (directory-names strategy, prebid.server.java slug)
+- **Prebid Documentation** - Documentation site (filenames-only strategy, master override, prebid.github.io slug)
+
+**Configuration Fields (repos.json):**
+- `fetch_strategy` - How to fetch data: "full_content", "filenames_only", "directory_names" 
+- `version_override` - Force specific version (e.g., "master" for docs)
+- `output_filename_slug` - Custom filename prefix (e.g., "prebid.js")
+- `parser_type` - Specialized parser: "prebid_js", "prebid_server_go", "prebid_server_java", "prebid_docs"
+- `paths` - Multi-directory configurations for complex repositories
 
 **Usage:**
 ```bash
@@ -95,6 +109,37 @@ cp .env.example .env
 1. Create new directory under `src/your_tool_name/`
 2. Add CLI entry point to `pyproject.toml`: `your-tool = "src.your_tool_name.main:main"`
 3. Follow the existing pattern for structure and imports
+
+## Adding New Repositories (repo-modules-by-version)
+The configuration-driven architecture makes adding new repositories simple:
+
+1. **Add repository configuration to `repos.json`:**
+```json
+{
+  "new-repo": {
+    "repo": "owner/repository",
+    "description": "Description of the repository",
+    "versions": ["master"],
+    "parser_type": "default",
+    "fetch_strategy": "full_content",
+    "output_filename_slug": "custom.name",
+    "paths": {
+      "Category Name": "path/to/directory"
+    }
+  }
+}
+```
+
+2. **Configuration fields:**
+   - `fetch_strategy`: "full_content" (files + content), "filenames_only" (just names), "directory_names" (folder structure)
+   - `version_override`: Force specific version (optional)
+   - `output_filename_slug`: Custom output filename prefix (optional)
+   - `parser_type`: Specialized parser or "default"
+   - `paths`: Multi-directory configuration (optional)
+
+3. **Create specialized parser (if needed):**
+   - Add parser class to `src/repo_modules_by_version/parsers/`
+   - Update `parser_factory.py` to register new parser type
 
 ## Post-Change Validation Workflow
 

@@ -8,7 +8,6 @@ This test suite validates:
 - Integration with new RepoConfig fields
 """
 
-import pytest
 from unittest.mock import Mock, patch
 
 from src.repo_modules_by_version.config import RepoConfig

@@ -17,20 +17,22 @@ cp .env.example .env
 
 ### repo-modules-by-version
 
-Extract and categorize modules/adapters from GitHub repositories with specialized parsing for Prebid projects.
+Extract and categorize modules/adapters from GitHub repositories using a **configuration-driven architecture** with specialized parsing for Prebid projects.
 
 **Supported Repositories:**
-- **prebid-js** - Prebid.js modules and adapters
-- **prebid-server** - Prebid Server Go implementation  
-- **prebid-server-java** - Prebid Server Java implementation
-- **prebid-docs** - Prebid documentation site
+- **prebid-js** - Prebid.js modules and adapters (filenames-only fetch strategy)
+- **prebid-server** - Prebid Server Go implementation (directory structure analysis)
+- **prebid-server-java** - Prebid Server Java implementation (directory structure analysis)
+- **prebid-docs** - Prebid documentation site (filenames-only with master override)
 
-**Features:**
-- Category-based organization (Bid Adapters, Analytics Adapters, etc.)
-- Underscore to space conversion for readability
-- Multi-path parsing for complex repositories
-- Automatic filename generation
-- JSON output for programmatic access
+**Key Features:**
+- **Configuration-driven architecture** - No hardcoded repository logic
+- **Flexible fetch strategies** - `full_content`, `filenames_only`, `directory_names`
+- **Version override system** - Force specific versions (e.g., master for docs)
+- **Smart filename generation** - Configurable output naming with fallbacks
+- **Multi-path parsing** - Complex repository structures with multiple directories
+- **Category-based organization** - Bid Adapters, Analytics Adapters, etc.
+- **Extensible parser system** - Easy to add new repositories and parsers
 
 ```bash
 # Interactive mode
@@ -48,6 +50,34 @@ repo-modules-by-version --repo prebid-server --version v3.8.0
 repo-modules-by-version --repo prebid-server-java --version v3.27.0
 repo-modules-by-version --repo prebid-docs  # Always uses master
 ```
+
+### Adding New Repositories
+
+The configuration-driven architecture makes adding new repositories simple:
+
+1. **Add repository to `src/repo_modules_by_version/repos.json`:**
+```json
+{
+  "new-repo": {
+    "repo": "owner/repository",
+    "description": "Description",
+    "versions": ["master"],
+    "parser_type": "default",
+    "fetch_strategy": "full_content",
+    "output_filename_slug": "custom.name"
+  }
+}
+```
+
+2. **Available fetch strategies:**
+   - `full_content` - Download files and content (default)
+   - `filenames_only` - Just get file names (fast)
+   - `directory_names` - Just get folder structure
+
+3. **Optional configurations:**
+   - `version_override` - Force specific version
+   - `output_filename_slug` - Custom output filename
+   - `paths` - Multi-directory parsing
 
 ## Development
 
@@ -114,14 +144,17 @@ src/
 │   └── cleanup.py            # Artifact cleanup utilities
 └── repo_modules_by_version/    # Tool for extracting data from GitHub repos by version
     ├── __init__.py
-    ├── main.py                 # CLI entry point
-    ├── config.py              # Repository configuration system
-    ├── github_client.py       # GitHub API client
-    └── parser_factory.py      # Extensible parsing framework
+    ├── main.py                 # CLI entry point with configuration-driven architecture
+    ├── config.py              # Repository configuration system with fetch strategies
+    ├── github_client.py       # Generic GitHub API client (no hardcoded logic)
+    ├── parser_factory.py      # Extensible parsing framework
+    ├── repos.json             # Repository configurations with fetch strategies
+    ├── parsers/               # Specialized parsers for different repository types
+    └── version_cache.py       # Version caching system for performance
 ```
 
 ## Environment Variables
 
 - `GITHUB_TOKEN` - GitHub Personal Access Token for API access (optional but recommended for higher rate limits)
 
-Last updated: 2025-06-26 16:01:38
+Last updated: 2025-06-26 16:17:11

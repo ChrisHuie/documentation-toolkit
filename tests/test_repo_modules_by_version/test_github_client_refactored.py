@@ -8,8 +8,9 @@ This test suite validates:
 - Error handling and edge cases
 """
 
+from unittest.mock import Mock, patch
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
 from github import GithubException
 
 from src.repo_modules_by_version.github_client import GitHubClient
