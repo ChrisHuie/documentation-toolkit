@@ -17,6 +17,21 @@ cp .env.example .env
 
 ### repo-modules-by-version
 
+Extract and categorize modules/adapters from GitHub repositories with specialized parsing for Prebid projects.
+
+**Supported Repositories:**
+- **prebid-js** - Prebid.js modules and adapters
+- **prebid-server** - Prebid Server Go implementation  
+- **prebid-server-java** - Prebid Server Java implementation
+- **prebid-docs** - Prebid documentation site
+
+**Features:**
+- Category-based organization (Bid Adapters, Analytics Adapters, etc.)
+- Underscore to space conversion for readability
+- Multi-path parsing for complex repositories
+- Automatic filename generation
+- JSON output for programmatic access
+
 ```bash
 # Interactive mode
 repo-modules-by-version
@@ -26,6 +41,12 @@ repo-modules-by-version --repo owner/repo --version v1.0.0
 
 # List available repos
 repo-modules-by-version --list-repos
+
+# Examples with preconfigured repos
+repo-modules-by-version --repo prebid-js --version v9.51.0
+repo-modules-by-version --repo prebid-server --version v3.8.0
+repo-modules-by-version --repo prebid-server-java --version v3.27.0
+repo-modules-by-version --repo prebid-docs  # Always uses master
 ```
 
 ## Development
@@ -103,4 +124,4 @@ src/
 
 - `GITHUB_TOKEN` - GitHub Personal Access Token for API access (optional but recommended for higher rate limits)
 
-Last updated: 2025-06-25 17:47:52
+Last updated: 2025-06-26 16:01:38

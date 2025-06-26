@@ -1,0 +1,514 @@
+Repository: prebid/prebid-server-java
+Version: 3.27.0
+
+Prebid Server Java Categories:
+========================================
+
+📦 Bid Adapters (230):
+------------------------------
+  • aax
+  • aceex
+  • acuityads
+  • adelement
+  • adf
+  • adgeneration
+  • adhese
+  • adkernel
+  • adkerneladn
+  • adman
+  • admatic
+  • admixer
+  • adnuntius
+  • adocean
+  • adoppler
+  • adot
+  • adpone
+  • adprime
+  • adquery
+  • adtarget
+  • adtelligent
+  • adtonos
+  • adtrgtme
+  • advangelists
+  • adverxo
+  • adview
+  • adxcg
+  • adyoulike
+  • aidem
+  • aja
+  • algorix
+  • alkimi
+  • amx
+  • apacdex
+  • appnexus
+  • appush
+  • aso
+  • audiencenetwork
+  • avocet
+  • axis
+  • axonix
+  • beachfront
+  • beintoo
+  • bematterfull
+  • between
+  • beyondmedia
+  • bidmachine
+  • bidmatic
+  • bidmyadz
+  • bidscube
+  • bidstack
+  • bigoad
+  • blasto
+  • bliink
+  • bluesea
+  • bmtm
+  • boldwin
+  • brave
+  • bwx
+  • cointraffic
+  • coinzilla
+  • colossus
+  • compass
+  • concert
+  • connatix
+  • connectad
+  • consumable
+  • copper6ssp
+  • cpmstar
+  • criteo
+  • datablocks
+  • decenterads
+  • deepintent
+  • definemedia
+  • dianomi
+  • displayio
+  • dmx
+  • driftpixel
+  • dxkulture
+  • edge226
+  • emtv
+  • emxdigital
+  • eplanning
+  • epom
+  • epsilon
+  • escalax
+  • evolution
+  • feedad
+  • flipp
+  • freewheelssp
+  • frvradn
+  • gamma
+  • gamoshi
+  • globalsun
+  • gotthamads
+  • grid
+  • gumgum
+  • huaweiads
+  • imds
+  • impactify
+  • improvedigital
+  • inmobi
+  • insticator
+  • interactiveoffers
+  • intertech
+  • invibes
+  • iqx
+  • iqzone
+  • ix
+  • jixie
+  • kargo
+  • kayzen
+  • kidoz
+  • kiviads
+  • kobler
+  • krushmedia
+  • kueezrtb
+  • lemmadigital
+  • limelightdigital
+  • lmkiviads
+  • lockerdome
+  • logan
+  • logicad
+  • loopme
+  • loyal
+  • lunamedia
+  • mabidder
+  • madvertise
+  • marsmedia
+  • mediago
+  • medianet
+  • melozen
+  • metax
+  • mgid
+  • mgidx
+  • minutemedia
+  • missena
+  • mobfoxpb
+  • mobilefuse
+  • mobkoi
+  • model
+  • motorik
+  • nextmillennium
+  • nobid
+  • ogury
+  • oms
+  • onetag
+  • openweb
+  • openx
+  • operaads
+  • oraki
+  • orbidder
+  • outbrain
+  • ownadx
+  • pangle
+  • pgamssp
+  • playdigo
+  • preciso
+  • pubmatic
+  • pubnative
+  • pubrise
+  • pulsepoint
+  • pwbid
+  • qt
+  • readpeak
+  • relevantdigital
+  • resetdigital
+  • revcontent
+  • richaudience
+  • rise
+  • roulax
+  • rtbhouse
+  • rubicon
+  • salunamedia
+  • screencore
+  • seedingAlliance
+  • seedtag
+  • sharethrough
+  • silvermob
+  • silverpush
+  • smaato
+  • smartadserver
+  • smarthub
+  • smartrtb
+  • smartx
+  • smartyads
+  • smilewanted
+  • smrtconnect
+  • sonobi
+  • sovrn
+  • sovrnxsp
+  • sspbc
+  • startio
+  • stroeercore
+  • taboola
+  • tappx
+  • teads
+  • telaria
+  • theadx
+  • thetradedesk
+  • thirtythreeacross
+  • tpmn
+  • tradplus
+  • trafficgate
+  • triplelift
+  • tripleliftnative
+  • trustedstack
+  • ucfunnel
+  • undertone
+  • unicorn
+  • unruly
+  • vidazoo
+  • videobyte
+  • videoheroes
+  • vidoomy
+  • visiblemeasures
+  • visx
+  • vox
+  • vrtcal
+  • vungle
+  • xeworks
+  • yahooads
+  • yandex
+  • yeahmobi
+  • yearxero
+  • yieldlab
+  • yieldmo
+  • yieldone
+  • zeroclickfraud
+  • zmaticoo
+
+📦 Analytics Adapters (3):
+------------------------------
+  • agma
+  • greenbids
+  • pubstack
+
+📦 General Modules (7):
+------------------------------
+  • confiant ad quality
+  • fiftyone devicedetection
+  • greenbids real time data
+  • ortb2 blocking
+  • request correction
+  • response correction
+  • richmedia filter
+
+📦 Privacy Modules (2):
+------------------------------
+  • uscustomlogic
+  • usnat
+
+JSON Output:
+--------------------
+{
+  "Bid Adapters": [
+    "admatic",
+    "mediago",
+    "adot",
+    "adman",
+    "adquery",
+    "apacdex",
+    "resetdigital",
+    "amx",
+    "screencore",
+    "globalsun",
+    "datablocks",
+    "sovrn",
+    "videoheroes",
+    "smaato",
+    "zeroclickfraud",
+    "theadx",
+    "bwx",
+    "silvermob",
+    "adkerneladn",
+    "adview",
+    "bliink",
+    "connectad",
+    "trafficgate",
+    "brave",
+    "evolution",
+    "yahooads",
+    "nobid",
+    "nextmillennium",
+    "roulax",
+    "freewheelssp",
+    "logan",
+    "minutemedia",
+    "thetradedesk",
+    "adpone",
+    "adtonos",
+    "inmobi",
+    "sharethrough",
+    "smartadserver",
+    "beintoo",
+    "beachfront",
+    "openx",
+    "tripleliftnative",
+    "richaudience",
+    "vrtcal",
+    "intertech",
+    "yandex",
+    "insticator",
+    "undertone",
+    "ucfunnel",
+    "lmkiviads",
+    "axis",
+    "seedingAlliance",
+    "bigoad",
+    "emxdigital",
+    "interactiveoffers",
+    "mabidder",
+    "model",
+    "yeahmobi",
+    "sovrnxsp",
+    "gotthamads",
+    "cpmstar",
+    "grid",
+    "definemedia",
+    "axonix",
+    "dxkulture",
+    "aja",
+    "kobler",
+    "displayio",
+    "jixie",
+    "zmaticoo",
+    "consumable",
+    "smrtconnect",
+    "flipp",
+    "adxcg",
+    "telaria",
+    "alkimi",
+    "improvedigital",
+    "oms",
+    "yieldone",
+    "frvradn",
+    "playdigo",
+    "pangle",
+    "copper6ssp",
+    "adnuntius",
+    "unruly",
+    "decenterads",
+    "impactify",
+    "mobilefuse",
+    "motorik",
+    "seedtag",
+    "vidoomy",
+    "colossus",
+    "pgamssp",
+    "melozen",
+    "readpeak",
+    "taboola",
+    "imds",
+    "yieldlab",
+    "rise",
+    "videobyte",
+    "iqx",
+    "adf",
+    "appush",
+    "oraki",
+    "escalax",
+    "adtarget",
+    "pubnative",
+    "tpmn",
+    "aidem",
+    "appnexus",
+    "gamoshi",
+    "connatix",
+    "sspbc",
+    "adyoulike",
+    "cointraffic",
+    "pubrise",
+    "between",
+    "kidoz",
+    "metax",
+    "rubicon",
+    "loopme",
+    "smartyads",
+    "pwbid",
+    "vungle",
+    "mobfoxpb",
+    "loyal",
+    "kayzen",
+    "salunamedia",
+    "visiblemeasures",
+    "criteo",
+    "pulsepoint",
+    "aax",
+    "smilewanted",
+    "feedad",
+    "mobkoi",
+    "blasto",
+    "teads",
+    "gumgum",
+    "mgid",
+    "ogury",
+    "edge226",
+    "logicad",
+    "tappx",
+    "beyondmedia",
+    "marsmedia",
+    "relevantdigital",
+    "audiencenetwork",
+    "boldwin",
+    "avocet",
+    "triplelift",
+    "yearxero",
+    "acuityads",
+    "invibes",
+    "pubmatic",
+    "orbidder",
+    "bematterfull",
+    "dianomi",
+    "admixer",
+    "algorix",
+    "eplanning",
+    "adtelligent",
+    "silverpush",
+    "outbrain",
+    "unicorn",
+    "yieldmo",
+    "aso",
+    "compass",
+    "openweb",
+    "lockerdome",
+    "limelightdigital",
+    "concert",
+    "bluesea",
+    "smartrtb",
+    "adgeneration",
+    "bidmachine",
+    "vidazoo",
+    "kargo",
+    "smarthub",
+    "qt",
+    "smartx",
+    "bidstack",
+    "epsilon",
+    "krushmedia",
+    "ownadx",
+    "tradplus",
+    "adocean",
+    "onetag",
+    "visx",
+    "revcontent",
+    "adkernel",
+    "trustedstack",
+    "ix",
+    "advangelists",
+    "coinzilla",
+    "madvertise",
+    "huaweiads",
+    "adhese",
+    "bidmatic",
+    "kueezrtb",
+    "deepintent",
+    "vox",
+    "adprime",
+    "gamma",
+    "bmtm",
+    "missena",
+    "adelement",
+    "xeworks",
+    "medianet",
+    "startio",
+    "lemmadigital",
+    "emtv",
+    "kiviads",
+    "preciso",
+    "mgidx",
+    "adoppler",
+    "stroeercore",
+    "bidmyadz",
+    "dmx",
+    "iqzone",
+    "epom",
+    "lunamedia",
+    "bidscube",
+    "driftpixel",
+    "operaads",
+    "sonobi",
+    "thirtythreeacross",
+    "aceex",
+    "adverxo",
+    "rtbhouse",
+    "adtrgtme"
+  ],
+  "Analytics Adapters": [
+    "greenbids",
+    "pubstack",
+    "agma"
+  ],
+  "General Modules": [
+    "richmedia filter",
+    "greenbids real time data",
+    "response correction",
+    "request correction",
+    "ortb2 blocking",
+    "confiant ad quality",
+    "fiftyone devicedetection"
+  ],
+  "Privacy Modules": [
+    "usnat",
+    "uscustomlogic"
+  ]
+}

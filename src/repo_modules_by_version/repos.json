@@ -4,27 +4,53 @@
         "directory": "modules",
         "description": "Prebid.js - Header bidding wrapper for publishers",
         "versions": ["master"],
-        "parser_type": "default"
+        "parser_type": "prebid_js",
+        "modules_path": "modules",
+        "fetch_strategy": "filenames_only",
+        "output_filename_slug": "prebid.js"
     },
     "prebid-server-java": {
         "repo": "prebid/prebid-server-java",
-        "directory": "src/main/java/org/prebid/server",
         "description": "Prebid Server Java implementation",
         "versions": ["master"],
-        "parser_type": "default"
+        "parser_type": "prebid_server_java",
+        "paths": {
+            "Bid Adapters": "src/main/java/org/prebid/server/bidder",
+            "Analytics Adapters": "src/main/java/org/prebid/server/analytics/reporter",
+            "General Modules": "extra/modules",
+            "Privacy Modules": "src/main/java/org/prebid/server/activity/infrastructure/privacy"
+        },
+        "fetch_strategy": "directory_names",
+        "output_filename_slug": "prebid.server.java"
     },
     "prebid-server": {
         "repo": "prebid/prebid-server",
-        "directory": "adapters",
         "description": "Prebid Server Go implementation",
         "versions": ["master"],
-        "parser_type": "default"
+        "parser_type": "prebid_server_go",
+        "paths": {
+            "Bid Adapters": "adapters",
+            "Analytics Adapters": "analytics",
+            "General Modules": "modules"
+        },
+        "fetch_strategy": "directory_names",
+        "output_filename_slug": "prebid.server.go"
     },
     "prebid-docs": {
         "repo": "prebid/prebid.github.io",
-        "directory": "dev-docs",
-        "description": "Prebid documentation site",
+        "description": "Prebid Documentation site",
         "versions": ["master"],
-        "parser_type": "markdown"
+        "parser_type": "prebid_docs",
+        "paths": {
+            "Bid Adapters": "dev-docs/bidders",
+            "Analytics Adapters": "dev-docs/analytics",
+            "Identity Modules": "dev-docs/modules/userid-submodules",
+            "Real-Time Data Modules": "dev-docs/modules",
+            "Video Modules": "dev-docs/modules",
+            "Other Modules": "dev-docs/modules"
+        },
+        "fetch_strategy": "filenames_only",
+        "version_override": "master",
+        "output_filename_slug": "prebid.github.io"
     }
 }

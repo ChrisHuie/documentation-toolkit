@@ -29,15 +29,24 @@ class GitHubClient:
         self.cache_manager = VersionCacheManager()
 
     def fetch_repository_data(
-        self, repo_name: str, version: str, directory: str
+        self,
+        repo_name: str,
+        version: str,
+        directory: str | None = None,
+        modules_path: str | None = None,
+        paths: dict[str, str] | None = None,
+        fetch_strategy: str = "full_content",
     ) -> dict[str, Any]:
         """
-        Fetch repository data for a specific version and directory.
+        Fetch repository data for a specific version and directory/directories.
 
         Args:
             repo_name: Repository name in format "owner/repo"
             version: Git reference (tag, branch, commit SHA)
-            directory: Directory path within repository
+            directory: Directory path within repository (for backward compatibility)
+            modules_path: Optional additional directory path for modules
+            paths: Dictionary of category names to directory paths (for multi-directory parsing)
+            fetch_strategy: How to fetch data - "full_content", "filenames_only", or "directory_names"
 
         Returns:
             Dictionary containing file paths and content
@@ -48,13 +57,61 @@ class GitHubClient:
             # Get the commit/reference
             ref = self._get_reference(repo, version)
 
-            # Fetch directory contents
-            files_data = self._fetch_directory_contents(repo, directory, ref)
+            # Handle multi-path fetching for new parsers like prebid-server
+            if paths:
+                paths_data = {}
+                all_files = {}
+                total_files = 0
+
+                for path in paths.values():
+                    # Use fetch strategy to determine which fetch method to use
+                    if fetch_strategy == "filenames_only":
+                        path_items = self._fetch_file_names(repo, path, ref)
+                    elif fetch_strategy == "directory_names":
+                        path_items = self._fetch_directory_names(repo, path, ref)
+                    elif fetch_strategy == "full_content":
+                        path_items = self._fetch_directory_contents(repo, path, ref)
+                    else:
+                        raise ValueError(
+                            f"Unsupported fetch strategy: {fetch_strategy}"
+                        )
+
+                    paths_data[path] = path_items
+                    all_files.update(path_items)
+                    total_files += len(path_items)
+
+                return {
+                    "repo": repo_name,
+                    "version": version,
+                    "paths": paths_data,
+                    "files": all_files,
+                    "metadata": {"commit_sha": ref, "total_files": total_files},
+                }
+
+            # Handle legacy single directory/modules_path
+            target_directory = modules_path if modules_path else directory
+
+            if not target_directory:
+                raise Exception("No directory specified for repository parsing")
+
+            # Use fetch strategy to determine fetch method
+            if fetch_strategy == "filenames_only":
+                # For filenames only, use appropriate file extensions
+                file_extensions = [".js"] if modules_path else None
+                files_data = self._fetch_directory_filenames(
+                    repo, target_directory, ref, file_extensions
+                )
+            elif fetch_strategy == "directory_names":
+                files_data = self._fetch_directory_names(repo, target_directory, ref)
+            elif fetch_strategy == "full_content":
+                files_data = self._fetch_directory_contents(repo, target_directory, ref)
+            else:
+                raise ValueError(f"Unsupported fetch strategy: {fetch_strategy}")
 
             return {
                 "repo": repo_name,
                 "version": version,
-                "directory": directory,
+                "directory": target_directory,
                 "files": files_data,
                 "metadata": {"commit_sha": ref, "total_files": len(files_data)},
             }
@@ -89,11 +146,175 @@ class GitHubClient:
                 f"Could not find reference '{version}' in repository"
             ) from e
 
-    def _fetch_directory_contents(
-        self, repo: Repository, directory: str, ref: str
+    def _handle_github_exception(self, e: GithubException, directory: str) -> None:
+        """
+        Handle GitHub API exceptions consistently across fetch methods.
+
+        Args:
+            e: The GitHub exception to handle
+            directory: The directory path that caused the exception
+
+        Raises:
+            Exception: Wrapped exception with appropriate error message
+        """
+        if e.status == 404:
+            raise Exception(f"Directory '{directory}' not found in repository") from e
+        else:
+            raise Exception(f"GitHub API error: {e}") from e
+
+    def _fetch_directory_filenames(
+        self,
+        repo: Repository,
+        directory: str,
+        ref: str,
+        file_extensions: list[str] | None = None,
     ) -> dict[str, str]:
         """
-        Recursively fetch all files from a directory.
+        Fetch only filenames from a directory without content (for modules parsing).
+
+        Args:
+            repo: GitHub repository object
+            directory: Directory path to fetch from
+            ref: Git reference (commit SHA, branch, tag)
+            file_extensions: Optional list of file extensions to filter (e.g., ['.js', '.py'])
+
+        Returns:
+            Dictionary mapping file paths to empty strings (for compatibility)
+        """
+        files_data = {}
+
+        try:
+            contents = repo.get_contents(directory, ref=ref)
+
+            # Handle single file case
+            if not isinstance(contents, list):
+                contents = [contents]
+
+            for content in contents:
+                if content.type == "file":
+                    # Check file extension filter
+                    if file_extensions:
+                        if not any(
+                            content.name.endswith(ext) for ext in file_extensions
+                        ):
+                            continue  # Skip files that don't match the extension filter
+
+                    # Only store filename, no content (much faster)
+                    files_data[content.path] = ""
+                # Skip subdirectories for modules parsing (we only want root level files)
+
+        except GithubException as e:
+            self._handle_github_exception(e, directory)
+
+        return files_data
+
+    def _fetch_directory_names(
+        self,
+        repo: Repository,
+        directory: str,
+        ref: str,
+    ) -> dict[str, str]:
+        """
+        Fetch subdirectory names up to 2 levels deep (for structure parsing).
+
+        Args:
+            repo: GitHub repository object
+            directory: Directory path to fetch from
+            ref: Git reference (commit SHA, branch, tag)
+
+        Returns:
+            Dictionary mapping directory paths to empty strings (for compatibility)
+        """
+        directories_data = {}
+
+        try:
+            # Get first level directories
+            contents = repo.get_contents(directory, ref=ref)
+
+            # Handle single file case
+            if not isinstance(contents, list):
+                contents = [contents]
+
+            for content in contents:
+                if content.type == "dir":
+                    # Store first level directory
+                    directories_data[content.path] = ""
+
+                    # Get second level directories for specific directories that need deep scanning
+                    # This is configurable behavior that can be controlled by fetch strategy
+                    # For now, check if path ends with "modules" to maintain compatibility
+                    if content.path.endswith("modules") or content.path.endswith(
+                        "modules/"
+                    ):
+                        try:
+                            sub_contents = repo.get_contents(content.path, ref=ref)
+                            if not isinstance(sub_contents, list):
+                                sub_contents = [sub_contents]
+
+                            for sub_content in sub_contents:
+                                if sub_content.type == "dir":
+                                    directories_data[sub_content.path] = ""
+                        except GithubException:
+                            # If subdirectory can't be accessed, skip it
+                            pass
+
+        except GithubException as e:
+            self._handle_github_exception(e, directory)
+
+        return directories_data
+
+    def _fetch_file_names(
+        self,
+        repo: Repository,
+        directory: str,
+        ref: str,
+    ) -> dict[str, str]:
+        """
+        Fetch only file names from a directory (for documentation parsing).
+
+        Args:
+            repo: GitHub repository object
+            directory: Directory path to fetch from
+            ref: Git reference (commit SHA, branch, tag)
+
+        Returns:
+            Dictionary mapping file paths to empty strings (for compatibility)
+        """
+        files_data = {}
+
+        try:
+            # Get files from directory
+            contents = repo.get_contents(directory, ref=ref)
+
+            # Handle single file case
+            if not isinstance(contents, list):
+                contents = [contents]
+
+            for content in contents:
+                if content.type == "file":
+                    # Store file name/path with empty content
+                    files_data[content.path] = ""
+
+        except GithubException as e:
+            self._handle_github_exception(e, directory)
+
+        return files_data
+
+    def _fetch_directory_contents(
+        self,
+        repo: Repository,
+        directory: str,
+        ref: str,
+        file_extensions: list[str] | None = None,
+    ) -> dict[str, str]:
+        """
+        Recursively fetch files from a directory, optionally filtered by extensions.
+
+        Args:
+            repo: GitHub repository object
+            directory: Directory path to fetch from
+            ref: Git reference (commit SHA, branch, tag)
+            file_extensions: Optional list of file extensions to filter (e.g., ['.js', '.py'])
 
         Returns:
             Dictionary mapping file paths to their content
@@ -109,13 +330,20 @@ class GitHubClient:
 
             for content in contents:
                 if content.type == "file":
+                    # Check file extension filter
+                    if file_extensions:
+                        if not any(
+                            content.name.endswith(ext) for ext in file_extensions
+                        ):
+                            continue  # Skip files that don't match the extension filter
+
                     # Fetch file content
                     file_content = self._get_file_content(content)
                     files_data[content.path] = file_content
                 elif content.type == "dir":
                     # Recursively fetch subdirectory
                     subdir_files = self._fetch_directory_contents(
-                        repo, content.path, ref
+                        repo, content.path, ref, file_extensions
                     )
                     files_data.update(subdir_files)
 

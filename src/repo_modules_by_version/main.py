@@ -21,6 +21,31 @@ logger.add(
 )
 
 
+def generate_output_filename(config: RepoConfig, version: str) -> str:
+    """
+    Generate output filename based on repository configuration.
+
+    Args:
+        config: Repository configuration containing output_filename_slug
+        version: Version string to include in filename
+
+    Returns:
+        Generated filename string
+    """
+    # Use custom slug if provided, otherwise generate from repo name
+    if config.output_filename_slug:
+        repo_name = config.output_filename_slug
+    else:
+        # Extract repo name and convert dashes to dots
+        owner, repo = config.repo.split("/")
+        repo_name = repo.lower().replace("-", ".")
+
+    # Clean version string for filename
+    version_clean = version.replace("/", "_")
+
+    return f"{repo_name}_modules_version_{version_clean}.txt"
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create and configure the argument parser."""
     parser = argparse.ArgumentParser(
@@ -175,6 +200,10 @@ def main():
             logger.error("Please specify a version using --version")
             sys.exit(1)
 
+    # Apply version override if configured
+    if repo_config.version_override:
+        version = repo_config.version_override
+
     # Initialize GitHub client and parser
     try:
         github_client = GitHubClient()
@@ -187,15 +216,34 @@ def main():
 
         # Fetch and parse repository data
         data = github_client.fetch_repository_data(
-            repo_config.repo, version, repo_config.directory
+            repo_config.repo,
+            version,
+            repo_config.directory,
+            repo_config.modules_path,
+            repo_config.paths,
+            repo_config.fetch_strategy,
         )
         result = parser_instance.parse(data)
 
         # Output result
         if args.output:
-            with open(args.output, "w") as f:
+            output_file = args.output
+        elif repo_config.modules_path or repo_config.paths:
+            # Auto-generate filename using configuration-driven helper
+            output_file = generate_output_filename(repo_config, version)
+        else:
+            output_file = None
+
+        if output_file:
+            # Check if file already exists and replace it
+            import os
+
+            if os.path.exists(output_file):
+                logger.info("Replacing existing file: %s", output_file)
+
+            with open(output_file, "w") as f:
                 f.write(result)
-            logger.info("Results written to %s", args.output)
+            logger.info("Results written to %s", output_file)
         else:
             logger.info("Results:")
             logger.info("%s", "-" * 40)
