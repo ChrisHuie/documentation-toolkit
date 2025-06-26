@@ -175,17 +175,25 @@ class TestFilenameGenerationIntegration:
         mock_factory.get_parser.return_value = mock_parser
 
         # Mock config
-        with patch(
-            "src.repo_modules_by_version.main.get_repo_config_with_versions"
-        ) as mock_get_config:
+        with (
+            patch(
+                "src.repo_modules_by_version.main.get_repo_config_with_versions"
+            ) as mock_get_config,
+            patch(
+                "src.repo_modules_by_version.main.get_available_repos"
+            ) as mock_get_repos,
+        ):
             mock_config = RepoConfig(
                 repo="prebid/prebid-server",
                 description="Test",
                 versions=["master"],
                 parser_type="prebid_server_go",
                 paths={"Bid Adapters": "adapters"},
+                fetch_strategy="directory_names",
+                output_filename_slug="prebid.server.go",
             )
             mock_get_config.return_value = mock_config
+            mock_get_repos.return_value = {"prebid-server": mock_config}
 
             # Test with temporary directory
             with tempfile.TemporaryDirectory() as temp_dir:

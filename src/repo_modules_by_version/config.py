@@ -24,6 +24,11 @@ class RepoConfig:
     )
     modules_path: str | None = None  # Optional path to modules directory for parsing
     paths: dict[str, str] | None = None  # Multiple paths for multi-directory parsing
+    fetch_strategy: str = (
+        "full_content"  # How to fetch data: "full_content", "filenames_only", "directory_names"
+    )
+    version_override: str | None = None  # Force specific version (e.g., "master")
+    output_filename_slug: str | None = None  # Custom slug for auto-generated filenames
 
 
 def _load_repos() -> dict[str, dict]:

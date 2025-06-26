@@ -50,6 +50,9 @@ class TestMasterOverride:
                 versions=["master"],
                 parser_type="prebid_docs",
                 paths={"Bid Adapters": "dev-docs/bidders"},
+                fetch_strategy="filenames_only",
+                version_override="master",  # Configuration-driven override
+                output_filename_slug="prebid.github.io",
             )
             mock_get_config.return_value = mock_config
             mock_get_repos.return_value = {"prebid-docs": mock_config}
@@ -148,6 +151,12 @@ class TestMasterOverride:
                     parser_type=config["parser_type"],
                     paths=config["paths"],
                     modules_path=config["modules_path"],
+                    fetch_strategy=(
+                        "filenames_only"
+                        if config["modules_path"]
+                        else "directory_names"
+                    ),
+                    # No version_override for non-prebid-docs repos
                 )
                 mock_get_config.return_value = mock_repo_config
                 mock_get_repos.return_value = {config["repo_name"]: mock_repo_config}

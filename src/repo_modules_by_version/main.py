@@ -21,6 +21,31 @@ logger.add(
 )
 
 
+def generate_output_filename(config: RepoConfig, version: str) -> str:
+    """
+    Generate output filename based on repository configuration.
+
+    Args:
+        config: Repository configuration containing output_filename_slug
+        version: Version string to include in filename
+
+    Returns:
+        Generated filename string
+    """
+    # Use custom slug if provided, otherwise generate from repo name
+    if config.output_filename_slug:
+        repo_name = config.output_filename_slug
+    else:
+        # Extract repo name and convert dashes to dots
+        owner, repo = config.repo.split("/")
+        repo_name = repo.lower().replace("-", ".")
+
+    # Clean version string for filename
+    version_clean = version.replace("/", "_")
+
+    return f"{repo_name}_modules_version_{version_clean}.txt"
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create and configure the argument parser."""
     parser = argparse.ArgumentParser(
@@ -175,9 +200,9 @@ def main():
             logger.error("Please specify a version using --version")
             sys.exit(1)
 
-    # Force prebid.github.io to always use master version
-    if repo_config.repo == "prebid/prebid.github.io":
-        version = "master"
+    # Apply version override if configured
+    if repo_config.version_override:
+        version = repo_config.version_override
 
     # Initialize GitHub client and parser
     try:
@@ -196,6 +221,7 @@ def main():
             repo_config.directory,
             repo_config.modules_path,
             repo_config.paths,
+            repo_config.fetch_strategy,
         )
         result = parser_instance.parse(data)
 
@@ -203,19 +229,8 @@ def main():
         if args.output:
             output_file = args.output
         elif repo_config.modules_path or repo_config.paths:
-            # Auto-generate filename for modules/multi-path parsing
-            # Extract just the repo name part (e.g., "prebid/Prebid.js" -> "prebid.js")
-            owner, repo = repo_config.repo.split("/")
-            repo_name = repo.lower().replace("-", ".")
-
-            # Special handling for prebid-server (Go) to use prebid.server.go
-            if repo_name == "prebid.server":
-                repo_name = "prebid.server.go"
-
-            # Keep prebid.js naming as-is
-
-            version_clean = version.replace("/", "_")
-            output_file = f"{repo_name}_modules_version_{version_clean}.txt"
+            # Auto-generate filename using configuration-driven helper
+            output_file = generate_output_filename(repo_config, version)
         else:
             output_file = None
 

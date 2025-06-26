@@ -5,7 +5,9 @@
         "description": "Prebid.js - Header bidding wrapper for publishers",
         "versions": ["master"],
         "parser_type": "prebid_js",
-        "modules_path": "modules"
+        "modules_path": "modules",
+        "fetch_strategy": "filenames_only",
+        "output_filename_slug": "prebid.js"
     },
     "prebid-server-java": {
         "repo": "prebid/prebid-server-java",
@@ -17,7 +19,9 @@
             "Analytics Adapters": "src/main/java/org/prebid/server/analytics/reporter",
             "General Modules": "extra/modules",
             "Privacy Modules": "src/main/java/org/prebid/server/activity/infrastructure/privacy"
-        }
+        },
+        "fetch_strategy": "directory_names",
+        "output_filename_slug": "prebid.server.java"
     },
     "prebid-server": {
         "repo": "prebid/prebid-server",
@@ -28,7 +32,9 @@
             "Bid Adapters": "adapters",
             "Analytics Adapters": "analytics",
             "General Modules": "modules"
-        }
+        },
+        "fetch_strategy": "directory_names",
+        "output_filename_slug": "prebid.server.go"
     },
     "prebid-docs": {
         "repo": "prebid/prebid.github.io",
@@ -42,6 +48,9 @@
             "Real-Time Data Modules": "dev-docs/modules",
             "Video Modules": "dev-docs/modules",
             "Other Modules": "dev-docs/modules"
-        }
+        },
+        "fetch_strategy": "filenames_only",
+        "version_override": "master",
+        "output_filename_slug": "prebid.github.io"
     }
 }

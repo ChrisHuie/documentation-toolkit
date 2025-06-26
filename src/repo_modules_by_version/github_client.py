@@ -35,6 +35,7 @@ class GitHubClient:
         directory: str | None = None,
         modules_path: str | None = None,
         paths: dict[str, str] | None = None,
+        fetch_strategy: str = "full_content",
     ) -> dict[str, Any]:
         """
         Fetch repository data for a specific version and directory/directories.
@@ -45,6 +46,7 @@ class GitHubClient:
             directory: Directory path within repository (for backward compatibility)
             modules_path: Optional additional directory path for modules
             paths: Dictionary of category names to directory paths (for multi-directory parsing)
+            fetch_strategy: How to fetch data - "full_content", "filenames_only", or "directory_names"
 
         Returns:
             Dictionary containing file paths and content
@@ -62,13 +64,18 @@ class GitHubClient:
                 total_files = 0
 
                 for path in paths.values():
-                    # For multi-path parsing, fetch directory names or file names depending on repo
-                    if repo_name == "prebid/prebid.github.io":
-                        # For docs repo, we need file names not directory names
+                    # Use fetch strategy to determine which fetch method to use
+                    if fetch_strategy == "filenames_only":
                         path_items = self._fetch_file_names(repo, path, ref)
-                    else:
-                        # For other repos, fetch directory names (much faster)
+                    elif fetch_strategy == "directory_names":
                         path_items = self._fetch_directory_names(repo, path, ref)
+                    elif fetch_strategy == "full_content":
+                        path_items = self._fetch_directory_contents(repo, path, ref)
+                    else:
+                        raise ValueError(
+                            f"Unsupported fetch strategy: {fetch_strategy}"
+                        )
+
                     paths_data[path] = path_items
                     all_files.update(path_items)
                     total_files += len(path_items)
@@ -87,14 +94,19 @@ class GitHubClient:
             if not target_directory:
                 raise Exception("No directory specified for repository parsing")
 
-            if modules_path:
-                # For modules parsing, only fetch filenames (much faster)
+            # Use fetch strategy to determine fetch method
+            if fetch_strategy == "filenames_only":
+                # For filenames only, use appropriate file extensions
+                file_extensions = [".js"] if modules_path else None
                 files_data = self._fetch_directory_filenames(
-                    repo, target_directory, ref, [".js"]
+                    repo, target_directory, ref, file_extensions
                 )
-            else:
-                # For regular parsing, fetch full content
+            elif fetch_strategy == "directory_names":
+                files_data = self._fetch_directory_names(repo, target_directory, ref)
+            elif fetch_strategy == "full_content":
                 files_data = self._fetch_directory_contents(repo, target_directory, ref)
+            else:
+                raise ValueError(f"Unsupported fetch strategy: {fetch_strategy}")
 
             return {
                 "repo": repo_name,
@@ -228,8 +240,12 @@ class GitHubClient:
                     # Store first level directory
                     directories_data[content.path] = ""
 
-                    # Get second level directories for modules (needed for fiftyonedegrees/devicedetection)
-                    if directory == "modules":
+                    # Get second level directories for specific directories that need deep scanning
+                    # This is configurable behavior that can be controlled by fetch strategy
+                    # For now, check if path ends with "modules" to maintain compatibility
+                    if content.path.endswith("modules") or content.path.endswith(
+                        "modules/"
+                    ):
                         try:
                             sub_contents = repo.get_contents(content.path, ref=ref)
                             if not isinstance(sub_contents, list):

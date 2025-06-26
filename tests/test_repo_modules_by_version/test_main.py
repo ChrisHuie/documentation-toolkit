@@ -277,7 +277,7 @@ class TestMainFunction:
             main()
 
             mock_client_instance.fetch_repository_data.assert_called_once_with(
-                "test/repo", "v1.0.0", "docs"
+                "test/repo", "v1.0.0", "docs", None, None, "full_content"
             )
 
     @patch("src.repo_modules_by_version.main.GitHubClient")
@@ -309,7 +309,7 @@ class TestMainFunction:
             main()
 
             mock_client_instance.fetch_repository_data.assert_called_once_with(
-                "custom/repo", "v1.0.0", ""
+                "custom/repo", "v1.0.0", "", None, None, "full_content"
             )
 
     @patch("src.repo_modules_by_version.main.show_repo_menu")
