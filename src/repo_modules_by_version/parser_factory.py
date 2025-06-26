@@ -485,17 +485,29 @@ class PrebidDocsParser(BaseParser):
                         adapters.add(adapter_name)
             categories["Bid Adapters"] = list(adapters)
 
-        elif category_name == "Analytics Adapters" and path == "dev-docs/analytics":
-            # For analytics path, get file names (remove .md extension)
+        elif category_name == "Analytics Adapters":
+            # Handle analytics adapters from different paths
             analytics = set()
             for file_path in files.keys():
                 parts = file_path.split("/")
                 if len(parts) > 0:
                     file_name = parts[-1]  # Get the file name
                     if file_name.endswith(".md"):
-                        adapter_name = file_name[:-3]  # Remove .md extension
-                        analytics.add(adapter_name)
-            categories["Analytics Adapters"] = list(analytics)
+                        base_name = file_name[:-3]  # Remove .md extension
+
+                        # Handle different analytics adapter types based on path
+                        if path == "dev-docs/modules" and base_name.endswith(
+                            "AnalyticsAdapter"
+                        ):
+                            # For modules path, remove AnalyticsAdapter suffix
+                            clean_name = base_name[:-16]  # Remove "AnalyticsAdapter"
+                            analytics.add(clean_name)
+                        elif path != "dev-docs/modules":
+                            # For dedicated analytics path, use the base name as-is
+                            analytics.add(base_name)
+
+            if analytics:
+                categories["Analytics Adapters"] = list(analytics)
 
         elif category_name == "Identity Modules":
             # For userid-submodules path, get file names (remove .md extension)
@@ -516,7 +528,6 @@ class PrebidDocsParser(BaseParser):
         ):
             # For modules path, categorize by file endings
             rtd_modules = set()
-            analytics_modules = set()
             video_modules = set()
             other_modules = set()
 
@@ -531,9 +542,6 @@ class PrebidDocsParser(BaseParser):
                         if base_name.endswith("RtdProvider"):
                             clean_name = base_name[:-11]  # Remove "RtdProvider"
                             rtd_modules.add(clean_name)
-                        elif base_name.endswith("AnalyticsAdapter"):
-                            clean_name = base_name[:-16]  # Remove "AnalyticsAdapter"
-                            analytics_modules.add(clean_name)
                         elif base_name.endswith("VideoProvider"):
                             clean_name = base_name[:-13]  # Remove "VideoProvider"
                             video_modules.add(clean_name)
@@ -543,12 +551,6 @@ class PrebidDocsParser(BaseParser):
             # Only add categories that have items and match the current category being processed
             if category_name == "Real-Time Data Modules" and rtd_modules:
                 categories["Real-Time Data Modules"] = list(rtd_modules)
-            elif category_name == "Analytics Adapters" and analytics_modules:
-                # Merge with existing analytics adapters if any
-                existing = categories.get("Analytics Adapters", [])
-                categories["Analytics Adapters"] = list(
-                    set(existing + list(analytics_modules))
-                )
             elif category_name == "Video Modules" and video_modules:
                 categories["Video Modules"] = list(video_modules)
             elif category_name == "Other Modules" and other_modules:

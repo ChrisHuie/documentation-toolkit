@@ -134,6 +134,22 @@ class GitHubClient:
                 f"Could not find reference '{version}' in repository"
             ) from e
 
+    def _handle_github_exception(self, e: GithubException, directory: str) -> None:
+        """
+        Handle GitHub API exceptions consistently across fetch methods.
+
+        Args:
+            e: The GitHub exception to handle
+            directory: The directory path that caused the exception
+
+        Raises:
+            Exception: Wrapped exception with appropriate error message
+        """
+        if e.status == 404:
+            raise Exception(f"Directory '{directory}' not found in repository") from e
+        else:
+            raise Exception(f"GitHub API error: {e}") from e
+
     def _fetch_directory_filenames(
         self,
         repo: Repository,
@@ -176,12 +192,7 @@ class GitHubClient:
                 # Skip subdirectories for modules parsing (we only want root level files)
 
         except GithubException as e:
-            if e.status == 404:
-                raise Exception(
-                    f"Directory '{directory}' not found in repository"
-                ) from e
-            else:
-                raise Exception(f"GitHub API error: {e}") from e
+            self._handle_github_exception(e, directory)
 
         return files_data
 
@@ -232,12 +243,7 @@ class GitHubClient:
                             pass
 
         except GithubException as e:
-            if e.status == 404:
-                raise Exception(
-                    f"Directory '{directory}' not found in repository"
-                ) from e
-            else:
-                raise Exception(f"GitHub API error: {e}") from e
+            self._handle_github_exception(e, directory)
 
         return directories_data
 
@@ -274,12 +280,7 @@ class GitHubClient:
                     files_data[content.path] = ""
 
         except GithubException as e:
-            if e.status == 404:
-                raise Exception(
-                    f"Directory '{directory}' not found in repository"
-                ) from e
-            else:
-                raise Exception(f"GitHub API error: {e}") from e
+            self._handle_github_exception(e, directory)
 
         return files_data
 
