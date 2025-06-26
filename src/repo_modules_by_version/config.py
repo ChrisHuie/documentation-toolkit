@@ -16,10 +16,14 @@ class RepoConfig:
     """Configuration for a repository parser."""
 
     repo: str  # GitHub repo in format "owner/repo"
-    directory: str  # Directory within repo to parse
     description: str  # Human-readable description
     versions: list[str]  # Available versions/tags/branches
     parser_type: str = "default"  # Parser type identifier
+    directory: str | None = (
+        None  # Directory within repo to parse (for backward compatibility)
+    )
+    modules_path: str | None = None  # Optional path to modules directory for parsing
+    paths: dict[str, str] | None = None  # Multiple paths for multi-directory parsing
 
 
 def _load_repos() -> dict[str, dict]:
@@ -55,10 +59,12 @@ def get_repo_config_with_versions(name: str) -> RepoConfig:
         # Create new config with dynamic versions
         return RepoConfig(
             repo=config.repo,
-            directory=config.directory,
             description=config.description,
             versions=dynamic_versions,
             parser_type=config.parser_type,
+            directory=config.directory,
+            modules_path=config.modules_path,
+            paths=config.paths,
         )
     except Exception:
         # Return original config with fallback versions if discovery fails

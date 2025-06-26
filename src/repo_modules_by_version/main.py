@@ -175,6 +175,10 @@ def main():
             logger.error("Please specify a version using --version")
             sys.exit(1)
 
+    # Force prebid.github.io to always use master version
+    if repo_config.repo == "prebid/prebid.github.io":
+        version = "master"
+
     # Initialize GitHub client and parser
     try:
         github_client = GitHubClient()
@@ -187,15 +191,44 @@ def main():
 
         # Fetch and parse repository data
         data = github_client.fetch_repository_data(
-            repo_config.repo, version, repo_config.directory
+            repo_config.repo,
+            version,
+            repo_config.directory,
+            repo_config.modules_path,
+            repo_config.paths,
         )
         result = parser_instance.parse(data)
 
         # Output result
         if args.output:
-            with open(args.output, "w") as f:
+            output_file = args.output
+        elif repo_config.modules_path or repo_config.paths:
+            # Auto-generate filename for modules/multi-path parsing
+            # Extract just the repo name part (e.g., "prebid/Prebid.js" -> "prebid.js")
+            owner, repo = repo_config.repo.split("/")
+            repo_name = repo.lower().replace("-", ".")
+
+            # Special handling for prebid-server (Go) to use prebid.server.go
+            if repo_name == "prebid.server":
+                repo_name = "prebid.server.go"
+
+            # Keep prebid.js naming as-is
+
+            version_clean = version.replace("/", "_")
+            output_file = f"{repo_name}_modules_version_{version_clean}.txt"
+        else:
+            output_file = None
+
+        if output_file:
+            # Check if file already exists and replace it
+            import os
+
+            if os.path.exists(output_file):
+                logger.info("Replacing existing file: %s", output_file)
+
+            with open(output_file, "w") as f:
                 f.write(result)
-            logger.info("Results written to %s", args.output)
+            logger.info("Results written to %s", output_file)
         else:
             logger.info("Results:")
             logger.info("%s", "-" * 40)

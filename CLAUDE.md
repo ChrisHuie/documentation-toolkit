@@ -25,7 +25,22 @@ CLI tool that allows users to:
 - Parse through specified directories in the repo
 - Extract data using configurable parsers
 - Supports interactive menus for preconfigured repos
-- Extensible parsing system (default, markdown, OpenAPI)
+- Extensible parsing system with specialized parsers for Prebid repositories
+- Multi-path parsing for complex repository structures
+- Automatic filename generation with consistent naming conventions
+
+**Supported Repositories:**
+- **Prebid.js** - JavaScript ad serving framework modules and adapters
+- **Prebid Server Go** - Go implementation with bid adapters, analytics, and modules
+- **Prebid Server Java** - Java implementation with bidders, privacy, and general modules  
+- **Prebid Documentation** - Documentation site with adapter and module documentation
+
+**Features:**
+- Underscore to space conversion for better readability
+- Category-based organization (Bid Adapters, Analytics Adapters, etc.)
+- Master version override for documentation repository
+- Special suffix handling (RtdProvider, AnalyticsAdapter, VideoProvider)
+- JSON output for programmatic access
 
 **Usage:**
 ```bash
@@ -37,6 +52,12 @@ repo-modules-by-version --repo owner/repo --version v1.0.0
 
 # List available repos
 repo-modules-by-version --list-repos
+
+# Examples with preconfigured repos
+repo-modules-by-version --repo prebid-js --version v9.51.0
+repo-modules-by-version --repo prebid-server --version v3.8.0
+repo-modules-by-version --repo prebid-server-java --version v3.27.0
+repo-modules-by-version --repo prebid-docs  # Always uses master
 ```
 
 ## Dependencies
