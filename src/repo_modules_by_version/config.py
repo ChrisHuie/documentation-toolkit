@@ -70,6 +70,9 @@ def get_repo_config_with_versions(name: str) -> RepoConfig:
             directory=config.directory,
             modules_path=config.modules_path,
             paths=config.paths,
+            fetch_strategy=config.fetch_strategy,
+            version_override=config.version_override,
+            output_filename_slug=config.output_filename_slug,
         )
     except Exception:
         # Return original config with fallback versions if discovery fails

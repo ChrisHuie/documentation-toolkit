@@ -4,6 +4,7 @@ Core functionality for finding bid adapter aliases in GitHub repositories
 
 import re
 import time
+import yaml
 from typing import Any
 
 from ..repo_modules_by_version.github_client import GitHubClient
@@ -163,12 +164,19 @@ class AliasFinder:
                             print(f"  - {file_path} - no aliases")
                             
                     except Exception as e:
-                        print(f"  ! {file_path} - error: {str(e)}")
+                        # Check if it's a 404 error (file doesn't exist in this version)
+                        is_404_error = "404" in str(e)
+                        if is_404_error:
+                            print(f"  - {file_path} - not in {version}")
+                        else:
+                            print(f"  ! {file_path} - error: {str(e)}")
+                        
                         file_aliases[file_path] = {
                             "aliases": [],
                             "has_aliases_in_comments": False,
                             "has_aliases_in_code": False,
-                            "commented_only": False
+                            "commented_only": False,
+                            "not_in_version": is_404_error
                         }
                     
                     # Delay between individual requests to avoid per-minute rate limits
@@ -187,7 +195,8 @@ class AliasFinder:
             # Calculate statistics
             files_with_aliases = len([f for f in file_aliases.values() if f["aliases"]])
             files_with_commented_aliases = len([f for f in file_aliases.values() if f["commented_only"]])
-            files_with_empty_aliases = len([f for f in file_aliases.values() if not f["aliases"] and not f["commented_only"]])
+            files_not_in_version = len([f for f in file_aliases.values() if f.get("not_in_version", False)])
+            files_with_empty_aliases = len([f for f in file_aliases.values() if not f["aliases"] and not f["commented_only"] and not f.get("not_in_version", False)])
             
             return {
                 "repo": repo_name,
@@ -199,6 +208,7 @@ class AliasFinder:
                     "total_files": len(file_aliases),
                     "files_with_aliases": files_with_aliases,
                     "files_with_commented_aliases": files_with_commented_aliases,
+                    "files_not_in_version": files_not_in_version,
                     "files_with_empty_aliases": files_with_empty_aliases,
                 },
             }
@@ -240,6 +250,16 @@ class AliasFinder:
         except Exception as e:
             raise Exception(f"Error fetching content for {file_path}: {str(e)}") from e
 
+    def _file_exists_in_version(self, repo_name: str, version: str, file_path: str) -> bool:
+        """Check if a file exists in a specific version/tag/branch."""
+        try:
+            repo = self.client.github.get_repo(repo_name)
+            ref = self.client._get_reference(repo, version)
+            repo.get_contents(file_path, ref=ref)
+            return True
+        except Exception:
+            return False
+
     def _extract_aliases_from_file(self, repo_name: str, version: str, file_path: str) -> dict[str, Any]:
         """Extract alias values from a BidAdapter.js file."""
         try:
@@ -259,7 +279,8 @@ class AliasFinder:
                 "aliases": aliases,
                 "has_aliases_in_comments": has_aliases_in_comments,
                 "has_aliases_in_code": has_aliases_in_code,
-                "commented_only": has_aliases_in_comments and not has_aliases_in_code
+                "commented_only": has_aliases_in_comments and not has_aliases_in_code,
+                "not_in_version": False
             }
         except Exception as e:
             raise Exception(f"Error extracting aliases from {file_path}: {str(e)}") from e
@@ -590,3 +611,175 @@ class AliasFinder:
         # Using word boundaries to avoid matching substrings
         aliases_pattern = r'\b(?:aliases|ALIASES)\b'
         return bool(re.search(aliases_pattern, content, re.IGNORECASE))
+
+    def find_server_aliases_from_yaml(
+        self,
+        repo_name: str,
+        version: str,
+        directory: str = "static/bidder-info",
+        limit: int | None = None,
+        batch_size: int = 20,
+        delay: int = 2,
+        request_delay: float = 0.6,
+        start_from: int = 0
+    ) -> dict[str, Any]:
+        """
+        Find aliases in Prebid Server by searching YAML files for aliasOf keys.
+        
+        Args:
+            repo_name: Repository name in format "owner/repo"
+            version: Git reference (tag, branch, commit SHA)
+            directory: Directory path within repository (default: static/bidder-info)
+            limit: Maximum number of files to process
+            batch_size: Number of files to process per batch
+            delay: Delay in seconds between batches
+            request_delay: Delay in seconds between individual requests
+            start_from: Starting file index (for resuming)
+            
+        Returns:
+            Dictionary with matching files and their extracted aliases
+        """
+        try:
+            print(f"Searching for YAML files with 'aliasOf' in {repo_name}/{directory}...")
+            
+            # Set current repo and version
+            self._current_repo = repo_name
+            self._current_version = version
+            
+            # Use GitHub search API to find YAML files containing aliasOf
+            matching_files = self._search_yaml_files_with_alias_of(repo_name, directory)
+            
+            print(f"Found {len(matching_files)} YAML files with aliasOf")
+            
+            
+            # Apply limits and start_from
+            if start_from > 0:
+                matching_files = matching_files[start_from:]
+                print(f"Starting from index {start_from}")
+            
+            if limit:
+                matching_files = matching_files[:limit]
+                print(f"Limited to {limit} files")
+            
+            print(f"Processing {len(matching_files)} files in batches of {batch_size}")
+            print("Extracting alias information from each YAML file...")
+            
+            # Process files in batches
+            file_aliases = {}
+            total_batches = (len(matching_files) + batch_size - 1) // batch_size
+            
+            for batch_num in range(total_batches):
+                start_idx = batch_num * batch_size
+                end_idx = min(start_idx + batch_size, len(matching_files))
+                batch_files = matching_files[start_idx:end_idx]
+                
+                print(f"\n📦 Batch {batch_num + 1}/{total_batches} ({len(batch_files)} files)")
+                
+                # Process batch
+                for i, file_path in enumerate(batch_files):
+                    try:
+                        result = self._extract_alias_from_yaml_file(repo_name, version, file_path)
+                        file_aliases[file_path] = result
+                        
+                        if result["alias_name"]:
+                            print(f"  ✓ {file_path} - alias: {result['alias_name']} -> {result['alias_of']}")
+                        else:
+                            print(f"  ! {file_path} - no valid alias found")
+                            
+                    except Exception as e:
+                        # Check if it's a 404 error (file doesn't exist in this version)
+                        is_404_error = "404" in str(e)
+                        if is_404_error:
+                            print(f"  - {file_path} - not in {version}")
+                        else:
+                            print(f"  ! {file_path} - error: {str(e)}")
+                        
+                        file_aliases[file_path] = {
+                            "alias_name": None,
+                            "alias_of": None,
+                            "has_alias_of": False,
+                            "not_in_version": is_404_error
+                        }
+                    
+                    # Delay between individual requests to avoid per-minute rate limits
+                    if request_delay > 0 and i < len(batch_files) - 1:
+                        time.sleep(request_delay)
+                
+                # Delay between batches (except for the last batch)
+                if batch_num < total_batches - 1:
+                    print(f"⏳ Waiting {delay} seconds before next batch...")
+                    time.sleep(delay)
+            
+            # Get commit SHA for metadata
+            repo = self.client.github.get_repo(repo_name)
+            ref = self.client._get_reference(repo, version)
+            
+            # Calculate statistics
+            files_with_aliases = len([f for f in file_aliases.values() if f["alias_name"]])
+            files_not_in_version = len([f for f in file_aliases.values() if f.get("not_in_version", False)])
+            files_with_empty_aliases = len([f for f in file_aliases.values() if not f["alias_name"] and not f.get("not_in_version", False)])
+            
+            return {
+                "repo": repo_name,
+                "version": version,
+                "directory": directory,
+                "file_aliases": file_aliases,
+                "metadata": {
+                    "commit_sha": ref,
+                    "total_files": len(file_aliases),
+                    "files_with_aliases": files_with_aliases,
+                    "files_not_in_version": files_not_in_version,
+                    "files_with_empty_aliases": files_with_empty_aliases,
+                },
+            }
+            
+        except Exception as e:
+            raise Exception(f"Error finding server aliases from YAML: {str(e)}") from e
+
+    def _search_yaml_files_with_alias_of(self, repo_name: str, directory: str) -> list[str]:
+        """Use GitHub search API to find YAML files containing aliasOf keyword."""
+        try:
+            matching_files = []
+            
+            # Search for "aliasOf" in YAML files
+            query = f"aliasOf repo:{repo_name} path:{directory} extension:yaml"
+            
+            print(f"Searching with query: {query}")
+            
+            # Use GitHub search API
+            result = self.client.github.search_code(query)
+            
+            for item in result:
+                file_path = item.path
+                matching_files.append(file_path)
+                print(f"  ✓ {file_path}")
+            
+            return matching_files
+            
+        except Exception as e:
+            raise Exception(f"Error searching YAML files with GitHub API: {str(e)}") from e
+
+    def _extract_alias_from_yaml_file(self, repo_name: str, version: str, file_path: str) -> dict[str, Any]:
+        """Extract alias information from a YAML file."""
+        try:
+            content = self._fetch_single_file_content(repo_name, version, file_path)
+            
+            # Parse YAML content
+            yaml_data = yaml.safe_load(content)
+            
+            # Extract alias name from filename (remove .yaml extension and directory path)
+            filename = file_path.split('/')[-1]
+            alias_name = filename.replace('.yaml', '') if filename.endswith('.yaml') else filename
+            
+            # Extract aliasOf value
+            alias_of = yaml_data.get('aliasOf') if yaml_data else None
+            
+            return {
+                "alias_name": alias_name,
+                "alias_of": alias_of,
+                "has_alias_of": alias_of is not None,
+                "not_in_version": False
+            }
+            
+        except Exception as e:
+            raise Exception(f"Error extracting alias from YAML file {file_path}: {str(e)}") from e

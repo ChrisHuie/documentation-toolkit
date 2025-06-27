@@ -5,7 +5,7 @@ Modules Directory: modules
 Prebid.js Module Categories:
 ========================================
 
-📦 Bid Adapters (331):
+📦 Bid Adapters (436):
 ------------------------------
   • 33across
   • 360playvid
@@ -338,8 +338,113 @@ Prebid.js Module Categories:
   • revcontent
   • rhythmone
   • richaudience
+  • ringieraxelspringer
+  • rise
+  • rixengine
+  • robusta
+  • rocketlab
+  • rtbhouse
+  • rtbsape
+  • rubicon
+  • saambaa
+  • scattered
+  • seedingAlliance
+  • seedtag
+  • setupad
+  • sharethrough
+  • shinez
+  • shinezRtb
+  • showheroes-bs
+  • silvermob
+  • silverpush
+  • slimcut
+  • smaato
+  • smartadserver
+  • smarthub
+  • smartico
+  • smartx
+  • smartyads
+  • smartytech
+  • smilewanted
+  • smoot
+  • snigel
+  • sonobi
+  • sovrn
+  • sparteo
+  • ssmas
+  • sspBC
+  • ssp_geniee
+  • stackadapt
+  • startio
+  • stn
+  • stroeerCore
+  • stv
+  • sublime
+  • suim
+  • taboola
+  • tagoras
+  • talkads
+  • tapnative
+  • tappx
+  • targetVideo
+  • teads
+  • teal
+  • telaria
+  • temedya
+  • theAdx
+  • themoneytizer
+  • tpmn
+  • trafficgate
+  • trion
+  • triplelift
+  • truereach
+  • ttd
+  • twistDigital
+  • ucfunnel
+  • underdogmedia
+  • undertone
+  • unicorn
+  • uniquest
+  • unruly
+  • valuad
+  • vdoai
+  • ventes
+  • viantOrtb
+  • vibrantmedia
+  • vidazoo
+  • videobyte
+  • videoheroes
+  • videonow
+  • videoreach
+  • vidoomy
+  • viewdeosDX
+  • viously
+  • viqeo
+  • visiblemeasures
+  • vistars
+  • visx
+  • vlyby
+  • vox
+  • vrtcal
+  • vuukle
+  • waardex
+  • welect
+  • widespace
+  • winr
+  • wipes
+  • xe
+  • yahooAds
+  • yandex
+  • yieldlab
+  • yieldlift
+  • yieldlove
+  • yieldmo
+  • yieldone
+  • zeta
+  • zeta_global_ssp
+  • zmaticoo
 
-📦 Analytics Adapters (51):
+📦 Analytics Adapters (64):
 ------------------------------
   • 33across
   • AsteriobidPbm
@@ -392,8 +497,21 @@ Prebid.js Module Categories:
   • pulsepoint
   • r2b2
   • relevant
+  • rivr
+  • roxot
+  • scaleable
+  • sharethrough
+  • smartyads
+  • symitri
+  • tercept
+  • ucfunnel
+  • uniquest
+  • yandex
+  • yieldone
+  • yuktamedia
+  • zeta_global_ssp
 
-📦 Rtd Modules (54):
+📦 Rtd Modules (60):
 ------------------------------
   • 1plusX
   • 51Degrees
@@ -449,8 +567,14 @@ Prebid.js Module Categories:
   • rayn
   • reconciliation
   • relevad
+  • semantiq
+  • sirdata
+  • symitriDap
+  • timeout
+  • weborama
+  • wurfl
 
-📦 Identity Modules (48):
+📦 Identity Modules (60):
 ------------------------------
   • 33across
   • admixer
@@ -500,8 +624,20 @@ Prebid.js Module Categories:
   • pubmatic
   • quantcast
   • rewardedInterest
+  • shared
+  • taboola
+  • tapad
+  • teads
+  • tnc
+  • uid2
+  • unified
+  • utiq
+  • utiqMtp
+  • verizonMedia
+  • yandex
+  • zeotapIdPlus
 
-📦 Other Modules (30):
+📦 Other Modules (40):
 ------------------------------
   • adlooxAdServerVideo
   • adplayerproVideoProvider
@@ -533,6 +669,16 @@ Prebid.js Module Categories:
   • paapi
   • paapiForGpt
   • priceFloors
+  • s2sTesting
+  • schain
+  • sizeMapping
+  • sizeMappingV2
+  • targetVideoAdServerVideo
+  • tcfControl
+  • topLevelPaapi
+  • topicsFpdModule
+  • videojsVideoProvider
+  • yieldmoSyntheticInventoryModule
 
 JSON Output:
 --------------------
@@ -868,7 +1014,112 @@ JSON Output:
     "retailspot",
     "revcontent",
     "rhythmone",
-    "richaudience"
+    "richaudience",
+    "ringieraxelspringer",
+    "rise",
+    "rixengine",
+    "robusta",
+    "rocketlab",
+    "rtbhouse",
+    "rtbsape",
+    "rubicon",
+    "saambaa",
+    "scattered",
+    "seedingAlliance",
+    "seedtag",
+    "setupad",
+    "sharethrough",
+    "shinez",
+    "shinezRtb",
+    "showheroes-bs",
+    "silvermob",
+    "silverpush",
+    "slimcut",
+    "smaato",
+    "smartadserver",
+    "smarthub",
+    "smartico",
+    "smartx",
+    "smartyads",
+    "smartytech",
+    "smilewanted",
+    "smoot",
+    "snigel",
+    "sonobi",
+    "sovrn",
+    "sparteo",
+    "ssmas",
+    "sspBC",
+    "ssp_geniee",
+    "stackadapt",
+    "startio",
+    "stn",
+    "stroeerCore",
+    "stv",
+    "sublime",
+    "suim",
+    "taboola",
+    "tagoras",
+    "talkads",
+    "tapnative",
+    "tappx",
+    "targetVideo",
+    "teads",
+    "teal",
+    "telaria",
+    "temedya",
+    "theAdx",
+    "themoneytizer",
+    "tpmn",
+    "trafficgate",
+    "trion",
+    "triplelift",
+    "truereach",
+    "ttd",
+    "twistDigital",
+    "ucfunnel",
+    "underdogmedia",
+    "undertone",
+    "unicorn",
+    "uniquest",
+    "unruly",
+    "valuad",
+    "vdoai",
+    "ventes",
+    "viantOrtb",
+    "vibrantmedia",
+    "vidazoo",
+    "videobyte",
+    "videoheroes",
+    "videonow",
+    "videoreach",
+    "vidoomy",
+    "viewdeosDX",
+    "viously",
+    "viqeo",
+    "visiblemeasures",
+    "vistars",
+    "visx",
+    "vlyby",
+    "vox",
+    "vrtcal",
+    "vuukle",
+    "waardex",
+    "welect",
+    "widespace",
+    "winr",
+    "wipes",
+    "xe",
+    "yahooAds",
+    "yandex",
+    "yieldlab",
+    "yieldlift",
+    "yieldlove",
+    "yieldmo",
+    "yieldone",
+    "zeta",
+    "zeta_global_ssp",
+    "zmaticoo"
   ],
   "analytics_adapters": [
     "33across",
@@ -921,7 +1172,20 @@ JSON Output:
     "pubxai",
     "pulsepoint",
     "r2b2",
-    "relevant"
+    "relevant",
+    "rivr",
+    "roxot",
+    "scaleable",
+    "sharethrough",
+    "smartyads",
+    "symitri",
+    "tercept",
+    "ucfunnel",
+    "uniquest",
+    "yandex",
+    "yieldone",
+    "yuktamedia",
+    "zeta_global_ssp"
   ],
   "rtd_modules": [
     "1plusX",
@@ -977,7 +1241,13 @@ JSON Output:
     "raveltech",
     "rayn",
     "reconciliation",
-    "relevad"
+    "relevad",
+    "semantiq",
+    "sirdata",
+    "symitriDap",
+    "timeout",
+    "weborama",
+    "wurfl"
   ],
   "identity_modules": [
     "33across",
@@ -1027,7 +1297,19 @@ JSON Output:
     "publink",
     "pubmatic",
     "quantcast",
-    "rewardedInterest"
+    "rewardedInterest",
+    "shared",
+    "taboola",
+    "tapad",
+    "teads",
+    "tnc",
+    "uid2",
+    "unified",
+    "utiq",
+    "utiqMtp",
+    "verizonMedia",
+    "yandex",
+    "zeotapIdPlus"
   ],
   "other_modules": [
     "adlooxAdServerVideo",
@@ -1059,6 +1341,16 @@ JSON Output:
     "nativeRendering",
     "paapi",
     "paapiForGpt",
-    "priceFloors"
+    "priceFloors",
+    "s2sTesting",
+    "schain",
+    "sizeMapping",
+    "sizeMappingV2",
+    "targetVideoAdServerVideo",
+    "tcfControl",
+    "topLevelPaapi",
+    "topicsFpdModule",
+    "videojsVideoProvider",
+    "yieldmoSyntheticInventoryModule"
   ]
 }

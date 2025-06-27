@@ -1,0 +1,304 @@
+# Prebid Server Alias Mappings
+# Repository: prebid/prebid-server
+# Version: v3.19.0
+# Generated: 705f21bc24533c1f8b1054ab8cca424b06fcb71a
+# Total Files: 61
+# Files with Aliases: 57
+# Files not in v3.19.0: 4
+# Files with Empty Aliases: 0
+# Total Aliases: 57
+
+## Alphabetical List of All Aliases
+
+152media
+addigi
+adform
+adinify
+admaticde
+adport
+adsyield
+adt
+adtg_org
+appstock
+artechnology
+bcmint
+bidgency
+bidsmind
+connektai
+copper6
+embimedia
+epsilon
+equativ
+evtech
+felixads
+filmzie
+finative
+freewheel-ssp
+greedygame
+iionads
+indicue
+jambojar
+janet
+jdpmedia
+magnite
+markapp
+mobupps
+monetixads
+netaddiction
+orangeclickmedia
+pgam
+pixad
+quantumdex
+rxnetwork
+streamkey
+streamlyn
+streamvision
+suntContent
+synacormedia
+tgm
+tredio
+trustx
+ttd
+valueimpression
+velonium
+viewdeos
+vimayx
+xtrmqb
+yahooAdvertising
+yahoossp
+yobee
+
+## JSON Structure
+
+```json
+[
+  {
+    "name": "152media",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "addigi",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "adform",
+    "aliasOf": "adf"
+  },
+  {
+    "name": "adinify",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "admaticde",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "adport",
+    "aliasOf": "adverxo"
+  },
+  {
+    "name": "adsyield",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "adt",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "adtg_org",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "appstock",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "artechnology",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "bcmint",
+    "aliasOf": "aso"
+  },
+  {
+    "name": "bidgency",
+    "aliasOf": "aso"
+  },
+  {
+    "name": "bidsmind",
+    "aliasOf": "adverxo"
+  },
+  {
+    "name": "connektai",
+    "aliasOf": "xeworks"
+  },
+  {
+    "name": "copper6",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "embimedia",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "epsilon",
+    "aliasOf": "conversant"
+  },
+  {
+    "name": "equativ",
+    "aliasOf": "smartadserver"
+  },
+  {
+    "name": "evtech",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "felixads",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "filmzie",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "finative",
+    "aliasOf": "seedingAlliance"
+  },
+  {
+    "name": "freewheel-ssp",
+    "aliasOf": "freewheelssp"
+  },
+  {
+    "name": "greedygame",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "iionads",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "indicue",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "jambojar",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "janet",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "jdpmedia",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "magnite",
+    "aliasOf": "rubicon"
+  },
+  {
+    "name": "markapp",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "mobupps",
+    "aliasOf": "adverxo"
+  },
+  {
+    "name": "monetixads",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "netaddiction",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "orangeclickmedia",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "pgam",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "pixad",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "quantumdex",
+    "aliasOf": "apacdex"
+  },
+  {
+    "name": "rxnetwork",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "streamkey",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "streamlyn",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "streamvision",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "suntContent",
+    "aliasOf": "seedingAlliance"
+  },
+  {
+    "name": "synacormedia",
+    "aliasOf": "imds"
+  },
+  {
+    "name": "tgm",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "tredio",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "trustx",
+    "aliasOf": "grid"
+  },
+  {
+    "name": "ttd",
+    "aliasOf": "thetradedesk"
+  },
+  {
+    "name": "valueimpression",
+    "aliasOf": "apacdex"
+  },
+  {
+    "name": "velonium",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "viewdeos",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "vimayx",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "xtrmqb",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "yahooAdvertising",
+    "aliasOf": "yahooAds"
+  },
+  {
+    "name": "yahoossp",
+    "aliasOf": "yahooAds"
+  },
+  {
+    "name": "yobee",
+    "aliasOf": "admatic"
+  }
+]
+```
