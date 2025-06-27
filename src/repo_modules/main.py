@@ -17,6 +17,7 @@ from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
 from .github_client import GitHubClient
 from .parser_factory import ParserFactory
+from ..shared_utilities.filename_generator import generate_output_filename
 
 # Initialize environment and logging
 load_dotenv()
@@ -60,6 +61,9 @@ def generate_output_filename(config: RepoConfig, version: str) -> str:
 
     # Clean version string for filename
     version_clean = version.replace("/", "_")
+    # Remove leading "v" if present (e.g., "v3.19.0" -> "3.19.0")
+    if version_clean.startswith("v"):
+        version_clean = version_clean[1:]
 
     return f"{repo_name}_modules_version_{version_clean}.txt"
 
@@ -97,26 +101,22 @@ def create_parser() -> argparse.ArgumentParser:
         "--batch-size",
         type=int,
         default=50,
-        help="Batch size for processing files (default: 50)"
+        help="Batch size for processing files (default: 50)",
     )
 
     parser.add_argument(
         "--delay",
         type=float,
         default=1.0,
-        help="Delay in seconds between batches (default: 1.0)"
+        help="Delay in seconds between batches (default: 1.0)",
     )
 
     parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Resume from checkpoint if available"
+        "--resume", action="store_true", help="Resume from checkpoint if available"
     )
 
     parser.add_argument(
-        "--limit",
-        type=int,
-        help="Limit number of files to process (for testing)"
+        "--limit", type=int, help="Limit number of files to process (for testing)"
     )
 
     return parser
@@ -269,7 +269,9 @@ def main():
 
         # Fetch and parse repository data
         with tracer.start_as_current_span("fetch_and_parse_data"):
-            logger.info(f"Starting data fetch with strategy: {repo_config.fetch_strategy}")
+            logger.info(
+                f"Starting data fetch with strategy: {repo_config.fetch_strategy}"
+            )
             data = github_client.fetch_repository_data(
                 repo_config.repo,
                 version,
@@ -302,7 +304,7 @@ def main():
             with open(output_file, "w") as f:
                 f.write(result)
             logger.info("Results written to %s", output_file)
-            
+
             # Clean up checkpoint file on successful completion
             checkpoint_file = f".{repo_config.repo.replace('/', '_')}_{version}_{(repo_config.modules_path or repo_config.directory or 'modules').replace('/', '_')}_checkpoint.json"
             if os.path.exists(checkpoint_file):
