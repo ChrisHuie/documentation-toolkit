@@ -17,6 +17,7 @@ dependencies = [
 [project.scripts]
 repo-modules-by-version = "src.repo_modules_by_version.main:main"
 validate-project = "src.dev_tools.cli:main"
+alias-mappings = "src.alias_mappings.main:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
