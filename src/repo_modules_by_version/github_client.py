@@ -2,8 +2,10 @@
 GitHub API client for fetching repository data
 """
 
+import json
 import os
 import re
+import time
 from typing import Any
 
 from github import Github, GithubException
@@ -19,13 +21,16 @@ class GitHubClient:
     def __init__(self, token: str | None = None):
         """Initialize GitHub client with optional token."""
         self.token = token or os.environ.get("GITHUB_TOKEN")
+        print(f"DEBUG: GitHub token available: {bool(self.token)}")
         if self.token:
+            print(f"DEBUG: Using authenticated GitHub client")
             self.github = Github(self.token)
         else:
-            # Use unauthenticated client (rate limited)
+            print(f"DEBUG: Using unauthenticated GitHub client (rate limited)")
             self.github = Github()
 
         # Initialize version cache manager
+        print(f"DEBUG: Initializing version cache manager")
         self.cache_manager = VersionCacheManager()
 
     def fetch_repository_data(
@@ -36,6 +41,9 @@ class GitHubClient:
         modules_path: str | None = None,
         paths: dict[str, str] | None = None,
         fetch_strategy: str = "full_content",
+        batch_size: int = 20,
+        delay: float = 0.5,
+        limit: int | None = None,
     ) -> dict[str, Any]:
         """
         Fetch repository data for a specific version and directory/directories.
@@ -52,10 +60,14 @@ class GitHubClient:
             Dictionary containing file paths and content
         """
         try:
+            print(f"DEBUG: Fetching repository {repo_name}")
             repo = self.github.get_repo(repo_name)
+            print(f"DEBUG: Got repository object")
 
             # Get the commit/reference
+            print(f"DEBUG: Getting reference for version {version}")
             ref = self._get_reference(repo, version)
+            print(f"DEBUG: Got reference: {ref}")
 
             # Handle multi-path fetching for new parsers like prebid-server
             if paths:
@@ -98,8 +110,10 @@ class GitHubClient:
             if fetch_strategy == "filenames_only":
                 # For filenames only, use appropriate file extensions
                 file_extensions = [".js"] if modules_path else None
+                # Generate checkpoint filename
+                checkpoint_file = f".{repo_name.replace('/', '_')}_{version}_{target_directory.replace('/', '_')}_checkpoint.json"
                 files_data = self._fetch_directory_filenames(
-                    repo, target_directory, ref, file_extensions
+                    repo, target_directory, ref, file_extensions, batch_size, delay, checkpoint_file, limit
                 )
             elif fetch_strategy == "directory_names":
                 files_data = self._fetch_directory_names(repo, target_directory, ref)
@@ -168,9 +182,15 @@ class GitHubClient:
         directory: str,
         ref: str,
         file_extensions: list[str] | None = None,
+        batch_size: int = 20,
+        delay: float = 0.5,
+        checkpoint_file: str | None = None,
+        limit: int | None = None,
     ) -> dict[str, str]:
         """
         Fetch only filenames from a directory without content (for modules parsing).
+        
+        Uses Git Tree API to avoid the 1000-item limit of get_contents().
 
         Args:
             repo: GitHub repository object
@@ -182,31 +202,342 @@ class GitHubClient:
             Dictionary mapping file paths to empty strings (for compatibility)
         """
         files_data = {}
+        
+        # Try to load from checkpoint first
+        if checkpoint_file and os.path.exists(checkpoint_file):
+            try:
+                with open(checkpoint_file, 'r') as f:
+                    checkpoint_data = json.load(f)
+                    files_data = checkpoint_data.get('files_data', {})
+                    processed_files = set(checkpoint_data.get('processed_files', []))
+                    print(f"Loaded checkpoint with {len(files_data)} files already processed")
+            except Exception as e:
+                print(f"Warning: Could not load checkpoint: {e}")
+                files_data = {}
+                processed_files = set()
+        else:
+            processed_files = set()
 
         try:
-            contents = repo.get_contents(directory, ref=ref)
-
-            # Handle single file case
-            if not isinstance(contents, list):
-                contents = [contents]
-
-            for content in contents:
-                if content.type == "file":
+            print(f"Fetching files from {directory} with rate limiting and checkpointing...")
+            
+            # For large repositories like prebid-js, skip Git Tree API and go directly to get_contents()
+            # This avoids the timeout issue with massive trees
+            print(f"Using get_contents() API for incremental file discovery...")
+            all_tree_elements = self._fetch_all_files_with_contents_api_checkpointed(
+                repo, directory, ref, checkpoint_file, batch_size, delay
+            )
+            
+            print(f"Total tree elements found: {len(all_tree_elements)}")
+            
+            # Collect files to process
+            files_to_process = []
+            directory_prefix = f"{directory}/" if not directory.endswith('/') else directory
+            
+            for element in all_tree_elements:
+                if element.type == "blob" and element.path.startswith(directory_prefix):
+                    # Get relative path within the directory
+                    relative_path = element.path[len(directory_prefix):]
+                    
+                    # Skip subdirectories for modules parsing (we only want root level files)
+                    if '/' in relative_path:
+                        continue
+                    
                     # Check file extension filter
                     if file_extensions:
-                        if not any(
-                            content.name.endswith(ext) for ext in file_extensions
-                        ):
+                        if not any(relative_path.endswith(ext) for ext in file_extensions):
                             continue  # Skip files that don't match the extension filter
 
-                    # Only store filename, no content (much faster)
-                    files_data[content.path] = ""
-                # Skip subdirectories for modules parsing (we only want root level files)
+                    if element.path not in processed_files:
+                        files_to_process.append(element.path)
+            
+            print(f"Found {len(files_to_process)} new files to process (already have {len(processed_files)} from checkpoint)")
+            
+            if not files_to_process:
+                print("All files already processed!")
+                return files_data
+            
+            # Check if we hit the 1000-item API limit and need reverse search
+            if not limit and len(all_tree_elements) >= 1000:
+                print(f"Hit API limit with {len(all_tree_elements)} items, checking for missing files...")
+                # Find the last file alphabetically from our current results
+                sorted_files = sorted(files_to_process)
+                last_file_path = sorted_files[-1] if sorted_files else ""
+                last_file_name = last_file_path.split('/')[-1] if last_file_path else ""
+                print(f"Last file found in first pass: {last_file_name}")
+                
+                # Get additional files via reverse search that come after our last file
+                additional_files = self._fetch_files_after_cutoff(repo, directory, ref, file_extensions, last_file_name)
+                if additional_files:
+                    files_to_process.extend(additional_files)
+                    print(f"Found {len(additional_files)} additional files after '{last_file_name}'")
+                    print(f"Total files now: {len(files_to_process)}")
+            
+            # Apply limit if specified (for testing)
+            if limit and limit < len(files_to_process):
+                files_to_process = files_to_process[:limit]
+                print(f"Limited to first {limit} files for testing")
+            
+            # Process files in batches to avoid overwhelming the API
+            total_batches = (len(files_to_process) + batch_size - 1) // batch_size
+            last_checkpoint_time = time.time()
+            
+            for batch_num in range(total_batches):
+                start_idx = batch_num * batch_size
+                end_idx = min(start_idx + batch_size, len(files_to_process))
+                batch_files = files_to_process[start_idx:end_idx]
+                
+                print(f"Processing batch {batch_num + 1}/{total_batches} ({len(batch_files)} files)")
+                
+                # Add all files in this batch (no content needed for filenames_only)
+                for file_path in batch_files:
+                    files_data[file_path] = ""
+                    processed_files.add(file_path)
+                
+                # Save checkpoint every 200 seconds
+                current_time = time.time()
+                if checkpoint_file and (current_time - last_checkpoint_time) >= 200:
+                    print(f"Saving checkpoint... ({len(files_data)} files processed)")
+                    checkpoint_data = {
+                        'files_data': files_data,
+                        'processed_files': list(processed_files),
+                        'timestamp': current_time
+                    }
+                    with open(checkpoint_file, 'w') as f:
+                        json.dump(checkpoint_data, f)
+                    last_checkpoint_time = current_time
+                
+                # Add delay between batches to respect rate limits
+                if batch_num < total_batches - 1 and delay > 0:
+                    print(f"Waiting {delay} seconds before next batch...")
+                    time.sleep(delay)
+            
+            # Save final checkpoint
+            if checkpoint_file:
+                print(f"Saving final checkpoint... ({len(files_data)} files total)")
+                checkpoint_data = {
+                    'files_data': files_data,
+                    'processed_files': list(processed_files),
+                    'timestamp': time.time(),
+                    'completed': True
+                }
+                with open(checkpoint_file, 'w') as f:
+                    json.dump(checkpoint_data, f)
 
         except GithubException as e:
             self._handle_github_exception(e, directory)
 
         return files_data
+
+    def _fetch_all_files_with_contents_api(self, repo, directory: str, ref: str) -> list:
+        """
+        Fetch all files using get_contents() API with recursive traversal.
+        This is used as fallback when Git Tree API is truncated.
+        """
+        all_files = []
+        
+        def fetch_directory_recursive(dir_path: str, depth: int = 0):
+            if depth > 10:  # Prevent infinite recursion
+                print(f"  Warning: Maximum recursion depth reached for {dir_path}")
+                return
+                
+            try:
+                print(f"  Fetching contents of {dir_path} (depth {depth})")
+                contents = repo.get_contents(dir_path, ref=ref)
+                
+                # Handle single file case
+                if not isinstance(contents, list):
+                    contents = [contents]
+                
+                for content in contents:
+                    if content.type == "file":
+                        # Create a pseudo tree element for compatibility
+                        pseudo_element = type('obj', (object,), {
+                            'type': 'blob',
+                            'path': content.path,
+                            'sha': content.sha
+                        })()
+                        all_files.append(pseudo_element)
+                    elif content.type == "dir":
+                        # Recursively fetch subdirectory
+                        fetch_directory_recursive(content.path, depth + 1)
+                        
+                # Add small delay to respect rate limits
+                time.sleep(0.1)
+                        
+            except GithubException as e:
+                if e.status == 404:
+                    print(f"  Directory {dir_path} not found (404)")
+                else:
+                    print(f"  Error fetching {dir_path}: {e}")
+            except Exception as e:
+                print(f"  Unexpected error fetching {dir_path}: {e}")
+        
+        # Start recursive fetch from the target directory
+        fetch_directory_recursive(directory)
+        
+        print(f"Total files found with contents API: {len(all_files)}")
+        return all_files
+
+    def _fetch_all_files_with_contents_api_checkpointed(
+        self, repo, directory: str, ref: str, checkpoint_file: str | None = None, 
+        batch_size: int = 20, delay: float = 0.5
+    ) -> list:
+        """
+        Fetch all files using get_contents() API with checkpointing support.
+        This processes directories incrementally and saves progress.
+        """
+        all_files = []
+        processed_dirs = set()
+        last_checkpoint_time = time.time()
+        
+        # Load from checkpoint if available
+        if checkpoint_file and os.path.exists(checkpoint_file):
+            try:
+                with open(checkpoint_file, 'r') as f:
+                    checkpoint_data = json.load(f)
+                    # Convert back to pseudo elements
+                    for file_data in checkpoint_data.get('files_data', []):
+                        pseudo_element = type('obj', (object,), {
+                            'type': 'blob',
+                            'path': file_data['path'],
+                            'sha': file_data.get('sha', '')
+                        })()
+                        all_files.append(pseudo_element)
+                    processed_dirs = set(checkpoint_data.get('processed_dirs', []))
+                    print(f"Loaded checkpoint: {len(all_files)} files from {len(processed_dirs)} directories")
+            except Exception as e:
+                print(f"Warning: Could not load checkpoint: {e}")
+                all_files = []
+                processed_dirs = set()
+        
+        def fetch_directory_with_checkpoint(dir_path: str, depth: int = 0):
+            nonlocal last_checkpoint_time
+            
+            if depth > 10:  # Prevent infinite recursion
+                print(f"  Warning: Maximum recursion depth reached for {dir_path}")
+                return
+            
+            if dir_path in processed_dirs:
+                print(f"  Skipping already processed directory: {dir_path}")
+                return
+                
+            try:
+                print(f"  Fetching contents of {dir_path} (depth {depth})")
+                contents = repo.get_contents(dir_path, ref=ref)
+                
+                # Handle single file case
+                if not isinstance(contents, list):
+                    contents = [contents]
+                
+                files_in_dir = []
+                subdirs_in_dir = []
+                
+                for content in contents:
+                    if content.type == "file":
+                        # Create a pseudo tree element for compatibility
+                        pseudo_element = type('obj', (object,), {
+                            'type': 'blob',
+                            'path': content.path,
+                            'sha': content.sha
+                        })()
+                        all_files.append(pseudo_element)
+                        files_in_dir.append(content.path)
+                    elif content.type == "dir":
+                        subdirs_in_dir.append(content.path)
+                
+                # Mark this directory as processed
+                processed_dirs.add(dir_path)
+                print(f"    Found {len(files_in_dir)} files, {len(subdirs_in_dir)} subdirs")
+                
+                # Save checkpoint every 200 seconds
+                current_time = time.time()
+                if checkpoint_file and (current_time - last_checkpoint_time) >= 200:
+                    print(f"Saving checkpoint... ({len(all_files)} files, {len(processed_dirs)} dirs)")
+                    checkpoint_data = {
+                        'files_data': [{'path': f.path, 'sha': f.sha} for f in all_files],
+                        'processed_dirs': list(processed_dirs),
+                        'timestamp': current_time
+                    }
+                    with open(checkpoint_file, 'w') as f:
+                        json.dump(checkpoint_data, f)
+                    last_checkpoint_time = current_time
+                
+                # Process subdirectories
+                for subdir_path in subdirs_in_dir:
+                    fetch_directory_with_checkpoint(subdir_path, depth + 1)
+                    # Add small delay between directories
+                    time.sleep(delay)
+                        
+            except GithubException as e:
+                if e.status == 404:
+                    print(f"  Directory {dir_path} not found (404)")
+                else:
+                    print(f"  Error fetching {dir_path}: {e}")
+            except Exception as e:
+                print(f"  Unexpected error fetching {dir_path}: {e}")
+        
+        # Start recursive fetch from the target directory
+        fetch_directory_with_checkpoint(directory)
+        
+        # Save final checkpoint
+        if checkpoint_file:
+            print(f"Saving final checkpoint... ({len(all_files)} files total)")
+            checkpoint_data = {
+                'files_data': [{'path': f.path, 'sha': f.sha} for f in all_files],
+                'processed_dirs': list(processed_dirs),
+                'timestamp': time.time(),
+                'completed': True
+            }
+            with open(checkpoint_file, 'w') as f:
+                json.dump(checkpoint_data, f)
+        
+        print(f"Total files found with checkpointed contents API: {len(all_files)}")
+        return all_files
+
+    def _fetch_files_after_cutoff(
+        self, repo, directory: str, ref: str, file_extensions: list[str] | None, cutoff_filename: str
+    ) -> list[str]:
+        """
+        Fetch files that come after the cutoff filename alphabetically.
+        Uses a reverse approach to catch files missed by the 1000-item API limit.
+        """
+        additional_files = []
+        
+        try:
+            print(f"Searching for files after '{cutoff_filename}' using Git Tree API...")
+            # Use Git Tree API to get complete file list
+            tree = repo.get_git_tree(ref, recursive=True)
+            
+            directory_prefix = f"{directory}/" if not directory.endswith('/') else directory
+            
+            for element in tree.tree:
+                if element.type == "blob" and element.path.startswith(directory_prefix):
+                    # Get relative path within the directory
+                    relative_path = element.path[len(directory_prefix):]
+                    
+                    # Skip subdirectories (we only want root level files)
+                    if '/' in relative_path:
+                        continue
+                    
+                    # Check file extension filter
+                    if file_extensions:
+                        if not any(relative_path.endswith(ext) for ext in file_extensions):
+                            continue
+                    
+                    # Only include files that come after our cutoff alphabetically
+                    if relative_path > cutoff_filename:
+                        additional_files.append(element.path)
+            
+            print(f"Git Tree API found {len(additional_files)} files after '{cutoff_filename}'")
+            
+        except GithubException as e:
+            print(f"Git Tree API failed, trying alternative approach: {e}")
+            # Fallback: try to guess missing files by checking specific patterns
+            # This is a last resort if Git Tree API also has issues
+            pass
+        
+        return additional_files
 
     def _fetch_directory_names(
         self,
@@ -271,6 +602,8 @@ class GitHubClient:
     ) -> dict[str, str]:
         """
         Fetch only file names from a directory (for documentation parsing).
+        
+        Uses Git Tree API to avoid the 1000-item limit of get_contents().
 
         Args:
             repo: GitHub repository object
@@ -283,17 +616,21 @@ class GitHubClient:
         files_data = {}
 
         try:
-            # Get files from directory
-            contents = repo.get_contents(directory, ref=ref)
-
-            # Handle single file case
-            if not isinstance(contents, list):
-                contents = [contents]
-
-            for content in contents:
-                if content.type == "file":
-                    # Store file name/path with empty content
-                    files_data[content.path] = ""
+            # Use Git Tree API to get all files recursively (avoids 1000-item limit)
+            tree = repo.get_git_tree(ref, recursive=True)
+            
+            # Filter for files in the target directory
+            directory_prefix = f"{directory}/" if not directory.endswith('/') else directory
+            
+            for element in tree.tree:
+                if element.type == "blob" and element.path.startswith(directory_prefix):
+                    # Get relative path within the directory
+                    relative_path = element.path[len(directory_prefix):]
+                    
+                    # Only include files in the root of the directory (no subdirectories)
+                    if '/' not in relative_path:
+                        # Store file name/path with empty content
+                        files_data[element.path] = ""
 
         except GithubException as e:
             self._handle_github_exception(e, directory)

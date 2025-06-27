@@ -8,6 +8,11 @@ import sys
 
 from dotenv import load_dotenv
 from loguru import logger
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 
 from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
 from .github_client import GitHubClient
@@ -19,6 +24,19 @@ logger.remove()  # Remove default handler
 logger.add(
     sys.stderr, format="{time:YYYY-MM-DD HH:mm:ss} [{level}] {message}", level="INFO"
 )
+
+# Initialize OpenTelemetry
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer(__name__)
+
+# Configure console exporter for debugging
+console_exporter = ConsoleSpanExporter()
+span_processor = SimpleSpanProcessor(console_exporter)
+trace.get_tracer_provider().add_span_processor(span_processor)
+
+# Auto-instrument HTTP libraries
+RequestsInstrumentor().instrument()
+URLLib3Instrumentor().instrument()
 
 
 def generate_output_filename(config: RepoConfig, version: str) -> str:
@@ -73,6 +91,32 @@ def create_parser() -> argparse.ArgumentParser:
 
     parser.add_argument(
         "--output", type=str, help="Output file path (optional, defaults to stdout)"
+    )
+
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=50,
+        help="Batch size for processing files (default: 50)"
+    )
+
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=1.0,
+        help="Delay in seconds between batches (default: 1.0)"
+    )
+
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from checkpoint if available"
+    )
+
+    parser.add_argument(
+        "--limit",
+        type=int,
+        help="Limit number of files to process (for testing)"
     )
 
     return parser
@@ -145,8 +189,9 @@ def show_version_menu(repo_config: RepoConfig) -> str | None:
 
 def main():
     """Main CLI entry point."""
-    parser = create_parser()
-    args = parser.parse_args()
+    with tracer.start_as_current_span("main"):
+        parser = create_parser()
+        args = parser.parse_args()
 
     # Handle list repos command
     if args.list_repos:
@@ -206,24 +251,37 @@ def main():
 
     # Initialize GitHub client and parser
     try:
-        github_client = GitHubClient()
-        parser_factory = ParserFactory()
+        with tracer.start_as_current_span("initialize_clients"):
+            logger.info("Creating GitHubClient instance...")
+            github_client = GitHubClient()
+            logger.info("GitHubClient created successfully")
+            logger.info("Creating ParserFactory instance...")
+            parser_factory = ParserFactory()
+            logger.info("ParserFactory created successfully")
 
-        logger.info("Analyzing %s at version %s...", repo_config.repo, version)
+        logger.info(f"Analyzing {repo_config.repo} at version {version}...")
+        logger.info("Initializing GitHub client...")
+        logger.info(f"Configuration: batch_size={args.batch_size}, delay={args.delay}")
 
         # Get parser for this repository
+        logger.info(f"Getting parser for repository type: {repo_config.parser_type}")
         parser_instance = parser_factory.get_parser(repo_config)
 
         # Fetch and parse repository data
-        data = github_client.fetch_repository_data(
-            repo_config.repo,
-            version,
-            repo_config.directory,
-            repo_config.modules_path,
-            repo_config.paths,
-            repo_config.fetch_strategy,
-        )
-        result = parser_instance.parse(data)
+        with tracer.start_as_current_span("fetch_and_parse_data"):
+            logger.info(f"Starting data fetch with strategy: {repo_config.fetch_strategy}")
+            data = github_client.fetch_repository_data(
+                repo_config.repo,
+                version,
+                repo_config.directory,
+                repo_config.modules_path,
+                repo_config.paths,
+                repo_config.fetch_strategy,
+                args.batch_size,
+                args.delay,
+                args.limit,
+            )
+            result = parser_instance.parse(data)
 
         # Output result
         if args.output:
@@ -244,6 +302,12 @@ def main():
             with open(output_file, "w") as f:
                 f.write(result)
             logger.info("Results written to %s", output_file)
+            
+            # Clean up checkpoint file on successful completion
+            checkpoint_file = f".{repo_config.repo.replace('/', '_')}_{version}_{(repo_config.modules_path or repo_config.directory or 'modules').replace('/', '_')}_checkpoint.json"
+            if os.path.exists(checkpoint_file):
+                os.remove(checkpoint_file)
+                logger.info("Cleaned up checkpoint file")
         else:
             logger.info("Results:")
             logger.info("%s", "-" * 40)

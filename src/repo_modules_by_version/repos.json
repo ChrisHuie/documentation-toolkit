@@ -26,7 +26,7 @@
     "prebid-server": {
         "repo": "prebid/prebid-server",
         "description": "Prebid Server Go implementation",
-        "versions": ["master"],
+        "versions": ["master", "v3.19.0"],
         "parser_type": "prebid_server_go",
         "paths": {
             "Bid Adapters": "adapters",
