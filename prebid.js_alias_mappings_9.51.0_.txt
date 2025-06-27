@@ -1,0 +1,1199 @@
+# Prebid.js Alias Mappings
+# Repository: prebid/Prebid.js
+# Version: 9.51.0
+# Generated: 62852abb21a4ae0d26c61b3df77987e8a87e6fb3
+# Total Files: 125
+# Files with Aliases: 107
+# Files with Commented Aliases: 3
+# Files with Empty Aliases: 15
+# Total Aliases: 236
+
+## Alphabetical List of All Aliases
+
+152media
+1accord
+33across_mgni
+9dotsmedia
+ad2
+adasta
+adbite
+adblender
+adform
+adformOpenRTB
+adg
+adingo
+adliveplus
+adlivetech
+admaticde
+admixeradx
+adomega
+adpluto
+adpluto_dsp
+adport
+adr
+adsmart
+adsolut
+adsyield
+adt
+adtg_org
+adwebone
+adzymic
+algorix
+amp
+ampliffy
+anyclip
+aotter
+apester
+appierBR
+appierExt
+appierGM
+appnexusAst
+atd
+attekmi
+audiencemedia
+avantisvideo
+ayl
+bcm
+bcmint
+bcmssp
+beintoo
+bg
+bidbuddy
+bidgency
+bidsmind
+bidstailamedia
+bk
+bp
+bridgeupp
+brightcom
+brightmountainmedia
+btw
+buzzoolaAdapter
+cadent
+cleanmedianet
+clmb
+cnvr
+compariola
+connectadrealtime
+converge
+cordless
+craft
+czlla
+denakop
+dh
+dia
+dichange
+didnadisplay
+didnavideo
+digiad
+digitalmatter
+displayioads
+divreach
+doceree
+driftpixel
+ds
+duration
+easybid
+emetriq
+emx_digital
+emxdigital
+engageadx
+engagesimply
+epsilon
+ergadx
+ex
+exads
+featureforward
+first-id
+freewheel-mrm
+freewheelssp
+futureads
+gambid
+gamma
+getintentAdapter
+gg
+global_sun
+glomexbidder
+go2net
+gourmetads
+gridNM
+h12
+headbidder
+headbidding
+houseofpubs
+hype
+hyperbrainz
+id
+iionads
+imp
+indicue
+iqx
+janet
+kivi
+kuantyx
+league-m
+lsm
+lunamediax
+mars
+matomy
+mediaopti
+mobupps
+monetix
+monetixads
+motionspots
+movingup
+msna
+msq
+nat
+netaddiction
+ntv
+oas
+ocm
+oftmedia
+oftmediahb
+openwebvideo
+openwebxchange
+opera
+oppamedia
+orangeclickmedia
+ottadvisors
+ozone
+pagescience
+paradocs
+pgammedia
+pilotx
+pixad
+pixelpluses
+playgroundxyz
+playwire
+pll
+plr
+prismadirect
+prismassp
+prjads
+projectagora
+publiffy
+pubtech
+pulseLite
+pulsepointLite
+px
+qortex
+quantumdex
+ra
+revbid
+revenuemaker
+risexchange
+roqoon
+rs
+rtbanalytica
+rtbdemand_com
+rtbstack
+rxnetwork
+saambaa
+sape
+scm
+scoremedia
+selectmedia
+selectmediavideo
+showheroesBs
+smart
+smile
+smn
+sonic_twist
+spinx
+spm
+st
+stailamedia
+stellormedia
+stickyadstv
+streamkey
+streamvision
+stringads
+sw
+synacormedia
+tgm
+theAdx
+theadx
+themoneytizer
+thetradedesk
+torchad
+trek
+tremor
+tremorvideo
+trustedstack
+trustx
+turktelekom
+twiago
+uncn
+unibots
+uol
+urekamedia
+valueimpression
+velonium
+vidcrunch
+videoffy
+viewdeos
+voisetech
+waardex_ak
+wi
+wlt
+wmg
+wnr
+xeworks
+y1
+ya
+yahooAdvertising
+yahoossp
+yl
+yobee
+
+## JSON Structure
+
+```json
+[
+  {
+    "name": "152media",
+    "aliasOf": "orbitsoft"
+  },
+  {
+    "name": "1accord",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "33across_mgni",
+    "aliasOf": "33across"
+  },
+  {
+    "name": "9dotsmedia",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "ad2",
+    "aliasOf": "ad2iction"
+  },
+  {
+    "name": "adasta",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "adbite",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "adblender",
+    "aliasOf": "admixer"
+  },
+  {
+    "name": "adform",
+    "aliasOf": "adf"
+  },
+  {
+    "name": "adformOpenRTB",
+    "aliasOf": "adf"
+  },
+  {
+    "name": "adg",
+    "aliasOf": "adgeneration"
+  },
+  {
+    "name": "adingo",
+    "aliasOf": "fluct"
+  },
+  {
+    "name": "adliveplus",
+    "aliasOf": "lucead"
+  },
+  {
+    "name": "adlivetech",
+    "aliasOf": "grid"
+  },
+  {
+    "name": "admaticde",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "admixeradx",
+    "aliasOf": "admixer"
+  },
+  {
+    "name": "adomega",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "adpluto",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "adpluto_dsp",
+    "aliasOf": "adkernelAdn"
+  },
+  {
+    "name": "adport",
+    "aliasOf": "adverxo"
+  },
+  {
+    "name": "adr",
+    "aliasOf": "adrelevantis"
+  },
+  {
+    "name": "adsmart",
+    "aliasOf": "adrelevantis"
+  },
+  {
+    "name": "adsolut",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "adsyield",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "adt",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "adtg_org",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "adwebone",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "adzymic",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "algorix",
+    "aliasOf": "rixengine"
+  },
+  {
+    "name": "amp",
+    "aliasOf": "ampliffy"
+  },
+  {
+    "name": "ampliffy",
+    "aliasOf": "ampliffy"
+  },
+  {
+    "name": "anyclip",
+    "aliasOf": "anyclip"
+  },
+  {
+    "name": "aotter",
+    "aliasOf": "aseal"
+  },
+  {
+    "name": "apester",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "appierBR",
+    "aliasOf": "appier"
+  },
+  {
+    "name": "appierExt",
+    "aliasOf": "appier"
+  },
+  {
+    "name": "appierGM",
+    "aliasOf": "appier"
+  },
+  {
+    "name": "appnexusAst",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "atd",
+    "aliasOf": "automatad"
+  },
+  {
+    "name": "attekmi",
+    "aliasOf": "smarthub"
+  },
+  {
+    "name": "audiencemedia",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "avantisvideo",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "ayl",
+    "aliasOf": "adyoulike"
+  },
+  {
+    "name": "bcm",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "bcmint",
+    "aliasOf": "aso"
+  },
+  {
+    "name": "bcmssp",
+    "aliasOf": "oms"
+  },
+  {
+    "name": "beintoo",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "bg",
+    "aliasOf": "bidglass"
+  },
+  {
+    "name": "bidbuddy",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "bidgency",
+    "aliasOf": "aso"
+  },
+  {
+    "name": "bidsmind",
+    "aliasOf": "adverxo"
+  },
+  {
+    "name": "bidstailamedia",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "bk",
+    "aliasOf": "bliink"
+  },
+  {
+    "name": "bp",
+    "aliasOf": "beop"
+  },
+  {
+    "name": "bridgeupp",
+    "aliasOf": "bridgeupp"
+  },
+  {
+    "name": "brightcom",
+    "aliasOf": "oms"
+  },
+  {
+    "name": "brightmountainmedia",
+    "aliasOf": "brightMountainMedia"
+  },
+  {
+    "name": "btw",
+    "aliasOf": "between"
+  },
+  {
+    "name": "buzzoolaAdapter",
+    "aliasOf": "buzzoola"
+  },
+  {
+    "name": "cadent",
+    "aliasOf": "cadentApertureMX"
+  },
+  {
+    "name": "cleanmedianet",
+    "aliasOf": "gamoshi"
+  },
+  {
+    "name": "clmb",
+    "aliasOf": "colombia"
+  },
+  {
+    "name": "cnvr",
+    "aliasOf": "conversant"
+  },
+  {
+    "name": "compariola",
+    "aliasOf": "adrelevantis"
+  },
+  {
+    "name": "connectadrealtime",
+    "aliasOf": "connectad"
+  },
+  {
+    "name": "converge",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "cordless",
+    "aliasOf": "aso"
+  },
+  {
+    "name": "craft",
+    "aliasOf": "craft"
+  },
+  {
+    "name": "czlla",
+    "aliasOf": "coinzilla"
+  },
+  {
+    "name": "denakop",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "dh",
+    "aliasOf": "dailyhunt"
+  },
+  {
+    "name": "dia",
+    "aliasOf": "dianomi"
+  },
+  {
+    "name": "dichange",
+    "aliasOf": "digitalMatter"
+  },
+  {
+    "name": "didnadisplay",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "didnavideo",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "digiad",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "digitalmatter",
+    "aliasOf": "digitalMatter"
+  },
+  {
+    "name": "displayioads",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "divreach",
+    "aliasOf": "adbutler"
+  },
+  {
+    "name": "doceree",
+    "aliasOf": "adbutler"
+  },
+  {
+    "name": "driftpixel",
+    "aliasOf": "driftpixel"
+  },
+  {
+    "name": "ds",
+    "aliasOf": "distroscale"
+  },
+  {
+    "name": "duration",
+    "aliasOf": "nobid"
+  },
+  {
+    "name": "easybid",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "emetriq",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "emx_digital",
+    "aliasOf": "cadentApertureMX"
+  },
+  {
+    "name": "emxdigital",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "engageadx",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "engagesimply",
+    "aliasOf": "adkernelAdn"
+  },
+  {
+    "name": "epsilon",
+    "aliasOf": "conversant"
+  },
+  {
+    "name": "ergadx",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "ex",
+    "aliasOf": "codefuel"
+  },
+  {
+    "name": "exads",
+    "aliasOf": "exads"
+  },
+  {
+    "name": "featureforward",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "first-id",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "freewheel-mrm",
+    "aliasOf": "fwssp"
+  },
+  {
+    "name": "freewheelssp",
+    "aliasOf": "freewheel-ssp"
+  },
+  {
+    "name": "futureads",
+    "aliasOf": "admixer"
+  },
+  {
+    "name": "gambid",
+    "aliasOf": "gamoshi"
+  },
+  {
+    "name": "gamma",
+    "aliasOf": "gamma"
+  },
+  {
+    "name": "getintentAdapter",
+    "aliasOf": "getintent"
+  },
+  {
+    "name": "gg",
+    "aliasOf": "gumgum"
+  },
+  {
+    "name": "global_sun",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "glomexbidder",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "go2net",
+    "aliasOf": "admixer"
+  },
+  {
+    "name": "gourmetads",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "gridNM",
+    "aliasOf": "grid"
+  },
+  {
+    "name": "h12",
+    "aliasOf": "h12media"
+  },
+  {
+    "name": "headbidder",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "headbidding",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "houseofpubs",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "hype",
+    "aliasOf": "hypelab"
+  },
+  {
+    "name": "hyperbrainz",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "id",
+    "aliasOf": "improvedigital"
+  },
+  {
+    "name": "iionads",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "imp",
+    "aliasOf": "impactify"
+  },
+  {
+    "name": "indicue",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "iqx",
+    "aliasOf": "iqx"
+  },
+  {
+    "name": "janet",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "kivi",
+    "aliasOf": "lm_kiviads"
+  },
+  {
+    "name": "kuantyx",
+    "aliasOf": "aso"
+  },
+  {
+    "name": "league-m",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "lsm",
+    "aliasOf": "lifestreet"
+  },
+  {
+    "name": "lunamediax",
+    "aliasOf": "xe"
+  },
+  {
+    "name": "mars",
+    "aliasOf": "marsmedia"
+  },
+  {
+    "name": "matomy",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "mediaopti",
+    "aliasOf": "adxcg"
+  },
+  {
+    "name": "mobupps",
+    "aliasOf": "adverxo"
+  },
+  {
+    "name": "monetix",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "monetixads",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "motionspots",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "movingup",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "msna",
+    "aliasOf": "missena"
+  },
+  {
+    "name": "msq",
+    "aliasOf": "mediasquare"
+  },
+  {
+    "name": "nat",
+    "aliasOf": "nativery"
+  },
+  {
+    "name": "netaddiction",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "ntv",
+    "aliasOf": "nativo"
+  },
+  {
+    "name": "oas",
+    "aliasOf": "orbitsoft"
+  },
+  {
+    "name": "ocm",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "oftmedia",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "oftmediahb",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "openwebvideo",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "openwebxchange",
+    "aliasOf": "rise"
+  },
+  {
+    "name": "opera",
+    "aliasOf": "operaads"
+  },
+  {
+    "name": "oppamedia",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "orangeclickmedia",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "ottadvisors",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "ozone",
+    "aliasOf": "ozone"
+  },
+  {
+    "name": "pagescience",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "paradocs",
+    "aliasOf": "orbitsoft"
+  },
+  {
+    "name": "pgammedia",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "pilotx",
+    "aliasOf": "pilotx"
+  },
+  {
+    "name": "pixad",
+    "aliasOf": "admatic"
+  },
+  {
+    "name": "pixelpluses",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "playgroundxyz",
+    "aliasOf": "pxyz"
+  },
+  {
+    "name": "playwire",
+    "aliasOf": "grid"
+  },
+  {
+    "name": "pll",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "plr",
+    "aliasOf": "publir"
+  },
+  {
+    "name": "prismadirect",
+    "aliasOf": "prisma"
+  },
+  {
+    "name": "prismassp",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "prjads",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "projectagora",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "publiffy",
+    "aliasOf": "ampliffy"
+  },
+  {
+    "name": "pubtech",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "pulseLite",
+    "aliasOf": "pulsepoint"
+  },
+  {
+    "name": "pulsepointLite",
+    "aliasOf": "pulsepoint"
+  },
+  {
+    "name": "px",
+    "aliasOf": "performax"
+  },
+  {
+    "name": "qortex",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "quantumdex",
+    "aliasOf": "apacdex"
+  },
+  {
+    "name": "ra",
+    "aliasOf": "richaudience"
+  },
+  {
+    "name": "revbid",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "revenuemaker",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "risexchange",
+    "aliasOf": "rise"
+  },
+  {
+    "name": "roqoon",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "rs",
+    "aliasOf": "retailspot"
+  },
+  {
+    "name": "rtbanalytica",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "rtbdemand_com",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "rtbstack",
+    "aliasOf": "admixer"
+  },
+  {
+    "name": "rxnetwork",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "saambaa",
+    "aliasOf": "advangelists"
+  },
+  {
+    "name": "sape",
+    "aliasOf": "rtbsape"
+  },
+  {
+    "name": "scm",
+    "aliasOf": "slimcut"
+  },
+  {
+    "name": "scoremedia",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "selectmedia",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "selectmediavideo",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "showheroesBs",
+    "aliasOf": "showheroes-bs"
+  },
+  {
+    "name": "smart",
+    "aliasOf": "smartadserver"
+  },
+  {
+    "name": "smile",
+    "aliasOf": "smilewanted"
+  },
+  {
+    "name": "smn",
+    "aliasOf": "admixer"
+  },
+  {
+    "name": "sonic_twist",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "spinx",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "spm",
+    "aliasOf": "nexx360"
+  },
+  {
+    "name": "st",
+    "aliasOf": "seedtag"
+  },
+  {
+    "name": "stailamedia",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "stellormedia",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "stickyadstv",
+    "aliasOf": "freewheel-ssp"
+  },
+  {
+    "name": "streamkey",
+    "aliasOf": "adtelligent"
+  },
+  {
+    "name": "streamvision",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "stringads",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "sw",
+    "aliasOf": "smilewanted"
+  },
+  {
+    "name": "synacormedia",
+    "aliasOf": "imds"
+  },
+  {
+    "name": "tgm",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "theAdx",
+    "aliasOf": "theAdx"
+  },
+  {
+    "name": "theadx",
+    "aliasOf": "theAdx"
+  },
+  {
+    "name": "themoneytizer",
+    "aliasOf": "themoneytizer"
+  },
+  {
+    "name": "thetradedesk",
+    "aliasOf": "ttd"
+  },
+  {
+    "name": "torchad",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "trek",
+    "aliasOf": "aseal"
+  },
+  {
+    "name": "tremor",
+    "aliasOf": "telaria"
+  },
+  {
+    "name": "tremorvideo",
+    "aliasOf": "telaria"
+  },
+  {
+    "name": "trustedstack",
+    "aliasOf": "medianet"
+  },
+  {
+    "name": "trustx",
+    "aliasOf": "grid"
+  },
+  {
+    "name": "turktelekom",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "twiago",
+    "aliasOf": "adspirit"
+  },
+  {
+    "name": "uncn",
+    "aliasOf": "unicorn"
+  },
+  {
+    "name": "unibots",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "uol",
+    "aliasOf": "appnexus"
+  },
+  {
+    "name": "urekamedia",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "valueimpression",
+    "aliasOf": "apacdex"
+  },
+  {
+    "name": "velonium",
+    "aliasOf": "limelightDigital"
+  },
+  {
+    "name": "vidcrunch",
+    "aliasOf": "aniview"
+  },
+  {
+    "name": "videoffy",
+    "aliasOf": "ampliffy"
+  },
+  {
+    "name": "viewdeos",
+    "aliasOf": "viewdeosDX"
+  },
+  {
+    "name": "voisetech",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "waardex_ak",
+    "aliasOf": "adkernel"
+  },
+  {
+    "name": "wi",
+    "aliasOf": "wipes"
+  },
+  {
+    "name": "wlt",
+    "aliasOf": "welect"
+  },
+  {
+    "name": "wmg",
+    "aliasOf": "adWMG"
+  },
+  {
+    "name": "wnr",
+    "aliasOf": "winr"
+  },
+  {
+    "name": "xeworks",
+    "aliasOf": "xe"
+  },
+  {
+    "name": "y1",
+    "aliasOf": "yieldone"
+  },
+  {
+    "name": "ya",
+    "aliasOf": "yandex"
+  },
+  {
+    "name": "yahooAdvertising",
+    "aliasOf": "yahooAds"
+  },
+  {
+    "name": "yahoossp",
+    "aliasOf": "yahooAds"
+  },
+  {
+    "name": "yl",
+    "aliasOf": "yieldlift"
+  },
+  {
+    "name": "yobee",
+    "aliasOf": "admatic"
+  }
+]
+```
