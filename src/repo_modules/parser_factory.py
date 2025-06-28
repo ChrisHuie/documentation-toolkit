@@ -162,23 +162,52 @@ class PrebidJSParser(BaseParser):
 
         # Check if we have metadata for v10.0+ or use traditional approach
         if self._should_use_metadata(data["version"]):
-            modules = self._parse_from_metadata(data)
+            modules: dict[str, list[str]] | dict[str, list[dict[str, Any]]] = (
+                self._parse_from_metadata(data)
+            )
         else:
             modules = self._categorize_modules(data["files"])
+
+        # Add historical data enrichment
+        include_history = data.get("include_history", False)
+        if include_history:
+            modules = self._enrich_with_history(modules, data["repo"])
 
         # Display categories
         result.append("Prebid.js Module Categories:")
         result.append("=" * 40)
         result.append("")
 
-        for category, files in modules.items():
-            if files:
+        for category, items in modules.items():
+            if items:
                 result.append(
-                    f"📦 {category.replace('_', ' ').title()} ({len(files)}):"
+                    f"📦 {category.replace('_', ' ').title()} ({len(items)}):"
                 )
                 result.append("-" * 30)
-                for file in sorted(files):
-                    result.append(f"{file}")
+
+                if include_history and items and isinstance(items[0], dict):
+                    # Display with historical data
+                    dict_items = [item for item in items if isinstance(item, dict)]
+                    for item in sorted(dict_items, key=lambda x: x.get("name", "")):
+                        name = item.get("name", "unknown")
+                        first_added = item.get("first_added")
+                        first_version = item.get("first_version")
+
+                        if first_added:
+                            date_str = first_added[:10]  # YYYY-MM-DD
+                            if first_version:
+                                result.append(
+                                    f"{name} (added: {date_str}, version: {first_version})"
+                                )
+                            else:
+                                result.append(f"{name} (added: {date_str})")
+                        else:
+                            result.append(f"{name} (added: unknown)")
+                else:
+                    # Display simple list
+                    str_items = [str(item) for item in items]
+                    for str_item in sorted(str_items):
+                        result.append(f"{str_item}")
                 result.append("")
 
         # Add JSON output
@@ -306,6 +335,62 @@ class PrebidJSParser(BaseParser):
             return self._categorize_modules(data["files"])
 
         return categories
+
+    def _enrich_with_history(
+        self, modules: dict[str, list[str]] | dict[str, list[dict[str, Any]]], repo: str
+    ) -> dict[str, list[str]] | dict[str, list[dict[str, Any]]]:
+        """Enrich module data with cached historical information only."""
+        try:
+            from .module_history import ModuleHistoryTracker
+
+            tracker = ModuleHistoryTracker(repo)
+
+            # Only use cached data - never make API calls during regular extraction
+            enriched_data: dict[str, list[dict[str, Any]]] = {}
+
+            for category, module_list in modules.items():
+                if not module_list:
+                    enriched_data[category] = []
+                    continue
+
+                # Create enriched module entries using only cached data
+                enriched_modules = []
+                for item in module_list:
+                    # Handle both string items and dict items
+                    if isinstance(item, str):
+                        module_name = item
+                    else:
+                        module_name = item.get("name", "unknown")
+                    module_info = {
+                        "name": module_name,
+                        "first_added": None,
+                        "first_version": None,
+                        "first_commit_sha": None,
+                    }
+
+                    # Check if we have cached data for this module
+                    if module_name in tracker._cache:
+                        history = tracker._cache[module_name]
+                        module_info.update(
+                            {
+                                "first_added": history.first_commit_date,
+                                "first_version": history.first_release_version,
+                                "first_commit_sha": history.first_commit_sha,
+                            }
+                        )
+
+                    enriched_modules.append(module_info)
+
+                enriched_data[category] = enriched_modules
+
+            return enriched_data
+
+        except Exception as e:
+            # Fallback to original data if history tracking fails
+            from loguru import logger
+
+            logger.warning(f"Failed to enrich with history data: {e}")
+            return modules
 
 
 class PrebidServerGoParser(BaseParser):
