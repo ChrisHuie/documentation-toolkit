@@ -1,0 +1,1296 @@
+Repository: prebid/Prebid.js
+Version: extract-metadata
+Modules Directory: modules
+
+Prebid.js Module Categories:
+========================================
+
+📦 Bid Adapters (425):
+------------------------------
+33across
+360playvid
+a1Media
+a4g
+ablida
+acuityads
+ad2iction
+adWMG
+adagio
+adbutler
+addefend
+adf
+adfusion
+adgeneration
+adgrid
+adhash
+adhese
+adipolo
+adkernel
+adkernelAdn
+admaru
+admatic
+admedia
+admixer
+adnow
+adnuntius
+adot
+adpartner
+adplus
+adpone
+adprime
+adquery
+adrelevantis
+adrino
+adriver
+ads_interactive
+adspirit
+adstir
+adtarget
+adtelligent
+adtrgtme
+adtrue
+aduptech
+advangelists
+advertising
+adverxo
+adxcg
+adyoulike
+afp
+aidem
+aja
+akcelo
+alkimi
+ampliffy
+amx
+aniview
+anyclip
+apacdex
+appier
+appnexus
+appush
+apstream
+aseal
+aso
+astraone
+audiencerun
+automatad
+axis
+axonix
+beachfront
+bedigitech
+beop
+between
+beyondmedia
+biddo
+bidglass
+bidmatic
+bidscube
+bidtheatre
+big-richmedia
+bitmedia
+blasto
+bliink
+blockthrough
+blue
+bms
+bmtm
+boldwin
+brainx
+brave
+brid
+bridgewell
+browsi
+bucksense
+buzzoola
+c1x
+cadent_aperture_mx
+caroda
+ccx
+chtnw
+clickforce
+codefuel
+cointraffic
+coinzilla
+colombia
+colossusssp
+compass
+conceptx
+concert
+condorx
+connatix
+connectad
+consumable
+contentexchange
+contxtful
+conversant
+copper6ssp
+cpmstar
+craft
+criteo
+cwire
+dailyhunt
+dailymotion
+datablocks
+datawrkz
+deepintent
+deltaprojects
+dexerto
+dianomi
+digitalMatter
+discovery
+displayio
+distroscale
+djax
+doceree
+docereeAdManager
+dochase
+driftpixel
+dsp_geniee
+dspx
+dvgroup
+dxkulture
+e_volution
+eclick
+edge226
+ehealthcaresolutions
+eightPod
+emtv
+engageya
+eplanning
+epom_dsp
+equativ
+escalax
+eskimi
+etarget
+exads
+exco
+fan
+feedad
+finative
+flipp
+fluct
+freepass
+fwssp
+gamma
+gamoshi
+getintent
+gjirafa
+glomex
+gmossp
+gnet
+goldbach
+greenbids
+grid
+growads
+gumgum
+h12media
+holid
+hybrid
+hypelab
+idx
+illumin
+impactify
+improvedigital
+incrementx
+inmobi
+innity
+insticator
+integr8
+intenze
+interactiveOffers
+invamia
+invibes
+iprom
+iqx
+iqzone
+ivs
+ix
+jixie
+justpremium
+jwplayer
+kargo
+kimberlite
+kiviads
+kobler
+krushmedia
+kubient
+kueezRtb
+lane4
+lasso
+lemmaDigital
+lifestreet
+limelightDigital
+livewrapped
+lkqd
+lm_kiviads
+lockerdome
+logan
+logicad
+loopme
+loyal
+lucead
+lunamediahb
+luponmedia
+mabidder
+madsense
+madvertise
+malltv
+mantis
+marsmedia
+mathildeads
+mediaConsortium
+mediabrama
+mediaeyes
+mediaforce
+mediafuse
+mediago
+mediaimpact
+mediakeys
+medianet
+mediasniper
+mediasquare
+mgid
+mgidX
+microad
+minutemedia
+missena
+mobfoxpb
+mobilefuse
+mobkoi
+my6sense
+mytarget
+nativery
+nativo
+newspassid
+nextMillennium
+nextroll
+nexverse
+nexx360
+nobid
+ogury
+omnidex
+oms
+onetag
+onomagic
+opaMarketplace
+open8
+openweb
+openx
+operaads
+opsco
+optable
+optidigital
+optout
+oraki
+orbidder
+orbitsoft
+otm
+outbrain
+ownadx
+ozone
+padsquad
+pangle
+performax
+pgamssp
+pilotx
+pinkLion
+pixfuture
+playdigo
+preciso
+prisma
+programmaticX
+programmatica
+proxistore
+pstudio
+pubCircle
+pubgenius
+publir
+pubmatic
+pubrise
+pubx
+pulsepoint
+pwbid
+pxyz
+qt
+quantcast
+qwarry
+r2b2
+readpeak
+rediads
+redtram
+relaido
+relay
+relevantdigital
+relevatehealth
+resetdigital
+responsiveAds
+retailspot
+revcontent
+rhythmone
+richaudience
+ringieraxelspringer
+rise
+rixengine
+robusta
+rocketlab
+rtbhouse
+rtbsape
+rubicon
+scattered
+seedingAlliance
+seedtag
+setupad
+sharethrough
+shinez
+shinezRtb
+showheroes-bs
+silvermob
+silverpush
+slimcut
+smaato
+smartadserver
+smarthub
+smartico
+smartx
+smartyads
+smartytech
+smilewanted
+smoot
+snigel
+sonarads
+sonobi
+sovrn
+sparteo
+ssmas
+sspBC
+ssp_geniee
+stackadapt
+startio
+stn
+stroeerCore
+stv
+sublime
+suim
+taboola
+tagoras
+talkads
+tapnative
+tappx
+targetVideo
+teads
+teal
+temedya
+theAdx
+themoneytizer
+tpmn
+trafficgate
+trion
+triplelift
+truereach
+ttd
+twistDigital
+ucfunnel
+underdogmedia
+undertone
+unicorn
+uniquest
+unruly
+valuad
+vdoai
+ventes
+viant
+vibrantmedia
+vidazoo
+videobyte
+videoheroes
+videonow
+videoreach
+vidoomy
+viewdeosDX
+viously
+viqeo
+visiblemeasures
+vistars
+visx
+vlyby
+vox
+vrtcal
+vuukle
+waardex
+welect
+widespace
+winr
+wipes
+xe
+yahooAds
+yandex
+yieldlab
+yieldlift
+yieldlove
+yieldmo
+yieldone
+zeta_global
+zeta_global_ssp
+zmaticoo
+
+📦 Analytics Adapters (60):
+------------------------------
+33across
+AsteriobidPbm
+adWMG
+adagio
+adkernelAdn
+adloox
+adnuntius
+advRed
+adxcg
+adxpremium
+agma
+appier
+asteriobid
+ats
+automatad
+browsi
+byData
+concert
+datablocks
+eightPod
+finteza
+greenbids
+growthCode
+hadron
+id5
+intentIq
+invisibly
+kargo
+liveIntent
+livewrapped
+magnite
+malltv
+medianet
+mobkoi
+nobid
+oolo
+optimon
+oxxion
+pianoDmp
+pubmatic
+pubperf
+pubstack
+pubwise
+pubxai
+pulsepoint
+r2b2
+relevant
+rivr
+roxot
+scaleable
+sharethrough
+smartyads
+symitri
+tercept
+ucfunnel
+uniquest
+yandex
+yieldone
+yuktamedia
+zeta_global_ssp
+
+📦 Rtd Modules (58):
+------------------------------
+1plusX
+51Degrees
+a1Media
+aaxBlockmeter
+adagio
+adlane
+adloox
+adnuntius
+airgrid
+anonymised
+arcspan
+azerionedge
+blueconic
+brandmetrics
+browsi
+cleanio
+confiant
+contxtful
+dgkeyword
+dynamicAdBoost
+experian
+gamera
+geoedge
+goldfishAds
+greenbids
+growthCode
+hadron
+humansecurity
+ias
+im
+intersection
+jwplayer
+liveIntent
+mediafilter
+medianet
+mgid
+mobian
+neuwo
+nodalsAi
+oneKey
+optable
+optimera
+overtone
+oxxion
+permutive
+pubmatic
+pubxai
+qortex
+raveltech
+rayn
+reconciliation
+relevad
+semantiq
+sirdata
+symitriDap
+timeout
+weborama
+wurfl
+
+📦 Identity Modules (58):
+------------------------------
+33across
+admixer
+adquery
+adriver
+adtelligent
+amx
+cee
+connect
+criteo
+czechAd
+dac
+deepintentDpes
+dmd
+euid
+fabrick
+freepass
+ftrack
+gravito
+growthCode
+hadron
+id5
+identityLink
+idx
+imu
+intentIq
+just
+kinesso
+liveIntent
+lmp
+lockrAIM
+lotamePanorama
+merkle
+mobkoi
+mwOpenLink
+mygaru
+navegg
+net
+novatiq
+oneKey
+openPair
+operaads
+pair
+permutiveIdentityManager
+pubProvided
+publink
+pubmatic
+quantcast
+rewardedInterest
+taboola
+tapad
+teads
+tnc
+uid2
+unified
+utiq
+utiqMtp
+yandex
+zeotapIdPlus
+
+📦 Other Modules (29):
+------------------------------
+_moduleMetadata
+adlooxAdServerVideo
+adplayerproVideoProvider
+adpod
+allowActivities
+bidViewability
+bidViewabilityIO
+categoryTranslation
+dfpAdServerVideo
+dfpAdpod
+dsaControl
+express
+freeWheelAdserverVideo
+gamAdServerVideo
+gamAdpod
+gppControl_usnat
+idImportLibrary
+instreamTracking
+jwplayerVideoProvider
+nativeRendering
+paapi
+paapiForGpt
+s2sTesting
+sizeMapping
+sizeMappingV2
+targetVideoAdServerVideo
+topLevelPaapi
+topicsFpdModule
+videojsVideoProvider
+
+JSON Output:
+--------------------
+{
+  "bid_adapters": [
+    "33across",
+    "360playvid",
+    "a1Media",
+    "a4g",
+    "ablida",
+    "acuityads",
+    "ad2iction",
+    "adWMG",
+    "adagio",
+    "adbutler",
+    "addefend",
+    "adf",
+    "adfusion",
+    "adgeneration",
+    "adgrid",
+    "adhash",
+    "adhese",
+    "adipolo",
+    "adkernelAdn",
+    "adkernel",
+    "admaru",
+    "admatic",
+    "admedia",
+    "admixer",
+    "adnow",
+    "adnuntius",
+    "adot",
+    "adpartner",
+    "adplus",
+    "adpone",
+    "adprime",
+    "adquery",
+    "adrelevantis",
+    "adrino",
+    "adriver",
+    "ads_interactive",
+    "adspirit",
+    "adstir",
+    "adtarget",
+    "adtelligent",
+    "adtrgtme",
+    "adtrue",
+    "aduptech",
+    "advangelists",
+    "advertising",
+    "adverxo",
+    "adxcg",
+    "adyoulike",
+    "afp",
+    "aidem",
+    "aja",
+    "akcelo",
+    "alkimi",
+    "ampliffy",
+    "amx",
+    "aniview",
+    "anyclip",
+    "apacdex",
+    "appier",
+    "appnexus",
+    "appush",
+    "apstream",
+    "aseal",
+    "aso",
+    "astraone",
+    "audiencerun",
+    "automatad",
+    "axis",
+    "axonix",
+    "beachfront",
+    "bedigitech",
+    "beop",
+    "between",
+    "beyondmedia",
+    "biddo",
+    "bidglass",
+    "bidmatic",
+    "bidscube",
+    "bidtheatre",
+    "big-richmedia",
+    "bitmedia",
+    "blasto",
+    "bliink",
+    "blockthrough",
+    "blue",
+    "bms",
+    "bmtm",
+    "boldwin",
+    "brainx",
+    "brave",
+    "brid",
+    "bridgewell",
+    "browsi",
+    "bucksense",
+    "buzzoola",
+    "c1x",
+    "cadent_aperture_mx",
+    "caroda",
+    "ccx",
+    "chtnw",
+    "clickforce",
+    "codefuel",
+    "cointraffic",
+    "coinzilla",
+    "colombia",
+    "colossusssp",
+    "compass",
+    "conceptx",
+    "concert",
+    "condorx",
+    "connatix",
+    "connectad",
+    "consumable",
+    "contentexchange",
+    "contxtful",
+    "conversant",
+    "copper6ssp",
+    "cpmstar",
+    "craft",
+    "criteo",
+    "cwire",
+    "dailyhunt",
+    "dailymotion",
+    "datablocks",
+    "datawrkz",
+    "deepintent",
+    "deltaprojects",
+    "dexerto",
+    "dianomi",
+    "digitalMatter",
+    "discovery",
+    "displayio",
+    "distroscale",
+    "djax",
+    "docereeAdManager",
+    "doceree",
+    "dochase",
+    "driftpixel",
+    "dsp_geniee",
+    "dspx",
+    "dvgroup",
+    "dxkulture",
+    "e_volution",
+    "eclick",
+    "edge226",
+    "ehealthcaresolutions",
+    "eightPod",
+    "emtv",
+    "engageya",
+    "eplanning",
+    "epom_dsp",
+    "equativ",
+    "escalax",
+    "eskimi",
+    "etarget",
+    "exads",
+    "exco",
+    "fan",
+    "feedad",
+    "finative",
+    "flipp",
+    "fluct",
+    "freepass",
+    "fwssp",
+    "gamma",
+    "gamoshi",
+    "getintent",
+    "gjirafa",
+    "glomex",
+    "gmossp",
+    "gnet",
+    "goldbach",
+    "greenbids",
+    "grid",
+    "growads",
+    "gumgum",
+    "h12media",
+    "holid",
+    "hybrid",
+    "hypelab",
+    "idx",
+    "illumin",
+    "impactify",
+    "improvedigital",
+    "incrementx",
+    "inmobi",
+    "innity",
+    "insticator",
+    "integr8",
+    "intenze",
+    "interactiveOffers",
+    "invamia",
+    "invibes",
+    "iprom",
+    "iqx",
+    "iqzone",
+    "ivs",
+    "ix",
+    "jixie",
+    "justpremium",
+    "jwplayer",
+    "kargo",
+    "kimberlite",
+    "kiviads",
+    "kobler",
+    "krushmedia",
+    "kubient",
+    "kueezRtb",
+    "lane4",
+    "lasso",
+    "lemmaDigital",
+    "lifestreet",
+    "limelightDigital",
+    "livewrapped",
+    "lkqd",
+    "lm_kiviads",
+    "lockerdome",
+    "logan",
+    "logicad",
+    "loopme",
+    "loyal",
+    "lucead",
+    "lunamediahb",
+    "luponmedia",
+    "mabidder",
+    "madsense",
+    "madvertise",
+    "malltv",
+    "mantis",
+    "marsmedia",
+    "mathildeads",
+    "mediaConsortium",
+    "mediabrama",
+    "mediaeyes",
+    "mediaforce",
+    "mediafuse",
+    "mediago",
+    "mediaimpact",
+    "mediakeys",
+    "medianet",
+    "mediasniper",
+    "mediasquare",
+    "mgid",
+    "mgidX",
+    "microad",
+    "minutemedia",
+    "missena",
+    "mobfoxpb",
+    "mobilefuse",
+    "mobkoi",
+    "my6sense",
+    "mytarget",
+    "nativery",
+    "nativo",
+    "newspassid",
+    "nextMillennium",
+    "nextroll",
+    "nexverse",
+    "nexx360",
+    "nobid",
+    "ogury",
+    "omnidex",
+    "oms",
+    "onetag",
+    "onomagic",
+    "opaMarketplace",
+    "open8",
+    "openweb",
+    "openx",
+    "operaads",
+    "opsco",
+    "optable",
+    "optidigital",
+    "optout",
+    "oraki",
+    "orbidder",
+    "orbitsoft",
+    "otm",
+    "outbrain",
+    "ownadx",
+    "ozone",
+    "padsquad",
+    "pangle",
+    "performax",
+    "pgamssp",
+    "pilotx",
+    "pinkLion",
+    "pixfuture",
+    "playdigo",
+    "preciso",
+    "prisma",
+    "programmaticX",
+    "programmatica",
+    "proxistore",
+    "pstudio",
+    "pubCircle",
+    "pubgenius",
+    "publir",
+    "pubmatic",
+    "pubrise",
+    "pubx",
+    "pulsepoint",
+    "pwbid",
+    "pxyz",
+    "qt",
+    "quantcast",
+    "qwarry",
+    "r2b2",
+    "readpeak",
+    "rediads",
+    "redtram",
+    "relaido",
+    "relay",
+    "relevantdigital",
+    "relevatehealth",
+    "resetdigital",
+    "responsiveAds",
+    "retailspot",
+    "revcontent",
+    "rhythmone",
+    "richaudience",
+    "ringieraxelspringer",
+    "rise",
+    "rixengine",
+    "robusta",
+    "rocketlab",
+    "rtbhouse",
+    "rtbsape",
+    "rubicon",
+    "scattered",
+    "seedingAlliance",
+    "seedtag",
+    "setupad",
+    "sharethrough",
+    "shinez",
+    "shinezRtb",
+    "showheroes-bs",
+    "silvermob",
+    "silverpush",
+    "slimcut",
+    "smaato",
+    "smartadserver",
+    "smarthub",
+    "smartico",
+    "smartx",
+    "smartyads",
+    "smartytech",
+    "smilewanted",
+    "smoot",
+    "snigel",
+    "sonarads",
+    "sonobi",
+    "sovrn",
+    "sparteo",
+    "ssmas",
+    "sspBC",
+    "ssp_geniee",
+    "stackadapt",
+    "startio",
+    "stn",
+    "stroeerCore",
+    "stv",
+    "sublime",
+    "suim",
+    "taboola",
+    "tagoras",
+    "talkads",
+    "tapnative",
+    "tappx",
+    "targetVideo",
+    "teads",
+    "teal",
+    "temedya",
+    "theAdx",
+    "themoneytizer",
+    "tpmn",
+    "trafficgate",
+    "trion",
+    "triplelift",
+    "truereach",
+    "ttd",
+    "twistDigital",
+    "ucfunnel",
+    "underdogmedia",
+    "undertone",
+    "unicorn",
+    "uniquest",
+    "unruly",
+    "valuad",
+    "vdoai",
+    "ventes",
+    "viant",
+    "vibrantmedia",
+    "vidazoo",
+    "videobyte",
+    "videoheroes",
+    "videonow",
+    "videoreach",
+    "vidoomy",
+    "viewdeosDX",
+    "viously",
+    "viqeo",
+    "visiblemeasures",
+    "vistars",
+    "visx",
+    "vlyby",
+    "vox",
+    "vrtcal",
+    "vuukle",
+    "waardex",
+    "welect",
+    "widespace",
+    "winr",
+    "wipes",
+    "xe",
+    "yahooAds",
+    "yandex",
+    "yieldlab",
+    "yieldlift",
+    "yieldlove",
+    "yieldmo",
+    "yieldone",
+    "zeta_global",
+    "zeta_global_ssp",
+    "zmaticoo"
+  ],
+  "analytics_adapters": [
+    "33across",
+    "AsteriobidPbm",
+    "adWMG",
+    "adagio",
+    "adkernelAdn",
+    "adloox",
+    "adnuntius",
+    "advRed",
+    "adxcg",
+    "adxpremium",
+    "agma",
+    "appier",
+    "asteriobid",
+    "ats",
+    "automatad",
+    "browsi",
+    "byData",
+    "concert",
+    "datablocks",
+    "eightPod",
+    "finteza",
+    "greenbids",
+    "growthCode",
+    "hadron",
+    "id5",
+    "intentIq",
+    "invisibly",
+    "kargo",
+    "liveIntent",
+    "livewrapped",
+    "magnite",
+    "malltv",
+    "medianet",
+    "mobkoi",
+    "nobid",
+    "oolo",
+    "optimon",
+    "oxxion",
+    "pianoDmp",
+    "pubmatic",
+    "pubperf",
+    "pubstack",
+    "pubwise",
+    "pubxai",
+    "pulsepoint",
+    "r2b2",
+    "relevant",
+    "rivr",
+    "roxot",
+    "scaleable",
+    "sharethrough",
+    "smartyads",
+    "symitri",
+    "tercept",
+    "ucfunnel",
+    "uniquest",
+    "yandex",
+    "yieldone",
+    "yuktamedia",
+    "zeta_global_ssp"
+  ],
+  "rtd_modules": [
+    "1plusX",
+    "51Degrees",
+    "a1Media",
+    "aaxBlockmeter",
+    "adagio",
+    "adlane",
+    "adloox",
+    "adnuntius",
+    "airgrid",
+    "anonymised",
+    "arcspan",
+    "azerionedge",
+    "blueconic",
+    "brandmetrics",
+    "browsi",
+    "cleanio",
+    "confiant",
+    "contxtful",
+    "dgkeyword",
+    "dynamicAdBoost",
+    "experian",
+    "gamera",
+    "geoedge",
+    "goldfishAds",
+    "greenbids",
+    "growthCode",
+    "hadron",
+    "humansecurity",
+    "ias",
+    "im",
+    "intersection",
+    "jwplayer",
+    "liveIntent",
+    "mediafilter",
+    "medianet",
+    "mgid",
+    "mobian",
+    "neuwo",
+    "nodalsAi",
+    "oneKey",
+    "optable",
+    "optimera",
+    "overtone",
+    "oxxion",
+    "permutive",
+    "pubmatic",
+    "pubxai",
+    "qortex",
+    "raveltech",
+    "rayn",
+    "reconciliation",
+    "relevad",
+    "semantiq",
+    "sirdata",
+    "symitriDap",
+    "timeout",
+    "weborama",
+    "wurfl"
+  ],
+  "identity_modules": [
+    "33across",
+    "admixer",
+    "adquery",
+    "adriver",
+    "adtelligent",
+    "amx",
+    "cee",
+    "connect",
+    "criteo",
+    "czechAd",
+    "dac",
+    "deepintentDpes",
+    "dmd",
+    "euid",
+    "fabrick",
+    "freepass",
+    "ftrack",
+    "gravito",
+    "growthCode",
+    "hadron",
+    "id5",
+    "identityLink",
+    "idx",
+    "imu",
+    "intentIq",
+    "just",
+    "kinesso",
+    "liveIntent",
+    "lmp",
+    "lockrAIM",
+    "lotamePanorama",
+    "merkle",
+    "mobkoi",
+    "mwOpenLink",
+    "mygaru",
+    "navegg",
+    "net",
+    "novatiq",
+    "oneKey",
+    "openPair",
+    "operaads",
+    "pair",
+    "permutiveIdentityManager",
+    "pubProvided",
+    "publink",
+    "pubmatic",
+    "quantcast",
+    "rewardedInterest",
+    "taboola",
+    "tapad",
+    "teads",
+    "tnc",
+    "uid2",
+    "unified",
+    "utiq",
+    "utiqMtp",
+    "yandex",
+    "zeotapIdPlus"
+  ],
+  "other_modules": [
+    "_moduleMetadata",
+    "adlooxAdServerVideo",
+    "adplayerproVideoProvider",
+    "adpod",
+    "allowActivities",
+    "bidViewability",
+    "bidViewabilityIO",
+    "categoryTranslation",
+    "dfpAdServerVideo",
+    "dfpAdpod",
+    "dsaControl",
+    "express",
+    "freeWheelAdserverVideo",
+    "gamAdServerVideo",
+    "gamAdpod",
+    "gppControl_usnat",
+    "idImportLibrary",
+    "instreamTracking",
+    "jwplayerVideoProvider",
+    "nativeRendering",
+    "paapi",
+    "paapiForGpt",
+    "s2sTesting",
+    "sizeMapping",
+    "sizeMappingV2",
+    "targetVideoAdServerVideo",
+    "topLevelPaapi",
+    "topicsFpdModule",
+    "videojsVideoProvider"
+  ]
+}
