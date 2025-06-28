@@ -5,8 +5,8 @@ Used across all tools in the documentation-toolkit project.
 """
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
 
 import requests
 from loguru import logger
@@ -287,7 +287,7 @@ class RateLimitManager:
         return False, 0
 
     def make_rate_limited_request(
-        self, request_func: callable, tool_name: str = "unknown", *args, **kwargs
+        self, request_func: Callable, tool_name: str = "unknown", *args, **kwargs
     ) -> requests.Response:
         """
         Make a rate-limited GitHub API request with automatic throttling.

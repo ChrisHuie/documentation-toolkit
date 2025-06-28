@@ -3,6 +3,7 @@ Tests for PrebidJSParser functionality
 """
 
 import json
+import unittest.mock
 
 from src.repo_modules.config import RepoConfig
 from src.repo_modules.parser_factory import PrebidJSParser
@@ -205,7 +206,6 @@ class TestPrebidJSParser:
 
     def test_parse_from_metadata_mock(self):
         """Test metadata parsing with mock data."""
-        import unittest.mock
 
         # Mock metadata response
         mock_metadata = {
@@ -279,7 +279,6 @@ class TestPrebidJSParser:
 
     def test_parse_from_metadata_fallback_on_error(self):
         """Test fallback to traditional parsing when metadata fails."""
-        import unittest.mock
 
         data = {
             "repo": "prebid/Prebid.js",
@@ -301,7 +300,6 @@ class TestPrebidJSParser:
 
     def test_parse_from_metadata_fallback_on_404(self):
         """Test fallback to traditional parsing when metadata is not found."""
-        import unittest.mock
 
         data = {
             "repo": "prebid/Prebid.js",
@@ -324,7 +322,6 @@ class TestPrebidJSParser:
 
     def test_parse_uses_metadata_for_v10(self):
         """Test that parse method uses metadata for v10.0+ versions."""
-        import unittest.mock
 
         mock_metadata = {
             "components": [

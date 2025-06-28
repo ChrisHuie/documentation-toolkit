@@ -6,6 +6,8 @@ Keeps agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md) in sync.
 
 from pathlib import Path
 
+from ..shared_utilities import get_logger
+
 
 class DocumentationSyncer:
     """Synchronizes agent instruction files.
@@ -25,6 +27,7 @@ class DocumentationSyncer:
         """
         self.project_root = project_root
         self.min_content_length = min_content_length
+        self.logger = get_logger(__name__)
         self.files = {
             "claude": self.project_root / "CLAUDE.md",
             "agents": self.project_root / "AGENTS.md",

@@ -8,6 +8,7 @@ import datetime
 import subprocess
 from pathlib import Path
 
+from ..shared_utilities import get_logger
 from .docs_sync import DocumentationSyncer
 
 
@@ -30,6 +31,7 @@ class ProjectValidator:
     def __init__(self, project_root: Path):
         self.project_root = project_root
         self.syncer = DocumentationSyncer(project_root)
+        self.logger = get_logger(__name__)
 
     def run_command(self, cmd: list[str], description: str) -> tuple[bool, str]:
         """Run a command and return success status and output."""
