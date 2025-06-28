@@ -1,0 +1,4446 @@
+Repository: prebid/Prebid.js
+Version: extract-metadata
+Modules Directory: modules
+
+Prebid.js Module Categories:
+========================================
+
+📦 Bid Adapters (425):
+------------------------------
+33across (added: 2017-11-09)
+360playvid (added: 2025-06-11)
+a1Media (added: 2023-09-18)
+a4g (added: 2017-11-06)
+ablida (added: unknown)
+acuityads (added: unknown)
+ad2iction (added: unknown)
+adWMG (added: unknown)
+adagio (added: unknown)
+adbutler (added: unknown)
+addefend (added: unknown)
+adf (added: unknown)
+adfusion (added: unknown)
+adgeneration (added: unknown)
+adgrid (added: unknown)
+adhash (added: unknown)
+adhese (added: unknown)
+adipolo (added: unknown)
+adkernel (added: unknown)
+adkernelAdn (added: unknown)
+admaru (added: unknown)
+admatic (added: unknown)
+admedia (added: unknown)
+admixer (added: unknown)
+adnow (added: unknown)
+adnuntius (added: unknown)
+adot (added: unknown)
+adpartner (added: unknown)
+adplus (added: unknown)
+adpone (added: unknown)
+adprime (added: unknown)
+adquery (added: unknown)
+adrelevantis (added: unknown)
+adrino (added: unknown)
+adriver (added: unknown)
+ads_interactive (added: unknown)
+adspirit (added: unknown)
+adstir (added: unknown)
+adtarget (added: unknown)
+adtelligent (added: unknown)
+adtrgtme (added: unknown)
+adtrue (added: unknown)
+aduptech (added: unknown)
+advangelists (added: unknown)
+advertising (added: unknown)
+adverxo (added: unknown)
+adxcg (added: unknown)
+adyoulike (added: unknown)
+afp (added: unknown)
+aidem (added: unknown)
+aja (added: unknown)
+akcelo (added: unknown)
+alkimi (added: unknown)
+ampliffy (added: unknown)
+amx (added: unknown)
+aniview (added: unknown)
+anyclip (added: unknown)
+apacdex (added: unknown)
+appier (added: unknown)
+appnexus (added: unknown)
+appush (added: unknown)
+apstream (added: unknown)
+aseal (added: unknown)
+aso (added: unknown)
+astraone (added: unknown)
+audiencerun (added: unknown)
+automatad (added: unknown)
+axis (added: unknown)
+axonix (added: unknown)
+beachfront (added: unknown)
+bedigitech (added: unknown)
+beop (added: unknown)
+between (added: unknown)
+beyondmedia (added: unknown)
+biddo (added: unknown)
+bidglass (added: unknown)
+bidmatic (added: unknown)
+bidscube (added: unknown)
+bidtheatre (added: unknown)
+big-richmedia (added: unknown)
+bitmedia (added: unknown)
+blasto (added: unknown)
+bliink (added: unknown)
+blockthrough (added: unknown)
+blue (added: unknown)
+bms (added: unknown)
+bmtm (added: unknown)
+boldwin (added: unknown)
+brainx (added: unknown)
+brave (added: unknown)
+brid (added: unknown)
+bridgewell (added: unknown)
+browsi (added: unknown)
+bucksense (added: 2019-05-07)
+buzzoola (added: 2019-09-10)
+c1x (added: 2017-08-04)
+cadent_aperture_mx (added: unknown)
+caroda (added: 2022-09-15)
+ccx (added: 2018-05-24)
+chtnw (added: 2022-10-21)
+clickforce (added: 2018-04-02)
+codefuel (added: 2021-10-14)
+cointraffic (added: 2020-09-09)
+coinzilla (added: 2019-01-02)
+colombia (added: 2018-09-18)
+colossusssp (added: 2017-10-17)
+compass (added: 2021-12-09)
+conceptx (added: 2023-06-07)
+concert (added: 2020-08-20)
+condorx (added: 2025-02-11)
+connatix (added: 2023-08-02)
+connectad (added: 2020-04-10)
+consumable (added: 2018-04-26)
+contentexchange (added: 2024-06-22)
+contxtful (added: unknown)
+conversant (added: unknown)
+copper6ssp (added: unknown)
+cpmstar (added: unknown)
+craft (added: unknown)
+criteo (added: unknown)
+cwire (added: unknown)
+dailyhunt (added: unknown)
+dailymotion (added: unknown)
+datablocks (added: unknown)
+datawrkz (added: unknown)
+deepintent (added: unknown)
+deltaprojects (added: unknown)
+dexerto (added: unknown)
+dianomi (added: unknown)
+digitalMatter (added: unknown)
+discovery (added: unknown)
+displayio (added: unknown)
+distroscale (added: unknown)
+djax (added: unknown)
+doceree (added: unknown)
+docereeAdManager (added: unknown)
+dochase (added: unknown)
+driftpixel (added: unknown)
+dsp_geniee (added: unknown)
+dspx (added: unknown)
+dvgroup (added: unknown)
+dxkulture (added: unknown)
+e_volution (added: unknown)
+eclick (added: unknown)
+edge226 (added: unknown)
+ehealthcaresolutions (added: unknown)
+eightPod (added: unknown)
+emtv (added: unknown)
+engageya (added: unknown)
+eplanning (added: unknown)
+epom_dsp (added: unknown)
+equativ (added: unknown)
+escalax (added: unknown)
+eskimi (added: unknown)
+etarget (added: unknown)
+exads (added: unknown)
+exco (added: unknown)
+fan (added: unknown)
+feedad (added: unknown)
+finative (added: unknown)
+flipp (added: unknown)
+fluct (added: unknown)
+freepass (added: unknown)
+fwssp (added: unknown)
+gamma (added: unknown)
+gamoshi (added: unknown)
+getintent (added: unknown)
+gjirafa (added: unknown)
+glomex (added: unknown)
+gmossp (added: unknown)
+gnet (added: unknown)
+goldbach (added: unknown)
+greenbids (added: unknown)
+grid (added: unknown)
+growads (added: unknown)
+gumgum (added: unknown)
+h12media (added: unknown)
+holid (added: unknown)
+hybrid (added: unknown)
+hypelab (added: unknown)
+idx (added: unknown)
+illumin (added: unknown)
+impactify (added: 2021-04-07)
+improvedigital (added: 2017-08-30)
+incrementx (added: unknown)
+inmobi (added: 2024-11-21)
+innity (added: 2017-06-26)
+insticator (added: 2021-08-26)
+integr8 (added: unknown)
+intenze (added: unknown)
+interactiveOffers (added: unknown)
+invamia (added: unknown)
+invibes (added: unknown)
+iprom (added: unknown)
+iqx (added: unknown)
+iqzone (added: unknown)
+ivs (added: unknown)
+ix (added: unknown)
+jixie (added: unknown)
+justpremium (added: unknown)
+jwplayer (added: unknown)
+kargo (added: unknown)
+kimberlite (added: unknown)
+kiviads (added: unknown)
+kobler (added: unknown)
+krushmedia (added: unknown)
+kubient (added: unknown)
+kueezRtb (added: unknown)
+lane4 (added: unknown)
+lasso (added: unknown)
+lemmaDigital (added: unknown)
+lifestreet (added: unknown)
+limelightDigital (added: unknown)
+livewrapped (added: unknown)
+lkqd (added: unknown)
+lm_kiviads (added: unknown)
+lockerdome (added: unknown)
+logan (added: unknown)
+logicad (added: unknown)
+loopme (added: unknown)
+loyal (added: unknown)
+lucead (added: unknown)
+lunamediahb (added: unknown)
+luponmedia (added: unknown)
+mabidder (added: unknown)
+madsense (added: unknown)
+madvertise (added: unknown)
+malltv (added: unknown)
+mantis (added: unknown)
+marsmedia (added: unknown)
+mathildeads (added: unknown)
+mediaConsortium (added: unknown)
+mediabrama (added: unknown)
+mediaeyes (added: unknown)
+mediaforce (added: unknown)
+mediafuse (added: unknown)
+mediago (added: unknown)
+mediaimpact (added: unknown)
+mediakeys (added: unknown)
+medianet (added: unknown)
+mediasniper (added: unknown)
+mediasquare (added: unknown)
+mgid (added: unknown)
+mgidX (added: unknown)
+microad (added: unknown)
+minutemedia (added: unknown)
+missena (added: unknown)
+mobfoxpb (added: unknown)
+mobilefuse (added: unknown)
+mobkoi (added: unknown)
+my6sense (added: unknown)
+mytarget (added: unknown)
+nativery (added: unknown)
+nativo (added: unknown)
+newspassid (added: unknown)
+nextMillennium (added: unknown)
+nextroll (added: unknown)
+nexverse (added: unknown)
+nexx360 (added: unknown)
+nobid (added: unknown)
+ogury (added: unknown)
+omnidex (added: unknown)
+oms (added: unknown)
+onetag (added: unknown)
+onomagic (added: unknown)
+opaMarketplace (added: unknown)
+open8 (added: unknown)
+openweb (added: unknown)
+openx (added: unknown)
+operaads (added: unknown)
+opsco (added: unknown)
+optable (added: unknown)
+optidigital (added: unknown)
+optout (added: unknown)
+oraki (added: unknown)
+orbidder (added: unknown)
+orbitsoft (added: unknown)
+otm (added: unknown)
+outbrain (added: unknown)
+ownadx (added: unknown)
+ozone (added: unknown)
+padsquad (added: unknown)
+pangle (added: unknown)
+performax (added: unknown)
+pgamssp (added: unknown)
+pilotx (added: unknown)
+pinkLion (added: unknown)
+pixfuture (added: unknown)
+playdigo (added: unknown)
+preciso (added: unknown)
+prisma (added: unknown)
+programmaticX (added: unknown)
+programmatica (added: unknown)
+proxistore (added: unknown)
+pstudio (added: unknown)
+pubCircle (added: unknown)
+pubgenius (added: unknown)
+publir (added: unknown)
+pubmatic (added: unknown)
+pubrise (added: unknown)
+pubx (added: unknown)
+pulsepoint (added: unknown)
+pwbid (added: unknown)
+pxyz (added: unknown)
+qt (added: unknown)
+quantcast (added: unknown)
+qwarry (added: unknown)
+r2b2 (added: unknown)
+readpeak (added: unknown)
+rediads (added: unknown)
+redtram (added: unknown)
+relaido (added: unknown)
+relay (added: unknown)
+relevantdigital (added: unknown)
+relevatehealth (added: unknown)
+resetdigital (added: unknown)
+responsiveAds (added: unknown)
+retailspot (added: unknown)
+revcontent (added: unknown)
+rhythmone (added: unknown)
+richaudience (added: unknown)
+ringieraxelspringer (added: unknown)
+rise (added: unknown)
+rixengine (added: unknown)
+robusta (added: unknown)
+rocketlab (added: unknown)
+rtbhouse (added: unknown)
+rtbsape (added: unknown)
+rubicon (added: unknown)
+scattered (added: unknown)
+seedingAlliance (added: unknown)
+seedtag (added: unknown)
+setupad (added: unknown)
+sharethrough (added: unknown)
+shinez (added: unknown)
+shinezRtb (added: unknown)
+showheroes-bs (added: unknown)
+silvermob (added: unknown)
+silverpush (added: unknown)
+slimcut (added: unknown)
+smaato (added: unknown)
+smartadserver (added: unknown)
+smarthub (added: unknown)
+smartico (added: unknown)
+smartx (added: unknown)
+smartyads (added: unknown)
+smartytech (added: unknown)
+smilewanted (added: unknown)
+smoot (added: unknown)
+snigel (added: unknown)
+sonarads (added: unknown)
+sonobi (added: unknown)
+sovrn (added: unknown)
+sparteo (added: unknown)
+ssmas (added: unknown)
+sspBC (added: unknown)
+ssp_geniee (added: unknown)
+stackadapt (added: unknown)
+startio (added: unknown)
+stn (added: unknown)
+stroeerCore (added: unknown)
+stv (added: unknown)
+sublime (added: unknown)
+suim (added: unknown)
+taboola (added: unknown)
+tagoras (added: unknown)
+talkads (added: unknown)
+tapnative (added: unknown)
+tappx (added: unknown)
+targetVideo (added: unknown)
+teads (added: unknown)
+teal (added: unknown)
+temedya (added: unknown)
+theAdx (added: unknown)
+themoneytizer (added: unknown)
+tpmn (added: unknown)
+trafficgate (added: unknown)
+trion (added: unknown)
+triplelift (added: unknown)
+truereach (added: unknown)
+ttd (added: unknown)
+twistDigital (added: unknown)
+ucfunnel (added: unknown)
+underdogmedia (added: unknown)
+undertone (added: unknown)
+unicorn (added: unknown)
+uniquest (added: unknown)
+unruly (added: unknown)
+valuad (added: unknown)
+vdoai (added: unknown)
+ventes (added: unknown)
+viant (added: unknown)
+vibrantmedia (added: unknown)
+vidazoo (added: unknown)
+videobyte (added: unknown)
+videoheroes (added: unknown)
+videonow (added: unknown)
+videoreach (added: unknown)
+vidoomy (added: unknown)
+viewdeosDX (added: unknown)
+viously (added: unknown)
+viqeo (added: unknown)
+visiblemeasures (added: unknown)
+vistars (added: unknown)
+visx (added: unknown)
+vlyby (added: unknown)
+vox (added: unknown)
+vrtcal (added: unknown)
+vuukle (added: unknown)
+waardex (added: unknown)
+welect (added: unknown)
+widespace (added: unknown)
+winr (added: unknown)
+wipes (added: unknown)
+xe (added: unknown)
+yahooAds (added: unknown)
+yandex (added: unknown)
+yieldlab (added: unknown)
+yieldlift (added: unknown)
+yieldlove (added: unknown)
+yieldmo (added: unknown)
+yieldone (added: unknown)
+zeta_global (added: unknown)
+zeta_global_ssp (added: unknown)
+zmaticoo (added: unknown)
+
+📦 Analytics Adapters (60):
+------------------------------
+33across (added: 2017-11-09)
+AsteriobidPbm (added: unknown)
+adWMG (added: unknown)
+adagio (added: unknown)
+adkernelAdn (added: unknown)
+adloox (added: unknown)
+adnuntius (added: unknown)
+advRed (added: unknown)
+adxcg (added: unknown)
+adxpremium (added: unknown)
+agma (added: unknown)
+appier (added: unknown)
+asteriobid (added: unknown)
+ats (added: unknown)
+automatad (added: unknown)
+browsi (added: unknown)
+byData (added: unknown)
+concert (added: 2020-08-20)
+datablocks (added: unknown)
+eightPod (added: unknown)
+finteza (added: unknown)
+greenbids (added: unknown)
+growthCode (added: unknown)
+hadron (added: unknown)
+id5 (added: unknown)
+intentIq (added: unknown)
+invisibly (added: unknown)
+kargo (added: unknown)
+liveIntent (added: unknown)
+livewrapped (added: unknown)
+magnite (added: unknown)
+malltv (added: unknown)
+medianet (added: unknown)
+mobkoi (added: unknown)
+nobid (added: unknown)
+oolo (added: unknown)
+optimon (added: unknown)
+oxxion (added: unknown)
+pianoDmp (added: unknown)
+pubmatic (added: unknown)
+pubperf (added: unknown)
+pubstack (added: unknown)
+pubwise (added: unknown)
+pubxai (added: unknown)
+pulsepoint (added: unknown)
+r2b2 (added: unknown)
+relevant (added: unknown)
+rivr (added: unknown)
+roxot (added: unknown)
+scaleable (added: unknown)
+sharethrough (added: unknown)
+smartyads (added: unknown)
+symitri (added: unknown)
+tercept (added: unknown)
+ucfunnel (added: unknown)
+uniquest (added: unknown)
+yandex (added: unknown)
+yieldone (added: unknown)
+yuktamedia (added: unknown)
+zeta_global_ssp (added: unknown)
+
+📦 Rtd Modules (58):
+------------------------------
+1plusX (added: unknown)
+51Degrees (added: unknown)
+a1Media (added: 2023-09-18)
+aaxBlockmeter (added: unknown)
+adagio (added: unknown)
+adlane (added: unknown)
+adloox (added: unknown)
+adnuntius (added: unknown)
+airgrid (added: unknown)
+anonymised (added: unknown)
+arcspan (added: unknown)
+azerionedge (added: unknown)
+blueconic (added: unknown)
+brandmetrics (added: unknown)
+browsi (added: unknown)
+cleanio (added: unknown)
+confiant (added: unknown)
+contxtful (added: unknown)
+dgkeyword (added: unknown)
+dynamicAdBoost (added: unknown)
+experian (added: unknown)
+gamera (added: unknown)
+geoedge (added: unknown)
+goldfishAds (added: unknown)
+greenbids (added: unknown)
+growthCode (added: unknown)
+hadron (added: unknown)
+humansecurity (added: unknown)
+ias (added: unknown)
+im (added: unknown)
+intersection (added: unknown)
+jwplayer (added: unknown)
+liveIntent (added: unknown)
+mediafilter (added: unknown)
+medianet (added: unknown)
+mgid (added: unknown)
+mobian (added: unknown)
+neuwo (added: unknown)
+nodalsAi (added: unknown)
+oneKey (added: unknown)
+optable (added: unknown)
+optimera (added: unknown)
+overtone (added: unknown)
+oxxion (added: unknown)
+permutive (added: unknown)
+pubmatic (added: unknown)
+pubxai (added: unknown)
+qortex (added: unknown)
+raveltech (added: unknown)
+rayn (added: unknown)
+reconciliation (added: unknown)
+relevad (added: unknown)
+semantiq (added: unknown)
+sirdata (added: unknown)
+symitriDap (added: unknown)
+timeout (added: unknown)
+weborama (added: unknown)
+wurfl (added: unknown)
+
+📦 Identity Modules (58):
+------------------------------
+33across (added: 2017-11-09)
+admixer (added: unknown)
+adquery (added: unknown)
+adriver (added: unknown)
+adtelligent (added: unknown)
+amx (added: unknown)
+cee (added: unknown)
+connect (added: unknown)
+criteo (added: unknown)
+czechAd (added: unknown)
+dac (added: unknown)
+deepintentDpes (added: unknown)
+dmd (added: unknown)
+euid (added: unknown)
+fabrick (added: unknown)
+freepass (added: unknown)
+ftrack (added: unknown)
+gravito (added: unknown)
+growthCode (added: unknown)
+hadron (added: unknown)
+id5 (added: unknown)
+identityLink (added: unknown)
+idx (added: unknown)
+imu (added: unknown)
+intentIq (added: unknown)
+just (added: unknown)
+kinesso (added: unknown)
+liveIntent (added: unknown)
+lmp (added: unknown)
+lockrAIM (added: unknown)
+lotamePanorama (added: unknown)
+merkle (added: unknown)
+mobkoi (added: unknown)
+mwOpenLink (added: unknown)
+mygaru (added: unknown)
+navegg (added: unknown)
+net (added: unknown)
+novatiq (added: unknown)
+oneKey (added: unknown)
+openPair (added: unknown)
+operaads (added: unknown)
+pair (added: unknown)
+permutiveIdentityManager (added: unknown)
+pubProvided (added: unknown)
+publink (added: unknown)
+pubmatic (added: unknown)
+quantcast (added: unknown)
+rewardedInterest (added: unknown)
+taboola (added: unknown)
+tapad (added: unknown)
+teads (added: unknown)
+tnc (added: unknown)
+uid2 (added: unknown)
+unified (added: unknown)
+utiq (added: unknown)
+utiqMtp (added: unknown)
+yandex (added: unknown)
+zeotapIdPlus (added: unknown)
+
+📦 Other Modules (29):
+------------------------------
+_moduleMetadata (added: unknown)
+adlooxAdServerVideo (added: unknown)
+adplayerproVideoProvider (added: unknown)
+adpod (added: unknown)
+allowActivities (added: unknown)
+bidViewability (added: unknown)
+bidViewabilityIO (added: unknown)
+categoryTranslation (added: unknown)
+dfpAdServerVideo (added: unknown)
+dfpAdpod (added: unknown)
+dsaControl (added: unknown)
+express (added: unknown)
+freeWheelAdserverVideo (added: unknown)
+gamAdServerVideo (added: unknown)
+gamAdpod (added: unknown)
+gppControl_usnat (added: unknown)
+idImportLibrary (added: unknown)
+instreamTracking (added: unknown)
+jwplayerVideoProvider (added: unknown)
+nativeRendering (added: unknown)
+paapi (added: unknown)
+paapiForGpt (added: unknown)
+s2sTesting (added: unknown)
+sizeMapping (added: unknown)
+sizeMappingV2 (added: unknown)
+targetVideoAdServerVideo (added: unknown)
+topLevelPaapi (added: unknown)
+topicsFpdModule (added: unknown)
+videojsVideoProvider (added: unknown)
+
+JSON Output:
+--------------------
+{
+  "bid_adapters": [
+    {
+      "name": "33across",
+      "first_added": "2017-11-09T15:19:43Z",
+      "first_version": null,
+      "first_commit_sha": "1895cb3ce6045199f5150f6b9820cdf4bc1c2a0d"
+    },
+    {
+      "name": "360playvid",
+      "first_added": "2025-06-11T15:59:42Z",
+      "first_version": null,
+      "first_commit_sha": "765c7141c6bd0ae66db429e6fc35c4c0c67233de"
+    },
+    {
+      "name": "a1Media",
+      "first_added": "2023-09-18T14:13:06Z",
+      "first_version": null,
+      "first_commit_sha": "7df304fdfef03b41ed995f327dd9b635e5b1f3ea"
+    },
+    {
+      "name": "a4g",
+      "first_added": "2017-11-06T22:15:51Z",
+      "first_version": null,
+      "first_commit_sha": "6107cc8cd07464c2b381ebce47d6fa36fd632de2"
+    },
+    {
+      "name": "ablida",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "acuityads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ad2iction",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adWMG",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adagio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adbutler",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "addefend",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adf",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adfusion",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adgeneration",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adgrid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adhash",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adhese",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adipolo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adkernelAdn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adkernel",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "admaru",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "admatic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "admedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "admixer",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adnow",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adnuntius",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adot",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adpartner",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adplus",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adpone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adprime",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adquery",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adrelevantis",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adrino",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adriver",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ads_interactive",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adspirit",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adstir",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adtarget",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adtelligent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adtrgtme",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adtrue",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "aduptech",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "advangelists",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "advertising",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adverxo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adxcg",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adyoulike",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "afp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "aidem",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "aja",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "akcelo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "alkimi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ampliffy",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "amx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "aniview",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "anyclip",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "apacdex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "appier",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "appnexus",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "appush",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "apstream",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "aseal",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "aso",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "astraone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "audiencerun",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "automatad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "axis",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "axonix",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "beachfront",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bedigitech",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "beop",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "between",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "beyondmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "biddo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bidglass",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bidmatic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bidscube",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bidtheatre",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "big-richmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bitmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "blasto",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bliink",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "blockthrough",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "blue",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bms",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bmtm",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "boldwin",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "brainx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "brave",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "brid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bridgewell",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "browsi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bucksense",
+      "first_added": "2019-05-07T14:34:12Z",
+      "first_version": null,
+      "first_commit_sha": "10ec9a599f46502b14ef41bf09173c36c959d7d5"
+    },
+    {
+      "name": "buzzoola",
+      "first_added": "2019-09-10T04:13:28Z",
+      "first_version": null,
+      "first_commit_sha": "c520176a8cec2f549fd9c0d4121af1c1b2c898dc"
+    },
+    {
+      "name": "c1x",
+      "first_added": "2017-08-04T13:03:38Z",
+      "first_version": null,
+      "first_commit_sha": "1a1028c80836a9ebda978431dd7e9c8ec95be8c1"
+    },
+    {
+      "name": "cadent_aperture_mx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "caroda",
+      "first_added": "2022-09-15T19:18:00Z",
+      "first_version": null,
+      "first_commit_sha": "3265b0567b693aea22fb9b93d7c0cfe892b11b3e"
+    },
+    {
+      "name": "ccx",
+      "first_added": "2018-05-24T16:58:23Z",
+      "first_version": null,
+      "first_commit_sha": "8010ba5ebb48eb484faf5774ab2d402c619c3181"
+    },
+    {
+      "name": "chtnw",
+      "first_added": "2022-10-21T17:15:32Z",
+      "first_version": null,
+      "first_commit_sha": "6c63c6f00267f396176e5b96629b6fc570e40805"
+    },
+    {
+      "name": "clickforce",
+      "first_added": "2018-04-02T18:02:09Z",
+      "first_version": null,
+      "first_commit_sha": "0397649764d2ebb0189ca0ebe55f63d6bda8eace"
+    },
+    {
+      "name": "codefuel",
+      "first_added": "2021-10-14T18:37:05Z",
+      "first_version": null,
+      "first_commit_sha": "ff188769cc096d949ef7d9f07d3130588a72c87f"
+    },
+    {
+      "name": "cointraffic",
+      "first_added": "2020-09-09T21:17:19Z",
+      "first_version": null,
+      "first_commit_sha": "9a92a2203f5efad3f61ca063a26a285df9c6672b"
+    },
+    {
+      "name": "coinzilla",
+      "first_added": "2019-01-02T15:17:34Z",
+      "first_version": null,
+      "first_commit_sha": "e3c67d00d1349373e6e1317baacaab5e1ac9e7a3"
+    },
+    {
+      "name": "colombia",
+      "first_added": "2018-09-18T13:31:38Z",
+      "first_version": null,
+      "first_commit_sha": "6d51add4defcde83f3c29fa75b9b0afe1ee7477a"
+    },
+    {
+      "name": "colossusssp",
+      "first_added": "2017-10-17T17:46:03Z",
+      "first_version": null,
+      "first_commit_sha": "54edd806fb9ae1e9a9418842b23260ef5939ec7d"
+    },
+    {
+      "name": "compass",
+      "first_added": "2021-12-09T14:42:40Z",
+      "first_version": null,
+      "first_commit_sha": "876b5184e1b3e519cba173db5985788432f8286e"
+    },
+    {
+      "name": "conceptx",
+      "first_added": "2023-06-07T15:12:08Z",
+      "first_version": null,
+      "first_commit_sha": "254f09888618f05faf74fc1f55c355edd83136a6"
+    },
+    {
+      "name": "concert",
+      "first_added": "2020-08-20T17:38:22Z",
+      "first_version": null,
+      "first_commit_sha": "b4c6b47bf90f48e6ffcab8f7e5aa287de0119a57"
+    },
+    {
+      "name": "condorx",
+      "first_added": "2025-02-11T15:22:30Z",
+      "first_version": null,
+      "first_commit_sha": "31057ff81042505385358f80ec00c54b566b35f4"
+    },
+    {
+      "name": "connatix",
+      "first_added": "2023-08-02T11:09:42Z",
+      "first_version": null,
+      "first_commit_sha": "2b422f908305d85d62267d985effcc4027a447eb"
+    },
+    {
+      "name": "connectad",
+      "first_added": "2020-04-10T18:30:25Z",
+      "first_version": null,
+      "first_commit_sha": "67a1cb134c784fdf99a60b3b349643e21267e557"
+    },
+    {
+      "name": "consumable",
+      "first_added": "2018-04-26T16:04:08Z",
+      "first_version": null,
+      "first_commit_sha": "bb9bc187e2bb8b7478907d0d69ef63c50a72ba38"
+    },
+    {
+      "name": "contentexchange",
+      "first_added": "2024-06-22T19:56:49Z",
+      "first_version": null,
+      "first_commit_sha": "850e0e2af883c66d8b2f802329a497d28a25850c"
+    },
+    {
+      "name": "contxtful",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "conversant",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "copper6ssp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "cpmstar",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "craft",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "criteo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "cwire",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dailyhunt",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dailymotion",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "datablocks",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "datawrkz",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "deepintent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "deltaprojects",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dexerto",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dianomi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "digitalMatter",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "discovery",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "displayio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "distroscale",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "djax",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "docereeAdManager",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "doceree",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dochase",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "driftpixel",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dsp_geniee",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dspx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dvgroup",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dxkulture",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "e_volution",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "eclick",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "edge226",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ehealthcaresolutions",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "eightPod",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "emtv",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "engageya",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "eplanning",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "epom_dsp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "equativ",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "escalax",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "eskimi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "etarget",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "exads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "exco",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "fan",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "feedad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "finative",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "flipp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "fluct",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "freepass",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "fwssp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gamma",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gamoshi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "getintent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gjirafa",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "glomex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gmossp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gnet",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "goldbach",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "greenbids",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "grid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "growads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gumgum",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "h12media",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "holid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "hybrid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "hypelab",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "idx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "illumin",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "impactify",
+      "first_added": "2021-04-07T15:14:53Z",
+      "first_version": null,
+      "first_commit_sha": "56bb4aeedf1457e4345239779bcb8346cd96744b"
+    },
+    {
+      "name": "improvedigital",
+      "first_added": "2017-08-30T22:24:58Z",
+      "first_version": null,
+      "first_commit_sha": "65b34c838052730d645dc52a9610c5bda5ac0ece"
+    },
+    {
+      "name": "incrementx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "inmobi",
+      "first_added": "2024-11-21T05:32:26Z",
+      "first_version": null,
+      "first_commit_sha": "835a3d35679e2c541abb262982ef8b45ca1ee7db"
+    },
+    {
+      "name": "innity",
+      "first_added": "2017-06-26T21:45:30Z",
+      "first_version": null,
+      "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305"
+    },
+    {
+      "name": "insticator",
+      "first_added": "2021-08-26T10:38:59Z",
+      "first_version": null,
+      "first_commit_sha": "8e466efae45f18067573b2db5d7234481f368191"
+    },
+    {
+      "name": "integr8",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "intenze",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "interactiveOffers",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "invamia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "invibes",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "iprom",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "iqx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "iqzone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ivs",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ix",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "jixie",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "justpremium",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "jwplayer",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kargo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kimberlite",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kiviads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kobler",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "krushmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kubient",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kueezRtb",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lane4",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lasso",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lemmaDigital",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lifestreet",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "limelightDigital",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "livewrapped",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lkqd",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lm_kiviads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lockerdome",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "logan",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "logicad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "loopme",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "loyal",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lucead",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lunamediahb",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "luponmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mabidder",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "madsense",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "madvertise",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "malltv",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mantis",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "marsmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mathildeads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediaConsortium",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediabrama",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediaeyes",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediaforce",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediafuse",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediago",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediaimpact",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediakeys",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "medianet",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediasniper",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediasquare",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mgid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mgidX",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "microad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "minutemedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "missena",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mobfoxpb",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mobilefuse",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mobkoi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "my6sense",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mytarget",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nativery",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nativo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "newspassid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nextMillennium",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nextroll",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nexverse",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nexx360",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nobid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ogury",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "omnidex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oms",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "onetag",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "onomagic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "opaMarketplace",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "open8",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "openweb",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "openx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "operaads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "opsco",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "optable",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "optidigital",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "optout",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oraki",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "orbidder",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "orbitsoft",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "otm",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "outbrain",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ownadx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ozone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "padsquad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pangle",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "performax",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pgamssp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pilotx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pinkLion",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pixfuture",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "playdigo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "preciso",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "prisma",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "programmaticX",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "programmatica",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "proxistore",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pstudio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubCircle",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubgenius",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "publir",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubmatic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubrise",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pulsepoint",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pwbid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pxyz",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "qt",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "quantcast",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "qwarry",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "r2b2",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "readpeak",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rediads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "redtram",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "relaido",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "relay",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "relevantdigital",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "relevatehealth",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "resetdigital",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "responsiveAds",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "retailspot",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "revcontent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rhythmone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "richaudience",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ringieraxelspringer",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rise",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rixengine",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "robusta",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rocketlab",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rtbhouse",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rtbsape",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rubicon",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "scattered",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "seedingAlliance",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "seedtag",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "setupad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sharethrough",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "shinez",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "shinezRtb",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "showheroes-bs",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "silvermob",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "silverpush",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "slimcut",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smaato",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smartadserver",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smarthub",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smartico",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smartx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smartyads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smartytech",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smilewanted",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smoot",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "snigel",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sonarads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sonobi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sovrn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sparteo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ssmas",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sspBC",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ssp_geniee",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "stackadapt",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "startio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "stn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "stroeerCore",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "stv",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sublime",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "suim",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "taboola",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tagoras",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "talkads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tapnative",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tappx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "targetVideo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "teads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "teal",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "temedya",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "theAdx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "themoneytizer",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tpmn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "trafficgate",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "trion",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "triplelift",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "truereach",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ttd",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "twistDigital",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ucfunnel",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "underdogmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "undertone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "unicorn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "uniquest",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "unruly",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "valuad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vdoai",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ventes",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "viant",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vibrantmedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vidazoo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "videobyte",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "videoheroes",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "videonow",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "videoreach",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vidoomy",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "viewdeosDX",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "viously",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "viqeo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "visiblemeasures",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vistars",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "visx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vlyby",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vox",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vrtcal",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "vuukle",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "waardex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "welect",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "widespace",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "winr",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "wipes",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "xe",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yahooAds",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yandex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yieldlab",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yieldlift",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yieldlove",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yieldmo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yieldone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "zeta_global",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "zeta_global_ssp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "zmaticoo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    }
+  ],
+  "analytics_adapters": [
+    {
+      "name": "33across",
+      "first_added": "2017-11-09T15:19:43Z",
+      "first_version": null,
+      "first_commit_sha": "1895cb3ce6045199f5150f6b9820cdf4bc1c2a0d"
+    },
+    {
+      "name": "AsteriobidPbm",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adWMG",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adagio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adkernelAdn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adloox",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adnuntius",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "advRed",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adxcg",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adxpremium",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "agma",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "appier",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "asteriobid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ats",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "automatad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "browsi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "byData",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "concert",
+      "first_added": "2020-08-20T17:38:22Z",
+      "first_version": null,
+      "first_commit_sha": "b4c6b47bf90f48e6ffcab8f7e5aa287de0119a57"
+    },
+    {
+      "name": "datablocks",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "eightPod",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "finteza",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "greenbids",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "growthCode",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "hadron",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "id5",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "intentIq",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "invisibly",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kargo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "liveIntent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "livewrapped",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "magnite",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "malltv",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "medianet",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mobkoi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nobid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oolo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "optimon",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oxxion",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pianoDmp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubmatic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubperf",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubstack",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubwise",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubxai",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pulsepoint",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "r2b2",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "relevant",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rivr",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "roxot",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "scaleable",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sharethrough",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "smartyads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "symitri",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tercept",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ucfunnel",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "uniquest",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yandex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yieldone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yuktamedia",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "zeta_global_ssp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    }
+  ],
+  "rtd_modules": [
+    {
+      "name": "1plusX",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "51Degrees",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "a1Media",
+      "first_added": "2023-09-18T14:13:06Z",
+      "first_version": null,
+      "first_commit_sha": "7df304fdfef03b41ed995f327dd9b635e5b1f3ea"
+    },
+    {
+      "name": "aaxBlockmeter",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adagio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adlane",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adloox",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adnuntius",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "airgrid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "anonymised",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "arcspan",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "azerionedge",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "blueconic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "brandmetrics",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "browsi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "cleanio",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "confiant",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "contxtful",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dgkeyword",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dynamicAdBoost",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "experian",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gamera",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "geoedge",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "goldfishAds",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "greenbids",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "growthCode",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "hadron",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "humansecurity",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ias",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "im",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "intersection",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "jwplayer",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "liveIntent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mediafilter",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "medianet",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mgid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mobian",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "neuwo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nodalsAi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oneKey",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "optable",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "optimera",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "overtone",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oxxion",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "permutive",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubmatic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubxai",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "qortex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "raveltech",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rayn",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "reconciliation",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "relevad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "semantiq",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sirdata",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "symitriDap",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "timeout",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "weborama",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "wurfl",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    }
+  ],
+  "identity_modules": [
+    {
+      "name": "33across",
+      "first_added": "2017-11-09T15:19:43Z",
+      "first_version": null,
+      "first_commit_sha": "1895cb3ce6045199f5150f6b9820cdf4bc1c2a0d"
+    },
+    {
+      "name": "admixer",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adquery",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adriver",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adtelligent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "amx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "cee",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "connect",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "criteo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "czechAd",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dac",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "deepintentDpes",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dmd",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "euid",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "fabrick",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "freepass",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "ftrack",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gravito",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "growthCode",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "hadron",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "id5",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "identityLink",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "idx",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "imu",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "intentIq",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "just",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "kinesso",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "liveIntent",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lmp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lockrAIM",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "lotamePanorama",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "merkle",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mobkoi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mwOpenLink",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "mygaru",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "navegg",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "net",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "novatiq",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "oneKey",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "openPair",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "operaads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pair",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "permutiveIdentityManager",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubProvided",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "publink",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "pubmatic",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "quantcast",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "rewardedInterest",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "taboola",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tapad",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "teads",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "tnc",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "uid2",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "unified",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "utiq",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "utiqMtp",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "yandex",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "zeotapIdPlus",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    }
+  ],
+  "other_modules": [
+    {
+      "name": "_moduleMetadata",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adlooxAdServerVideo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adplayerproVideoProvider",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "adpod",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "allowActivities",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bidViewability",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "bidViewabilityIO",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "categoryTranslation",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dfpAdServerVideo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dfpAdpod",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "dsaControl",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "express",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "freeWheelAdserverVideo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gamAdServerVideo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gamAdpod",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "gppControl_usnat",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "idImportLibrary",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "instreamTracking",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "jwplayerVideoProvider",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "nativeRendering",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "paapi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "paapiForGpt",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "s2sTesting",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sizeMapping",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "sizeMappingV2",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "targetVideoAdServerVideo",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "topLevelPaapi",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "topicsFpdModule",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    },
+    {
+      "name": "videojsVideoProvider",
+      "first_added": null,
+      "first_version": null,
+      "first_commit_sha": null
+    }
+  ]
+}
