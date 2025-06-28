@@ -62,15 +62,20 @@ class ModuleHistoryError(Exception):
 class ModuleHistoryTracker:
     """
     Tracks when modules were first introduced in repositories.
-    
+
     Provides both version-based analysis (for Prebid.js) and commit-level tracking
     with intelligent rate limiting and file path collision prevention.
     """
 
-    def __init__(self, token: str | None = None, cache_dir: str | None = None, repo: str | None = None):
+    def __init__(
+        self,
+        token: str | None = None,
+        cache_dir: str | None = None,
+        repo: str | None = None,
+    ):
         """
         Initialize module history tracker.
-        
+
         Args:
             token: GitHub token for API access
             cache_dir: Directory for caching historical data
@@ -80,10 +85,10 @@ class ModuleHistoryTracker:
         self.cache_manager = VersionCacheManager()
         self.parser_factory = ParserFactory()
         self.logger = get_logger(__name__)
-        
+
         # Repository for commit-level tracking (optional)
         self.repo = repo
-        
+
         # Rate limiting manager from shared utilities
         self.rate_limit_manager = global_rate_limit_manager
 
@@ -100,15 +105,17 @@ class ModuleHistoryTracker:
 
         self.history_cache_dir.mkdir(parents=True, exist_ok=True)
         self.commit_cache_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Commit-level cache setup
         if self.repo:
-            self.cache_file = self.commit_cache_dir / f"{self.repo.replace('/', '_')}_history.json"
+            self.cache_file = (
+                self.commit_cache_dir / f"{self.repo.replace('/', '_')}_history.json"
+            )
             self._cache: dict[str, ModuleHistoryInfo] = self._load_commit_cache()
         else:
             self._cache = {}
-            
-        # Tag cache for version detection  
+
+        # Tag cache for version detection
         self._tags_cache: list[dict[str, Any]] | None = None
 
     def _get_cache_file(self, repo_name: str) -> Path:
@@ -529,7 +536,9 @@ class ModuleHistoryTracker:
         try:
             version_cache = self.cache_manager.load_cache(repo_name)
             if not version_cache:
-                error_msg = f"No version cache found for {repo_name}. Run repo-modules first."
+                error_msg = (
+                    f"No version cache found for {repo_name}. Run repo-modules first."
+                )
                 self.logger.error(error_msg)
                 raise ModuleHistoryError(error_msg)
         except Exception as e:
@@ -702,7 +711,7 @@ class ModuleHistoryTracker:
         """
         if not self.repo:
             raise ModuleHistoryError("Repository not set for commit-level tracking")
-            
+
         results = {}
         new_entries = 0
 
@@ -823,7 +832,7 @@ class ModuleHistoryTracker:
         """Get creation information for a specific file."""
         if not self.repo:
             return None
-            
+
         try:
             # Get commits for this file, ordered oldest first
             url = f"https://api.github.com/repos/{self.repo}/commits"

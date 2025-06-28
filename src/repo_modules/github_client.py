@@ -356,7 +356,7 @@ class GitHubClient:
 
                 # Add delay between batches to respect rate limits
                 if batch_num < total_batches - 1:
-                    print(f"Applying rate limit delay before next batch...")
+                    print("Applying rate limit delay before next batch...")
                     global_rate_limit_manager.wait_if_needed(tool_name="github_client")
 
             # Save final checkpoint

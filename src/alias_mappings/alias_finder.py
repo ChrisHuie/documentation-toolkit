@@ -10,7 +10,7 @@ import yaml
 from loguru import logger
 
 from ..repo_modules.github_client import GitHubClient
-from ..shared_utilities import get_logger, global_rate_limit_manager
+from ..shared_utilities import global_rate_limit_manager
 from ..shared_utilities.telemetry import trace_function
 
 
