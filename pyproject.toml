@@ -13,6 +13,7 @@ dependencies = [
     "ruff>=0.3.0",
     "black>=24.0.0",
     "pyyaml>=6.0.0",
+    "requests>=2.31.0",
     "opentelemetry-api>=1.20.0",
     "opentelemetry-sdk>=1.20.0",
     "opentelemetry-instrumentation-requests>=0.41b0",
@@ -74,4 +75,5 @@ extend-exclude = '''
 [dependency-groups]
 dev = [
     "types-pyyaml>=6.0.12.20250516",
+    "types-requests>=2.31.0",
 ]

@@ -182,3 +182,197 @@ class TestPrebidJSParser:
         # Verify total count
         total_modules = sum(len(modules) for modules in categories.values())
         assert total_modules == 7
+
+    def test_should_use_metadata_version_detection(self):
+        """Test version detection for metadata usage."""
+        # Test v10.0+ versions should use metadata
+        assert self.parser._should_use_metadata("v10.0.0") is True
+        assert self.parser._should_use_metadata("10.0.0") is True
+        assert self.parser._should_use_metadata("v10.1.0") is True
+        assert self.parser._should_use_metadata("v11.0.0") is True
+        assert self.parser._should_use_metadata("master") is True
+        assert self.parser._should_use_metadata("main") is True
+
+        # Test versions before v10.0 should not use metadata
+        assert self.parser._should_use_metadata("v9.51.0") is False
+        assert self.parser._should_use_metadata("9.51.0") is False
+        assert self.parser._should_use_metadata("v8.0.0") is False
+        assert self.parser._should_use_metadata("v1.0.0") is False
+
+        # Test invalid versions
+        assert self.parser._should_use_metadata("invalid") is False
+        assert self.parser._should_use_metadata("") is False
+
+    def test_parse_from_metadata_mock(self):
+        """Test metadata parsing with mock data."""
+        import unittest.mock
+
+        # Mock metadata response
+        mock_metadata = {
+            "NOTICE": "auto-generated",
+            "components": [
+                {
+                    "componentType": "bidder",
+                    "componentName": "appnexus",
+                    "aliasOf": None,
+                    "gvlid": 32,
+                    "disclosureURL": None,
+                },
+                {
+                    "componentType": "bidder",
+                    "componentName": "appnexus_alias",
+                    "aliasOf": "appnexus",
+                    "gvlid": None,
+                    "disclosureURL": None,
+                },
+                {
+                    "componentType": "analytics",
+                    "componentName": "googleAnalytics",
+                    "aliasOf": None,
+                    "gvlid": None,
+                    "disclosureURL": None,
+                },
+                {
+                    "componentType": "rtd",
+                    "componentName": "amazon",
+                    "aliasOf": None,
+                    "gvlid": None,
+                    "disclosureURL": None,
+                },
+                {
+                    "componentType": "userId",
+                    "componentName": "facebookId",
+                    "aliasOf": None,
+                    "gvlid": None,
+                    "disclosureURL": None,
+                },
+            ],
+        }
+
+        data = {
+            "repo": "prebid/Prebid.js",
+            "version": "v10.0.0",
+            "directory": "modules",
+            "files": {},
+        }
+
+        with unittest.mock.patch("requests.get") as mock_get:
+            mock_response = unittest.mock.Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = mock_metadata
+            mock_get.return_value = mock_response
+
+            categories = self.parser._parse_from_metadata(data)
+
+            # Verify categories were parsed correctly
+            assert "appnexus" in categories["bid_adapters"]
+            assert (
+                "appnexus_alias" not in categories["bid_adapters"]
+            )  # Aliases excluded
+            assert "googleAnalytics" in categories["analytics_adapters"]
+            assert "amazon" in categories["rtd_modules"]
+            assert "facebookId" in categories["identity_modules"]
+
+            # Verify the correct URL was called
+            expected_url = "https://raw.githubusercontent.com/prebid/Prebid.js/v10.0.0/metadata/modules.json"
+            mock_get.assert_called_once_with(expected_url, timeout=30)
+
+    def test_parse_from_metadata_fallback_on_error(self):
+        """Test fallback to traditional parsing when metadata fails."""
+        import unittest.mock
+
+        data = {
+            "repo": "prebid/Prebid.js",
+            "version": "v10.0.0",
+            "directory": "modules",
+            "files": {
+                "modules/appnexusBidAdapter.js": "content",
+            },
+        }
+
+        with unittest.mock.patch("requests.get") as mock_get:
+            # Simulate network error
+            mock_get.side_effect = Exception("Network error")
+
+            categories = self.parser._parse_from_metadata(data)
+
+            # Should fall back to traditional parsing
+            assert "appnexus" in categories["bid_adapters"]
+
+    def test_parse_from_metadata_fallback_on_404(self):
+        """Test fallback to traditional parsing when metadata is not found."""
+        import unittest.mock
+
+        data = {
+            "repo": "prebid/Prebid.js",
+            "version": "v10.0.0",
+            "directory": "modules",
+            "files": {
+                "modules/rubiconBidAdapter.js": "content",
+            },
+        }
+
+        with unittest.mock.patch("requests.get") as mock_get:
+            mock_response = unittest.mock.Mock()
+            mock_response.status_code = 404
+            mock_get.return_value = mock_response
+
+            categories = self.parser._parse_from_metadata(data)
+
+            # Should fall back to traditional parsing
+            assert "rubicon" in categories["bid_adapters"]
+
+    def test_parse_uses_metadata_for_v10(self):
+        """Test that parse method uses metadata for v10.0+ versions."""
+        import unittest.mock
+
+        mock_metadata = {
+            "components": [
+                {
+                    "componentType": "bidder",
+                    "componentName": "metadata_adapter",
+                    "aliasOf": None,
+                    "gvlid": 123,
+                    "disclosureURL": None,
+                }
+            ]
+        }
+
+        data = {
+            "repo": "prebid/Prebid.js",
+            "version": "v10.0.0",
+            "directory": "modules",
+            "files": {
+                "modules/traditional_adapter.js": "content",  # This should be ignored for v10+
+            },
+            "metadata": {"total_files": 1},
+        }
+
+        with unittest.mock.patch("requests.get") as mock_get:
+            mock_response = unittest.mock.Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = mock_metadata
+            mock_get.return_value = mock_response
+
+            result = self.parser.parse(data)
+
+            # Should use metadata, not traditional parsing
+            assert "metadata_adapter" in result
+            assert "traditional_adapter" not in result
+
+    def test_parse_uses_traditional_for_v9(self):
+        """Test that parse method uses traditional parsing for v9.x versions."""
+        data = {
+            "repo": "prebid/Prebid.js",
+            "version": "v9.51.0",
+            "directory": "modules",
+            "files": {
+                "modules/traditionalBidAdapter.js": "content",
+            },
+            "metadata": {"total_files": 1},
+        }
+
+        result = self.parser.parse(data)
+
+        # Should use traditional parsing for v9.x
+        assert "traditional" in result

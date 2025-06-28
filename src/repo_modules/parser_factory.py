@@ -160,8 +160,11 @@ class PrebidJSParser(BaseParser):
         result.append(f"Modules Directory: {data['directory']}")
         result.append("")
 
-        # Categorize modules
-        modules = self._categorize_modules(data["files"])
+        # Check if we have metadata for v10.0+ or use traditional approach
+        if self._should_use_metadata(data["version"]):
+            modules = self._parse_from_metadata(data)
+        else:
+            modules = self._categorize_modules(data["files"])
 
         # Display categories
         result.append("Prebid.js Module Categories:")
@@ -226,6 +229,81 @@ class PrebidJSParser(BaseParser):
                 # Other .js modules
                 module_name = filename.replace(".js", "")
                 categories["other_modules"].append(module_name)
+
+        return categories
+
+    def _should_use_metadata(self, version: str) -> bool:
+        """Determine if version supports metadata approach (v10.0+)."""
+        import re
+
+        # Check if version is at least 10.0
+        try:
+            # Handle master/main branch
+            if version.lower() in ["master", "main"]:
+                return True
+
+            # Extract version number from string like "v10.0.0" or "10.0.0"
+            version_match = re.match(r"v?(\d+)\.(\d+)\.?(\d+)?", version)
+            if version_match:
+                major = int(version_match.group(1))
+                return major >= 10
+        except (ValueError, AttributeError):
+            pass
+
+        return False
+
+    def _parse_from_metadata(self, data: dict[str, Any]) -> dict[str, list[str]]:
+        """Parse modules using the metadata/modules.json approach for v10.0+."""
+        import requests
+
+        categories: dict[str, list[str]] = {
+            "bid_adapters": [],
+            "analytics_adapters": [],
+            "rtd_modules": [],
+            "identity_modules": [],
+            "other_modules": [],
+        }
+
+        try:
+            # Fetch metadata from the repository
+            metadata_url = f"https://raw.githubusercontent.com/{data['repo']}/{data['version']}/metadata/modules.json"
+            response = requests.get(metadata_url, timeout=30)
+
+            if response.status_code == 200:
+                metadata = response.json()
+                components = metadata.get("components", [])
+
+                for component in components:
+                    component_type = component.get("componentType")
+                    component_name = component.get("componentName")
+                    alias_of = component.get("aliasOf")
+
+                    if not component_name:
+                        continue
+
+                    # Skip aliases for cleaner output (or include them with indication)
+                    if alias_of:
+                        continue
+
+                    # Categorize based on component type
+                    if component_type == "bidder":
+                        categories["bid_adapters"].append(component_name)
+                    elif component_type == "analytics":
+                        categories["analytics_adapters"].append(component_name)
+                    elif component_type == "rtd":
+                        categories["rtd_modules"].append(component_name)
+                    elif component_type == "userId":
+                        categories["identity_modules"].append(component_name)
+                    else:
+                        categories["other_modules"].append(component_name)
+
+            else:
+                # Fallback to traditional parsing if metadata is not available
+                return self._categorize_modules(data["files"])
+
+        except Exception:
+            # Fallback to traditional parsing on any error
+            return self._categorize_modules(data["files"])
 
         return categories
 
