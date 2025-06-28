@@ -9,6 +9,7 @@ from typing import Any
 import yaml
 
 from ..repo_modules.github_client import GitHubClient
+from ..shared_utilities.telemetry import trace_function
 
 
 class AliasFinder:
@@ -18,6 +19,7 @@ class AliasFinder:
         """Initialize with optional GitHub token."""
         self.client = GitHubClient(token)
 
+    @trace_function("find_adapter_files_with_aliases", include_args=True)
     def find_adapter_files_with_aliases(
         self, repo_name: str, version: str, directory: str, limit: int | None = None
     ) -> dict[str, Any]:

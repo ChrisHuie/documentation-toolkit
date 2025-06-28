@@ -2,8 +2,8 @@
 Tests for the PrebidServerGoParser
 """
 
-from src.repo_modules_by_version.config import RepoConfig
-from src.repo_modules_by_version.parser_factory import PrebidServerGoParser
+from src.repo_modules.config import RepoConfig
+from src.repo_modules.parser_factory import PrebidServerGoParser
 
 
 class TestPrebidServerGoParser:

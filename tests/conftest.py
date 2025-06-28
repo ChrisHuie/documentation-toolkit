@@ -6,7 +6,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.repo_modules_by_version.config import RepoConfig
+from src.repo_modules.config import RepoConfig
 
 
 @pytest.fixture

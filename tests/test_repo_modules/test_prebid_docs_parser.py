@@ -2,8 +2,8 @@
 Tests for the PrebidDocsParser
 """
 
-from src.repo_modules_by_version.config import RepoConfig
-from src.repo_modules_by_version.parser_factory import PrebidDocsParser
+from src.repo_modules.config import RepoConfig
+from src.repo_modules.parser_factory import PrebidDocsParser
 
 
 class TestPrebidDocsParser:

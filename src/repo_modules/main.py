@@ -9,15 +9,14 @@ import sys
 from dotenv import load_dotenv
 from loguru import logger
 from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 
 from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
 from .github_client import GitHubClient
 from .parser_factory import ParserFactory
-from ..shared_utilities.filename_generator import generate_output_filename
 
 # Initialize environment and logging
 load_dotenv()
@@ -27,20 +26,20 @@ logger.add(
 )
 
 # Initialize OpenTelemetry
-trace.set_tracer_provider(TracerProvider())
-tracer = trace.get_tracer(__name__)
+trace.set_tracer_provider(TracerProvider())  # type: ignore
+tracer = trace.get_tracer(__name__)  # type: ignore
 
 # Configure console exporter for debugging
-console_exporter = ConsoleSpanExporter()
-span_processor = SimpleSpanProcessor(console_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
+console_exporter = ConsoleSpanExporter()  # type: ignore
+span_processor = SimpleSpanProcessor(console_exporter)  # type: ignore
+trace.get_tracer_provider().add_span_processor(span_processor)  # type: ignore
 
 # Auto-instrument HTTP libraries
-RequestsInstrumentor().instrument()
-URLLib3Instrumentor().instrument()
+RequestsInstrumentor().instrument()  # type: ignore
+URLLib3Instrumentor().instrument()  # type: ignore
 
 
-def generate_output_filename(config: RepoConfig, version: str) -> str:
+def generate_repo_output_filename(config: RepoConfig, version: str) -> str:
     """
     Generate output filename based on repository configuration.
 
@@ -61,9 +60,6 @@ def generate_output_filename(config: RepoConfig, version: str) -> str:
 
     # Clean version string for filename
     version_clean = version.replace("/", "_")
-    # Remove leading "v" if present (e.g., "v3.19.0" -> "3.19.0")
-    if version_clean.startswith("v"):
-        version_clean = version_clean[1:]
 
     return f"{repo_name}_modules_version_{version_clean}.txt"
 
@@ -290,7 +286,7 @@ def main():
             output_file = args.output
         elif repo_config.modules_path or repo_config.paths:
             # Auto-generate filename using configuration-driven helper
-            output_file = generate_output_filename(repo_config, version)
+            output_file = generate_repo_output_filename(repo_config, version)
         else:
             output_file = None
 

@@ -4,8 +4,8 @@ Tests for the parser_factory module.
 
 import pytest
 
-from src.repo_modules_by_version.config import RepoConfig
-from src.repo_modules_by_version.parser_factory import (
+from src.repo_modules.config import RepoConfig
+from src.repo_modules.parser_factory import (
     BaseParser,
     DefaultParser,
     MarkdownParser,

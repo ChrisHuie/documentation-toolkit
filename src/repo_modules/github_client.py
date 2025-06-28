@@ -23,14 +23,14 @@ class GitHubClient:
         self.token = token or os.environ.get("GITHUB_TOKEN")
         print(f"DEBUG: GitHub token available: {bool(self.token)}")
         if self.token:
-            print(f"DEBUG: Using authenticated GitHub client")
+            print("DEBUG: Using authenticated GitHub client")
             self.github = Github(self.token)
         else:
-            print(f"DEBUG: Using unauthenticated GitHub client (rate limited)")
+            print("DEBUG: Using unauthenticated GitHub client (rate limited)")
             self.github = Github()
 
         # Initialize version cache manager
-        print(f"DEBUG: Initializing version cache manager")
+        print("DEBUG: Initializing version cache manager")
         self.cache_manager = VersionCacheManager()
 
     def fetch_repository_data(
@@ -62,7 +62,7 @@ class GitHubClient:
         try:
             print(f"DEBUG: Fetching repository {repo_name}")
             repo = self.github.get_repo(repo_name)
-            print(f"DEBUG: Got repository object")
+            print("DEBUG: Got repository object")
 
             # Get the commit/reference
             print(f"DEBUG: Getting reference for version {version}")
@@ -229,7 +229,7 @@ class GitHubClient:
         # Try to load from checkpoint first
         if checkpoint_file and os.path.exists(checkpoint_file):
             try:
-                with open(checkpoint_file, "r") as f:
+                with open(checkpoint_file) as f:
                     checkpoint_data = json.load(f)
                     files_data = checkpoint_data.get("files_data", {})
                     processed_files = set(checkpoint_data.get("processed_files", []))
@@ -250,7 +250,7 @@ class GitHubClient:
 
             # For large repositories like prebid-js, skip Git Tree API and go directly to get_contents()
             # This avoids the timeout issue with massive trees
-            print(f"Using get_contents() API for incremental file discovery...")
+            print("Using get_contents() API for incremental file discovery...")
             all_tree_elements = self._fetch_all_files_with_contents_api_checkpointed(
                 repo, directory, ref, checkpoint_file, batch_size, delay
             )
@@ -442,7 +442,7 @@ class GitHubClient:
         # Load from checkpoint if available
         if checkpoint_file and os.path.exists(checkpoint_file):
             try:
-                with open(checkpoint_file, "r") as f:
+                with open(checkpoint_file) as f:
                     checkpoint_data = json.load(f)
                     # Convert back to pseudo elements
                     for file_data in checkpoint_data.get("files_data", []):

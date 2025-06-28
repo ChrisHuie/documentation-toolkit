@@ -13,7 +13,7 @@ import os
 import tempfile
 from unittest.mock import Mock, patch
 
-from src.repo_modules_by_version.config import RepoConfig
+from src.repo_modules.config import RepoConfig
 
 
 class TestFilenameGeneration:
@@ -150,8 +150,8 @@ class TestFilenameGeneration:
             assert repo_name == expected_output
 
 
-@patch("src.repo_modules_by_version.main.GitHubClient")
-@patch("src.repo_modules_by_version.main.ParserFactory")
+@patch("src.repo_modules.main.GitHubClient")
+@patch("src.repo_modules.main.ParserFactory")
 class TestFilenameGenerationIntegration:
     """Integration tests for filename generation within main function."""
 
@@ -177,11 +177,9 @@ class TestFilenameGenerationIntegration:
         # Mock config
         with (
             patch(
-                "src.repo_modules_by_version.main.get_repo_config_with_versions"
+                "src.repo_modules.main.get_repo_config_with_versions"
             ) as mock_get_config,
-            patch(
-                "src.repo_modules_by_version.main.get_available_repos"
-            ) as mock_get_repos,
+            patch("src.repo_modules.main.get_available_repos") as mock_get_repos,
         ):
             mock_config = RepoConfig(
                 repo="prebid/prebid-server",
@@ -202,7 +200,7 @@ class TestFilenameGenerationIntegration:
                     os.chdir(temp_dir)
 
                     # Import and test main function
-                    from src.repo_modules_by_version.main import main
+                    from src.repo_modules.main import main
 
                     # Mock sys.argv
                     with patch(

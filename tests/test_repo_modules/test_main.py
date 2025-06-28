@@ -6,8 +6,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from src.repo_modules_by_version.config import RepoConfig
-from src.repo_modules_by_version.main import (
+from src.repo_modules.config import RepoConfig
+from src.repo_modules.main import (
     create_parser,
     main,
     show_repo_menu,
@@ -61,7 +61,7 @@ class TestCreateParser:
 class TestShowRepoMenu:
     """Test repository menu functionality."""
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("builtins.input")
     def test_show_repo_menu_valid_selection(self, mock_input, mock_get_repos):
         """Test valid repository selection."""
@@ -78,7 +78,7 @@ class TestShowRepoMenu:
         result = show_repo_menu()
         assert result == "test-repo"
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("builtins.input")
     def test_show_repo_menu_quit(self, mock_input, mock_get_repos):
         """Test quitting from repository menu."""
@@ -95,7 +95,7 @@ class TestShowRepoMenu:
         result = show_repo_menu()
         assert result is None
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     def test_show_repo_menu_no_repos(self, mock_get_repos):
         """Test menu when no repositories are available."""
         mock_get_repos.return_value = {}
@@ -103,7 +103,7 @@ class TestShowRepoMenu:
         result = show_repo_menu()
         assert result is None
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("builtins.input")
     def test_show_repo_menu_invalid_then_valid(self, mock_input, mock_get_repos):
         """Test invalid selection followed by valid selection."""
@@ -121,7 +121,7 @@ class TestShowRepoMenu:
         result = show_repo_menu()
         assert result == "test-repo"
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("builtins.input")
     def test_show_repo_menu_keyboard_interrupt(self, mock_input, mock_get_repos):
         """Test handling of keyboard interrupt."""
@@ -201,7 +201,7 @@ class TestShowVersionMenu:
 class TestMainFunction:
     """Test main CLI function."""
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("sys.argv", ["main.py", "--list-repos"])
     def test_main_list_repos_with_repos(self, mock_get_repos):
         """Test main function with --list-repos when repos exist."""
@@ -218,7 +218,7 @@ class TestMainFunction:
             main()
         assert exc_info.value.code == 0
 
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("sys.argv", ["main.py", "--list-repos"])
     def test_main_list_repos_no_repos(self, mock_get_repos):
         """Test main function with --list-repos when no repos exist."""
@@ -228,9 +228,9 @@ class TestMainFunction:
             main()
         assert exc_info.value.code == 0
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.get_repo_config_with_versions")
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.get_repo_config_with_versions")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("sys.argv", ["main.py", "--repo", "test-repo", "--version", "v1.0.0"])
     def test_main_with_preconfigured_repo(
         self, mock_get_repos, mock_get_config, mock_github_client
@@ -265,9 +265,7 @@ class TestMainFunction:
         mock_github_client.return_value = mock_client_instance
 
         # Mock parser
-        with patch(
-            "src.repo_modules_by_version.main.ParserFactory"
-        ) as mock_parser_factory:
+        with patch("src.repo_modules.main.ParserFactory") as mock_parser_factory:
             mock_parser_instance = Mock()
             mock_parser_instance.parse.return_value = "Parsed output"
             mock_factory_instance = Mock()
@@ -277,11 +275,11 @@ class TestMainFunction:
             main()
 
             mock_client_instance.fetch_repository_data.assert_called_once_with(
-                "test/repo", "v1.0.0", "docs", None, None, "full_content"
+                "test/repo", "v1.0.0", "docs", None, None, "full_content", 50, 1.0, None
             )
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.get_available_repos")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.get_available_repos")
     @patch("sys.argv", ["main.py", "--repo", "custom/repo", "--version", "v1.0.0"])
     def test_main_with_custom_repo(self, mock_get_repos, mock_github_client):
         """Test main function with custom repository not in config."""
@@ -297,9 +295,7 @@ class TestMainFunction:
         }
         mock_github_client.return_value = mock_client_instance
 
-        with patch(
-            "src.repo_modules_by_version.main.ParserFactory"
-        ) as mock_parser_factory:
+        with patch("src.repo_modules.main.ParserFactory") as mock_parser_factory:
             mock_parser_instance = Mock()
             mock_parser_instance.parse.return_value = "Custom parsed output"
             mock_factory_instance = Mock()
@@ -309,10 +305,10 @@ class TestMainFunction:
             main()
 
             mock_client_instance.fetch_repository_data.assert_called_once_with(
-                "custom/repo", "v1.0.0", "", None, None, "full_content"
+                "custom/repo", "v1.0.0", "", None, None, "full_content", 50, 1.0, None
             )
 
-    @patch("src.repo_modules_by_version.main.show_repo_menu")
+    @patch("src.repo_modules.main.show_repo_menu")
     @patch("sys.argv", ["main.py"])
     def test_main_interactive_repo_selection_quit(self, mock_show_repo_menu):
         """Test main function when user quits repo selection."""
@@ -322,20 +318,18 @@ class TestMainFunction:
             main()
         assert exc_info.value.code == 0
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
+    @patch("src.repo_modules.main.GitHubClient")
     @patch("sys.argv", ["main.py", "--repo", "test/repo"])
     def test_main_missing_version_no_preconfigured(self, mock_github_client):
         """Test main function when version is missing and no preconfigured versions."""
-        with patch(
-            "src.repo_modules_by_version.main.get_available_repos"
-        ) as mock_get_repos:
+        with patch("src.repo_modules.main.get_available_repos") as mock_get_repos:
             mock_get_repos.return_value = {}
 
             with pytest.raises(SystemExit) as exc_info:
                 main()
             assert exc_info.value.code == 1
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
+    @patch("src.repo_modules.main.GitHubClient")
     @patch("builtins.open", create=True)
     @patch(
         "sys.argv",
@@ -364,33 +358,27 @@ class TestMainFunction:
         }
         mock_github_client.return_value = mock_client_instance
 
-        with patch(
-            "src.repo_modules_by_version.main.ParserFactory"
-        ) as mock_parser_factory:
+        with patch("src.repo_modules.main.ParserFactory") as mock_parser_factory:
             mock_parser_instance = Mock()
             mock_parser_instance.parse.return_value = "Output content"
             mock_factory_instance = Mock()
             mock_factory_instance.get_parser.return_value = mock_parser_instance
             mock_parser_factory.return_value = mock_factory_instance
 
-            with patch(
-                "src.repo_modules_by_version.main.get_available_repos"
-            ) as mock_get_repos:
+            with patch("src.repo_modules.main.get_available_repos") as mock_get_repos:
                 mock_get_repos.return_value = {}
 
                 main()
 
                 mock_file.write.assert_called_once_with("Output content")
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
+    @patch("src.repo_modules.main.GitHubClient")
     @patch("sys.argv", ["main.py", "--repo", "test/repo", "--version", "v1.0.0"])
     def test_main_handles_exceptions(self, mock_github_client):
         """Test main function handles exceptions gracefully."""
         mock_github_client.side_effect = Exception("Test error")
 
-        with patch(
-            "src.repo_modules_by_version.main.get_available_repos"
-        ) as mock_get_repos:
+        with patch("src.repo_modules.main.get_available_repos") as mock_get_repos:
             mock_get_repos.return_value = {}
 
             with pytest.raises(SystemExit) as exc_info:

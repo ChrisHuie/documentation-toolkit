@@ -2,11 +2,14 @@
 CLI entry point for alias mappings tool
 """
 
-import json
-from pathlib import Path
-
 import click
 
+from ..shared_utilities.output_formatter import (
+    OutputFormatter,
+    create_output_metadata_from_result,
+    extract_aliases_from_result_data,
+)
+from ..shared_utilities.telemetry import trace_function, trace_operation
 from .alias_finder import AliasFinder
 
 
@@ -76,6 +79,7 @@ from .alias_finder import AliasFinder
     help="Extraction mode: 'js' for JavaScript files, 'server' for YAML files (Go), 'java-server' for YAML files (Java)",
     show_default=True,
 )
+@trace_function("alias_mappings_main", include_args=True)
 def main(
     repo: str,
     version: str,
@@ -207,7 +211,7 @@ def main(
                         for alias in sorted(aliases):
                             print(f"  • {alias}")
                     elif file_data["commented_only"]:
-                        print(f"  (aliases in comments only)")
+                        print("  (aliases in comments only)")
                     elif not_in_version:
                         print(f"  (not in {version})")
                     else:
@@ -215,7 +219,7 @@ def main(
 
             # Generate output file if specified
             if output:
-                _generate_output_file(result, output, repo, version, mode)
+                _generate_output_file_with_shared_utilities(result, output, mode)
                 print(f"\n📄 Output saved to: {output}")
         else:
             if mode == "server":
@@ -225,85 +229,23 @@ def main(
 
     except Exception as e:
         click.echo(f"Error: {e}", err=True)
-        raise click.Abort()
+        raise click.Abort() from e
 
 
-def _generate_output_file(
-    result: dict, output_path: str, repo: str, version: str, mode: str = "js"
+def _generate_output_file_with_shared_utilities(
+    result: dict, output_path: str, mode: str = "js"
 ) -> None:
-    """Generate the formatted output file with alphabetical list and JSON structure."""
+    """Generate output file using shared utilities."""
+    with trace_operation(
+        "generate_output_file", {"mode": mode, "output_path": output_path}
+    ):
+        # Extract aliases and metadata using shared utilities
+        aliases = extract_aliases_from_result_data(result, mode)
+        metadata = create_output_metadata_from_result(result)
 
-    # Collect all aliases with their source files
-    all_aliases = []
-    alias_objects = []
-    metadata = result["metadata"]
-
-    if mode == "server":
-        for file_path, file_data in result["file_aliases"].items():
-            alias_name = file_data["alias_name"]
-            alias_of = file_data["alias_of"]
-            if alias_name and alias_of:
-                all_aliases.append(alias_name)
-                alias_objects.append({"name": alias_name, "aliasOf": alias_of})
-
-        title = "Prebid Server Alias Mappings"
-        files_stat_line = f"# Files not in {version}: {metadata['files_not_in_version']}\n# Files with Empty Aliases: {metadata['files_with_empty_aliases']}"
-    elif mode == "java-server":
-        for file_path, file_data in result["file_aliases"].items():
-            aliases = file_data["aliases"]
-            bidder_name = file_data["bidder_name"]
-            if aliases and bidder_name:
-                for alias in aliases:
-                    all_aliases.append(alias)
-                    alias_objects.append({"name": alias, "aliasOf": bidder_name})
-
-        title = "Prebid Server Java Alias Mappings"
-        files_stat_line = f"# Files not in {version}: {metadata['files_not_in_version']}\n# Files with Empty Aliases: {metadata['files_with_empty_aliases']}"
-    else:
-        for file_path, file_data in result["file_aliases"].items():
-            aliases = file_data["aliases"]
-            if aliases:
-                # Extract adapter name from file path (remove .js and BidAdapter suffix)
-                adapter_name = Path(file_path).stem.replace("BidAdapter", "")
-
-                for alias in aliases:
-                    all_aliases.append(alias)
-                    alias_objects.append({"name": alias, "aliasOf": adapter_name})
-
-        title = "Prebid.js Alias Mappings"
-        files_stat_line = f"# Files with Commented Aliases: {metadata['files_with_commented_aliases']}\n# Files not in {version}: {metadata['files_not_in_version']}\n# Files with Empty Aliases: {metadata['files_with_empty_aliases']}"
-
-    # Sort alphabetically
-    all_aliases.sort()
-    alias_objects.sort(key=lambda x: x["name"])
-
-    # Generate output content
-    lines = []
-    lines.append(f"# {title}")
-    lines.append(f"# Repository: {repo}")
-    lines.append(f"# Version: {version}")
-    lines.append(f"# Generated: {metadata['commit_sha']}")
-    lines.append(f"# Total Files: {metadata['total_files']}")
-    lines.append(f"# Files with Aliases: {metadata['files_with_aliases']}")
-    lines.append(files_stat_line)
-    lines.append(f"# Total Aliases: {len(all_aliases)}")
-    lines.append("")
-    lines.append("## Alphabetical List of All Aliases")
-    lines.append("")
-
-    for alias in all_aliases:
-        lines.append(alias)
-
-    lines.append("")
-    lines.append("## JSON Structure")
-    lines.append("")
-    lines.append("```json")
-    lines.append(json.dumps(alias_objects, indent=2))
-    lines.append("```")
-
-    # Write to file
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+        # Create formatter and generate output
+        formatter = OutputFormatter()
+        formatter.generate_alias_output_file(output_path, aliases, metadata, mode)
 
 
 if __name__ == "__main__":

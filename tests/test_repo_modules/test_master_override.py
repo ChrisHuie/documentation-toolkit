@@ -10,14 +10,14 @@ This test suite validates:
 
 from unittest.mock import Mock, patch
 
-from src.repo_modules_by_version.config import RepoConfig
+from src.repo_modules.config import RepoConfig
 
 
 class TestMasterOverride:
     """Test master version override functionality for prebid.github.io."""
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_prebid_docs_master_override(self, mock_parser_factory, mock_github_client):
         """Test that prebid.github.io always uses master version regardless of input."""
         # Mock the necessary components
@@ -38,11 +38,9 @@ class TestMasterOverride:
         # Mock config for prebid-docs
         with (
             patch(
-                "src.repo_modules_by_version.main.get_repo_config_with_versions"
+                "src.repo_modules.main.get_repo_config_with_versions"
             ) as mock_get_config,
-            patch(
-                "src.repo_modules_by_version.main.get_available_repos"
-            ) as mock_get_repos,
+            patch("src.repo_modules.main.get_available_repos") as mock_get_repos,
         ):
             mock_config = RepoConfig(
                 repo="prebid/prebid.github.io",
@@ -63,7 +61,7 @@ class TestMasterOverride:
             for input_version in test_versions:
                 mock_github.fetch_repository_data.reset_mock()
 
-                from src.repo_modules_by_version.main import main
+                from src.repo_modules.main import main
 
                 # Mock sys.argv with different versions
                 with patch(
@@ -83,8 +81,8 @@ class TestMasterOverride:
                     call_args[0][1] == "master"
                 ), f"Expected master version, got {call_args[0][1]} for input {input_version}"
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_other_repos_not_affected_by_master_override(
         self, mock_parser_factory, mock_github_client
     ):
@@ -138,11 +136,9 @@ class TestMasterOverride:
             # Mock config for current repo
             with (
                 patch(
-                    "src.repo_modules_by_version.main.get_repo_config_with_versions"
+                    "src.repo_modules.main.get_repo_config_with_versions"
                 ) as mock_get_config,
-                patch(
-                    "src.repo_modules_by_version.main.get_available_repos"
-                ) as mock_get_repos,
+                patch("src.repo_modules.main.get_available_repos") as mock_get_repos,
             ):
                 mock_repo_config = RepoConfig(
                     repo=config["repo_url"],
@@ -161,7 +157,7 @@ class TestMasterOverride:
                 mock_get_config.return_value = mock_repo_config
                 mock_get_repos.return_value = {config["repo_name"]: mock_repo_config}
 
-                from src.repo_modules_by_version.main import main
+                from src.repo_modules.main import main
 
                 # Mock sys.argv
                 with patch(
@@ -216,7 +212,7 @@ class TestMasterOverride:
                 result == expected_output
             ), f"For repo {repo_url} with version {input_version}, expected {expected_output}, got {result}"
 
-    @patch("src.repo_modules_by_version.main.logger")
+    @patch("src.repo_modules.main.logger")
     def test_master_override_preserves_original_main_logic(self, mock_logger):
         """Test that master override doesn't break other main function logic."""
         # This test ensures the override is properly integrated

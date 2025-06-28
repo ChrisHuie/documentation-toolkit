@@ -4,8 +4,8 @@ Tests for PrebidJSParser functionality
 
 import json
 
-from src.repo_modules_by_version.config import RepoConfig
-from src.repo_modules_by_version.parser_factory import PrebidJSParser
+from src.repo_modules.config import RepoConfig
+from src.repo_modules.parser_factory import PrebidJSParser
 
 
 class TestPrebidJSParser:
