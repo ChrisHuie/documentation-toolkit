@@ -7,7 +7,7 @@ This test suite validates:
 - Configuration validation and defaults
 """
 
-from src.repo_modules_by_version.config import RepoConfig, get_available_repos
+from src.repo_modules.config import RepoConfig, get_available_repos
 
 
 class TestRepoConfigNewFields:

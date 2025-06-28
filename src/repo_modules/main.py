@@ -9,10 +9,10 @@ import sys
 from dotenv import load_dotenv
 from loguru import logger
 from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 
 from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
 from .github_client import GitHubClient
@@ -26,20 +26,20 @@ logger.add(
 )
 
 # Initialize OpenTelemetry
-trace.set_tracer_provider(TracerProvider())
-tracer = trace.get_tracer(__name__)
+trace.set_tracer_provider(TracerProvider())  # type: ignore
+tracer = trace.get_tracer(__name__)  # type: ignore
 
 # Configure console exporter for debugging
-console_exporter = ConsoleSpanExporter()
-span_processor = SimpleSpanProcessor(console_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
+console_exporter = ConsoleSpanExporter()  # type: ignore
+span_processor = SimpleSpanProcessor(console_exporter)  # type: ignore
+trace.get_tracer_provider().add_span_processor(span_processor)  # type: ignore
 
 # Auto-instrument HTTP libraries
-RequestsInstrumentor().instrument()
-URLLib3Instrumentor().instrument()
+RequestsInstrumentor().instrument()  # type: ignore
+URLLib3Instrumentor().instrument()  # type: ignore
 
 
-def generate_output_filename(config: RepoConfig, version: str) -> str:
+def generate_repo_output_filename(config: RepoConfig, version: str) -> str:
     """
     Generate output filename based on repository configuration.
 
@@ -97,26 +97,22 @@ def create_parser() -> argparse.ArgumentParser:
         "--batch-size",
         type=int,
         default=50,
-        help="Batch size for processing files (default: 50)"
+        help="Batch size for processing files (default: 50)",
     )
 
     parser.add_argument(
         "--delay",
         type=float,
         default=1.0,
-        help="Delay in seconds between batches (default: 1.0)"
+        help="Delay in seconds between batches (default: 1.0)",
     )
 
     parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Resume from checkpoint if available"
+        "--resume", action="store_true", help="Resume from checkpoint if available"
     )
 
     parser.add_argument(
-        "--limit",
-        type=int,
-        help="Limit number of files to process (for testing)"
+        "--limit", type=int, help="Limit number of files to process (for testing)"
     )
 
     return parser
@@ -269,7 +265,9 @@ def main():
 
         # Fetch and parse repository data
         with tracer.start_as_current_span("fetch_and_parse_data"):
-            logger.info(f"Starting data fetch with strategy: {repo_config.fetch_strategy}")
+            logger.info(
+                f"Starting data fetch with strategy: {repo_config.fetch_strategy}"
+            )
             data = github_client.fetch_repository_data(
                 repo_config.repo,
                 version,
@@ -288,7 +286,7 @@ def main():
             output_file = args.output
         elif repo_config.modules_path or repo_config.paths:
             # Auto-generate filename using configuration-driven helper
-            output_file = generate_output_filename(repo_config, version)
+            output_file = generate_repo_output_filename(repo_config, version)
         else:
             output_file = None
 
@@ -302,7 +300,7 @@ def main():
             with open(output_file, "w") as f:
                 f.write(result)
             logger.info("Results written to %s", output_file)
-            
+
             # Clean up checkpoint file on successful completion
             checkpoint_file = f".{repo_config.repo.replace('/', '_')}_{version}_{(repo_config.modules_path or repo_config.directory or 'modules').replace('/', '_')}_checkpoint.json"
             if os.path.exists(checkpoint_file):

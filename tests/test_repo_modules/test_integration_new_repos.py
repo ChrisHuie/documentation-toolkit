@@ -10,8 +10,8 @@ This test suite validates:
 - Master override for prebid.github.io
 """
 
-from src.repo_modules_by_version.config import RepoConfig, get_available_repos
-from src.repo_modules_by_version.parser_factory import (
+from src.repo_modules.config import RepoConfig, get_available_repos
+from src.repo_modules.parser_factory import (
     ParserFactory,
     PrebidDocsParser,
     PrebidJSParser,

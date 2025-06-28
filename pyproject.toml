@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [project.scripts]
-repo-modules-by-version = "src.repo_modules_by_version.main:main"
+repo-modules = "src.repo_modules.main:main"
 validate-project = "src.dev_tools.cli:main"
 alias-mappings = "src.alias_mappings.main:main"
 
@@ -70,3 +70,8 @@ extend-exclude = '''
   | dist
 )/
 '''
+
+[dependency-groups]
+dev = [
+    "types-pyyaml>=6.0.12.20250516",
+]

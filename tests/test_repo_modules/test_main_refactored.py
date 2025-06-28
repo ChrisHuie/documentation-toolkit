@@ -3,19 +3,19 @@ Tests for refactored main.py with configuration-driven functionality.
 
 This test suite validates:
 - Version override functionality through configuration
-- generate_output_filename helper function
+- generate_repo_output_filename helper function
 - Configuration-driven behavior in main function
 - Integration with new RepoConfig fields
 """
 
 from unittest.mock import Mock, patch
 
-from src.repo_modules_by_version.config import RepoConfig
-from src.repo_modules_by_version.main import generate_output_filename
+from src.repo_modules.config import RepoConfig
+from src.repo_modules.main import generate_repo_output_filename
 
 
 class TestGenerateOutputFilename:
-    """Test the generate_output_filename helper function."""
+    """Test the generate_repo_output_filename helper function."""
 
     def test_generate_filename_with_custom_slug(self):
         """Test filename generation with custom output_filename_slug."""
@@ -26,7 +26,7 @@ class TestGenerateOutputFilename:
             output_filename_slug="custom.name",
         )
 
-        result = generate_output_filename(config, "v1.2.3")
+        result = generate_repo_output_filename(config, "v1.2.3")
         assert result == "custom.name_modules_version_v1.2.3.txt"
 
     def test_generate_filename_without_custom_slug(self):
@@ -38,7 +38,7 @@ class TestGenerateOutputFilename:
             # No output_filename_slug specified
         )
 
-        result = generate_output_filename(config, "v1.2.3")
+        result = generate_repo_output_filename(config, "v1.2.3")
         # Should convert dashes to dots and use lowercase
         assert result == "test.repository_modules_version_v1.2.3.txt"
 
@@ -60,7 +60,7 @@ class TestGenerateOutputFilename:
         ]
 
         for version, expected in test_cases:
-            result = generate_output_filename(config, version)
+            result = generate_repo_output_filename(config, version)
             assert result == expected
 
     def test_generate_filename_real_repositories(self):
@@ -101,7 +101,7 @@ class TestGenerateOutputFilename:
                 output_filename_slug=slug,
             )
 
-            result = generate_output_filename(config, version)
+            result = generate_repo_output_filename(config, version)
             assert result == expected
 
     def test_generate_filename_fallback_logic(self):
@@ -125,15 +125,15 @@ class TestGenerateOutputFilename:
                 # No output_filename_slug provided
             )
 
-            result = generate_output_filename(config, version)
+            result = generate_repo_output_filename(config, version)
             assert result == expected
 
 
 class TestVersionOverrideFunctionality:
     """Test version override functionality through configuration."""
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_version_override_applied(self, mock_parser_factory, mock_github_client):
         """Test that version_override from config is applied."""
         # Setup mocks
@@ -164,11 +164,11 @@ class TestVersionOverrideFunctionality:
 
         with (
             patch(
-                "src.repo_modules_by_version.main.get_repo_config_with_versions",
+                "src.repo_modules.main.get_repo_config_with_versions",
                 return_value=config,
             ),
             patch(
-                "src.repo_modules_by_version.main.get_available_repos",
+                "src.repo_modules.main.get_available_repos",
                 return_value={"test-repo": config},
             ),
             patch(
@@ -178,7 +178,7 @@ class TestVersionOverrideFunctionality:
         ):
             mock_open.return_value.__enter__.return_value.write = Mock()
 
-            from src.repo_modules_by_version.main import main
+            from src.repo_modules.main import main
 
             main()
 
@@ -188,8 +188,8 @@ class TestVersionOverrideFunctionality:
             called_version = call_args[0][1]  # Second argument is version
             assert called_version == "master", f"Expected master, got {called_version}"
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_no_version_override_preserves_user_input(
         self, mock_parser_factory, mock_github_client
     ):
@@ -222,11 +222,11 @@ class TestVersionOverrideFunctionality:
 
         with (
             patch(
-                "src.repo_modules_by_version.main.get_repo_config_with_versions",
+                "src.repo_modules.main.get_repo_config_with_versions",
                 return_value=config,
             ),
             patch(
-                "src.repo_modules_by_version.main.get_available_repos",
+                "src.repo_modules.main.get_available_repos",
                 return_value={"test-repo": config},
             ),
             patch(
@@ -236,7 +236,7 @@ class TestVersionOverrideFunctionality:
         ):
             mock_open.return_value.__enter__.return_value.write = Mock()
 
-            from src.repo_modules_by_version.main import main
+            from src.repo_modules.main import main
 
             main()
 
@@ -250,8 +250,8 @@ class TestVersionOverrideFunctionality:
 class TestConfigurationDrivenBehavior:
     """Test that main function behavior is driven by configuration."""
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_fetch_strategy_passed_to_github_client(
         self, mock_parser_factory, mock_github_client
     ):
@@ -288,11 +288,11 @@ class TestConfigurationDrivenBehavior:
 
             with (
                 patch(
-                    "src.repo_modules_by_version.main.get_repo_config_with_versions",
+                    "src.repo_modules.main.get_repo_config_with_versions",
                     return_value=config,
                 ),
                 patch(
-                    "src.repo_modules_by_version.main.get_available_repos",
+                    "src.repo_modules.main.get_available_repos",
                     return_value={"test-repo": config},
                 ),
                 patch(
@@ -303,7 +303,7 @@ class TestConfigurationDrivenBehavior:
             ):
                 mock_open.return_value.__enter__.return_value.write = Mock()
 
-                from src.repo_modules_by_version.main import main
+                from src.repo_modules.main import main
 
                 main()
 
@@ -315,12 +315,12 @@ class TestConfigurationDrivenBehavior:
                     called_strategy == strategy
                 ), f"Expected {strategy}, got {called_strategy}"
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_output_filename_uses_generate_helper(
         self, mock_parser_factory, mock_github_client
     ):
-        """Test that output filename uses the generate_output_filename helper."""
+        """Test that output filename uses the generate_repo_output_filename helper."""
         # Setup mocks
         mock_github = Mock()
         mock_github_client.return_value = mock_github
@@ -348,11 +348,11 @@ class TestConfigurationDrivenBehavior:
 
         with (
             patch(
-                "src.repo_modules_by_version.main.get_repo_config_with_versions",
+                "src.repo_modules.main.get_repo_config_with_versions",
                 return_value=config,
             ),
             patch(
-                "src.repo_modules_by_version.main.get_available_repos",
+                "src.repo_modules.main.get_available_repos",
                 return_value={"test-repo": config},
             ),
             patch(
@@ -364,7 +364,7 @@ class TestConfigurationDrivenBehavior:
             mock_file = Mock()
             mock_open.return_value.__enter__.return_value = mock_file
 
-            from src.repo_modules_by_version.main import main
+            from src.repo_modules.main import main
 
             main()
 
@@ -372,8 +372,8 @@ class TestConfigurationDrivenBehavior:
             expected_filename = "custom.output.name_modules_version_v2.1.0.txt"
             mock_open.assert_called_with(expected_filename, "w")
 
-    @patch("src.repo_modules_by_version.main.GitHubClient")
-    @patch("src.repo_modules_by_version.main.ParserFactory")
+    @patch("src.repo_modules.main.GitHubClient")
+    @patch("src.repo_modules.main.ParserFactory")
     def test_integration_all_new_config_fields(
         self, mock_parser_factory, mock_github_client
     ):
@@ -407,11 +407,11 @@ class TestConfigurationDrivenBehavior:
 
         with (
             patch(
-                "src.repo_modules_by_version.main.get_repo_config_with_versions",
+                "src.repo_modules.main.get_repo_config_with_versions",
                 return_value=config,
             ),
             patch(
-                "src.repo_modules_by_version.main.get_available_repos",
+                "src.repo_modules.main.get_available_repos",
                 return_value={"test-repo": config},
             ),
             patch(
@@ -424,7 +424,7 @@ class TestConfigurationDrivenBehavior:
             mock_file = Mock()
             mock_open.return_value.__enter__.return_value = mock_file
 
-            from src.repo_modules_by_version.main import main
+            from src.repo_modules.main import main
 
             main()
 

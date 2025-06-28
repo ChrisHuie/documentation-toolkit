@@ -175,7 +175,7 @@ class PrebidJSParser(BaseParser):
                 )
                 result.append("-" * 30)
                 for file in sorted(files):
-                    result.append(f"  • {file}")
+                    result.append(f"{file}")
                 result.append("")
 
         # Add JSON output
@@ -260,7 +260,7 @@ class PrebidServerGoParser(BaseParser):
                 result.append(f"📦 {category} ({len(items)}):")
                 result.append("-" * 30)
                 for item in sorted(items):
-                    result.append(f"  • {item}")
+                    result.append(f"{item}")
                 result.append("")
 
         # Add JSON output
@@ -351,7 +351,7 @@ class PrebidServerJavaParser(BaseParser):
                 result.append(f"📦 {category} ({len(items)}):")
                 result.append("-" * 30)
                 for item in sorted(items):
-                    result.append(f"  • {item}")
+                    result.append(f"{item}")
                 result.append("")
 
         # Add JSON output
@@ -455,7 +455,7 @@ class PrebidDocsParser(BaseParser):
                 result.append(f"📦 {category} ({len(items)}):")
                 result.append("-" * 30)
                 for item in sorted(items):
-                    result.append(f"  • {item}")
+                    result.append(f"{item}")
                 result.append("")
 
         # Add JSON output
