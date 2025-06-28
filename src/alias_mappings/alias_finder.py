@@ -20,7 +20,6 @@ class AliasFinder:
     def __init__(self, token: str | None = None):
         """Initialize with optional GitHub token."""
         self.client = GitHubClient(token)
-        self.logger = get_logger(__name__)
 
     @trace_function("find_adapter_files_with_aliases", include_args=True)
     def find_adapter_files_with_aliases(
@@ -223,20 +222,11 @@ class AliasFinder:
 
                 # Rate limit delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-<<<<<<< HEAD
-                    self.logger.debug(
-                        "Batch processing delay",
-                        delay_seconds=delay,
-                        operation="alias_processing",
-                    )
-                    time.sleep(delay)
-=======
                     logger.debug("Applying rate limit delay before next batch")
                     logger.debug(
                         f"Rate limit status: {global_rate_limit_manager.format_status_summary()}"
                     )
                     global_rate_limit_manager.wait_if_needed(tool_name="alias_finder")
->>>>>>> main
 
             # Get commit SHA for metadata
             repo = self.client.github.get_repo(repo_name)
@@ -823,20 +813,11 @@ class AliasFinder:
 
                 # Rate limit delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-<<<<<<< HEAD
-                    self.logger.debug(
-                        "Batch processing delay",
-                        delay_seconds=delay,
-                        operation="alias_processing",
-                    )
-                    time.sleep(delay)
-=======
                     logger.debug("Applying rate limit delay before next batch")
                     logger.debug(
                         f"Rate limit status: {global_rate_limit_manager.format_status_summary()}"
                     )
                     global_rate_limit_manager.wait_if_needed(tool_name="alias_finder")
->>>>>>> main
 
             # Get commit SHA for metadata
             repo = self.client.github.get_repo(repo_name)
@@ -1036,20 +1017,11 @@ class AliasFinder:
 
                 # Rate limit delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-<<<<<<< HEAD
-                    self.logger.debug(
-                        "Batch processing delay",
-                        delay_seconds=delay,
-                        operation="alias_processing",
-                    )
-                    time.sleep(delay)
-=======
                     logger.debug("Applying rate limit delay before next batch")
                     logger.debug(
                         f"Rate limit status: {global_rate_limit_manager.format_status_summary()}"
                     )
                     global_rate_limit_manager.wait_if_needed(tool_name="alias_finder")
->>>>>>> main
 
             # Get commit SHA for metadata
             repo = self.client.github.get_repo(repo_name)

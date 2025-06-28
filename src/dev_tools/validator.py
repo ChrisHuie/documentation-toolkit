@@ -116,37 +116,6 @@ class ProjectValidator:
     def sync_documentation(self) -> ValidationResult:
         """Sync agent documentation files."""
         try:
-<<<<<<< HEAD
-            self.logger.info("Starting documentation sync")
-            results = self.syncer.sync()
-            updated_files = [name for name, updated in results.items() if updated]
-            total_files = len(results)
-
-            # Log detailed sync results
-            for name, updated in results.items():
-                self.logger.info(
-                    "Documentation file sync",
-                    file=f"{name.upper()}.md",
-                    updated=updated,
-                )
-
-            if updated_files:
-                output = f"Updated {len(updated_files)}/{total_files} files: {', '.join(f'{name.upper()}.md' for name in updated_files)}"
-                self.logger.info(
-                    "Documentation sync completed",
-                    updated_count=len(updated_files),
-                    total_count=total_files,
-                    updated_files=[f"{name.upper()}.md" for name in updated_files],
-                )
-            else:
-                output = f"All {total_files} agent files already in sync"
-                self.logger.info(
-                    "Documentation sync completed",
-                    updated_count=0,
-                    total_count=total_files,
-                    status="all_in_sync",
-                )
-=======
             print("\n📚 Syncing agent documentation files...")
             results = self.syncer.sync()
             updated_files = [name for name, updated in results.items() if updated]
@@ -159,23 +128,13 @@ class ProjectValidator:
             else:
                 output = f"All {total_files} agent files already in sync"
                 print(f"✅ Documentation sync completed: {output}")
->>>>>>> main
 
             return ValidationResult("Documentation sync", True, output)
 
         except Exception as e:
-<<<<<<< HEAD
-            self.logger.error(
-                "Documentation sync failed",
-                error_type=type(e).__name__,
-                error_message=str(e),
-            )
-            return ValidationResult("Documentation sync", False, str(e))
-=======
             error_msg = f"Documentation sync failed: {str(e)}"
             print(f"❌ {error_msg}")
             return ValidationResult("Documentation sync", False, error_msg)
->>>>>>> main
 
     # Cleanup functionality removed for safety - manual cleanup only
 
@@ -204,7 +163,7 @@ class ProjectValidator:
 
     def print_results(self, results: dict[str, list[ValidationResult]]) -> bool:
         """
-        Log validation results and display summary.
+        Print validation results in a nice format.
 
         Returns:
             True if all validations passed.
@@ -212,21 +171,20 @@ class ProjectValidator:
         all_passed = True
         critical_failed = False
 
-<<<<<<< HEAD
-        # Log structured results for each category
-=======
         print("\n🚀 Project Validation Results\n")
 
->>>>>>> main
         for category, category_results in results.items():
+            print(f"📋 {category.title().replace('_', ' ')}")
+            print("-" * 40)
+
             for result in category_results:
-                self.logger.info(
-                    "Validation result",
-                    category=category,
-                    validation=result.name,
-                    passed=result.passed,
-                    output=result.output if not result.passed else None,
-                )
+                print(f"   {result}")
+                if result.output and not result.passed:
+                    # Show first few lines of error output
+                    lines = result.output.split("\n")[:3]
+                    for line in lines:
+                        if line.strip():
+                            print(f"      {line}")
 
                 if not result.passed:
                     all_passed = False
@@ -234,27 +192,13 @@ class ProjectValidator:
                     if category in ["formatting", "linting", "documentation"]:
                         critical_failed = True
 
-        # Log overall validation summary
-        self.logger.info(
-            "Validation summary",
-            total_categories=len(results),
-            all_passed=all_passed,
-            critical_failed=critical_failed,
-        )
+            print()
 
-<<<<<<< HEAD
-        # Display user-friendly console output (minimal)
-        if all_passed:
-            print("🎉 All validations passed!")
-            print(
-                "📝 Documentation sync keeps CLAUDE.md, AGENTS.md, and GEMINI.md in sync"
-=======
         print("=" * 60)
         if all_passed:
             print("🎉 All validations passed!")
             print(
                 "\n📝 Remember: Documentation sync keeps CLAUDE.md, AGENTS.md, and GEMINI.md in sync"
->>>>>>> main
             )
         else:
             if critical_failed:
@@ -268,10 +212,6 @@ class ProjectValidator:
                 print("⚠️  Some non-critical validations failed (type checking/tests).")
                 print("   These should be addressed but don't block development.")
 
-<<<<<<< HEAD
-            print("📝 Always run 'validate-project' after making changes!")
-=======
             print("\n📝 Always run 'validate-project' after making changes!")
->>>>>>> main
 
         return all_passed

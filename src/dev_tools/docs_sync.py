@@ -11,11 +11,12 @@ from ..shared_utilities import get_logger
 
 class DocumentationSyncer:
     """Synchronizes agent instruction files.
-    
+
     This class ensures that CLAUDE.md, AGENTS.md, and GEMINI.md all contain
     the same content with only their headers differing. This prevents
     documentation drift between different AI agent platforms.
     """
+
     def __init__(self, project_root: Path, min_content_length: int = 100):
         """
         Initialize documentation syncer.
@@ -26,10 +27,7 @@ class DocumentationSyncer:
         """
         self.project_root = project_root
         self.min_content_length = min_content_length
-<<<<<<< HEAD
         self.logger = get_logger(__name__)
-=======
->>>>>>> main
         self.files = {
             "claude": self.project_root / "CLAUDE.md",
             "agents": self.project_root / "AGENTS.md",
