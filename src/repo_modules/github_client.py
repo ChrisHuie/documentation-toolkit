@@ -12,6 +12,7 @@ from github import Github, GithubException
 from github.ContentFile import ContentFile
 from github.Repository import Repository
 
+from ..shared_utilities import global_rate_limit_manager
 from .version_cache import MajorVersionInfo, RepoVersionCache, VersionCacheManager
 
 
@@ -349,9 +350,9 @@ class GitHubClient:
                     last_checkpoint_time = current_time
 
                 # Add delay between batches to respect rate limits
-                if batch_num < total_batches - 1 and delay > 0:
-                    print(f"Waiting {delay} seconds before next batch...")
-                    time.sleep(delay)
+                if batch_num < total_batches - 1:
+                    print(f"Applying rate limit delay before next batch...")
+                    global_rate_limit_manager.wait_if_needed(tool_name="github_client")
 
             # Save final checkpoint
             if checkpoint_file:
@@ -405,8 +406,8 @@ class GitHubClient:
                         # Recursively fetch subdirectory
                         fetch_directory_recursive(content.path, depth + 1)
 
-                # Add small delay to respect rate limits
-                time.sleep(0.1)
+                # Add rate limit delay
+                global_rate_limit_manager.wait_if_needed(tool_name="github_client")
 
             except GithubException as e:
                 if e.status == 404:
@@ -526,8 +527,8 @@ class GitHubClient:
                 # Process subdirectories
                 for subdir_path in subdirs_in_dir:
                     fetch_directory_with_checkpoint(subdir_path, depth + 1)
-                    # Add small delay between directories
-                    time.sleep(delay)
+                    # Add rate limit delay between directories
+                    global_rate_limit_manager.wait_if_needed(tool_name="github_client")
 
             except GithubException as e:
                 if e.status == 404:

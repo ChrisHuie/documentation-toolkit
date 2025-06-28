@@ -114,18 +114,25 @@ class ProjectValidator:
     def sync_documentation(self) -> ValidationResult:
         """Sync agent documentation files."""
         try:
+            print("\n📚 Syncing agent documentation files...")
             results = self.syncer.sync()
             updated_files = [name for name, updated in results.items() if updated]
+            total_files = len(results)
+            synced_files = len(updated_files)
 
             if updated_files:
-                output = f"Updated files: {', '.join(updated_files)}"
+                output = f"Updated {synced_files}/{total_files} files: {', '.join(f'{name.upper()}.md' for name in updated_files)}"
+                print(f"✅ Documentation sync completed: {output}")
             else:
-                output = "All files already in sync"
+                output = f"All {total_files} agent files already in sync"
+                print(f"✅ Documentation sync completed: {output}")
 
             return ValidationResult("Documentation sync", True, output)
 
         except Exception as e:
-            return ValidationResult("Documentation sync", False, str(e))
+            error_msg = f"Documentation sync failed: {str(e)}"
+            print(f"❌ {error_msg}")
+            return ValidationResult("Documentation sync", False, error_msg)
 
     # Cleanup functionality removed for safety - manual cleanup only
 
@@ -160,8 +167,9 @@ class ProjectValidator:
             True if all validations passed.
         """
         all_passed = True
+        critical_failed = False
 
-        print("🚀 Project Validation Results\n")
+        print("\n🚀 Project Validation Results\n")
 
         for category, category_results in results.items():
             print(f"📋 {category.title().replace('_', ' ')}")
@@ -178,13 +186,30 @@ class ProjectValidator:
 
                 if not result.passed:
                     all_passed = False
+                    # Mark critical categories that should always pass
+                    if category in ["formatting", "linting", "documentation"]:
+                        critical_failed = True
 
             print()
 
-        print("=" * 50)
+        print("=" * 60)
         if all_passed:
             print("🎉 All validations passed!")
+            print(
+                "\n📝 Remember: Documentation sync keeps CLAUDE.md, AGENTS.md, and GEMINI.md in sync"
+            )
         else:
-            print("💥 Some validations failed. Please review and fix.")
+            if critical_failed:
+                print(
+                    "💥 CRITICAL validations failed. These must be fixed before proceeding:"
+                )
+                print("   - Formatting errors prevent consistent code style")
+                print("   - Linting errors indicate code quality issues")
+                print("   - Documentation sync failures cause agent instruction drift")
+            else:
+                print("⚠️  Some non-critical validations failed (type checking/tests).")
+                print("   These should be addressed but don't block development.")
+
+            print("\n📝 Always run 'validate-project' after making changes!")
 
         return all_passed

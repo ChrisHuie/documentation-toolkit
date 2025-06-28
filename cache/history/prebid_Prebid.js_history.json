@@ -1,0 +1,370 @@
+{
+  "33across": {
+    "file_path": "modules/33acrossBidAdapter.js",
+    "first_commit_date": "2017-11-09T15:19:43Z",
+    "first_commit_sha": "1895cb3ce6045199f5150f6b9820cdf4bc1c2a0d",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "33across"
+  },
+  "360playvid": {
+    "file_path": "modules/360playvidBidAdapter.js",
+    "first_commit_date": "2025-06-11T15:59:42Z",
+    "first_commit_sha": "765c7141c6bd0ae66db429e6fc35c4c0c67233de",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "360playvid"
+  },
+  "a1Media": {
+    "file_path": "modules/a1MediaBidAdapter.js",
+    "first_commit_date": "2023-09-18T14:13:06Z",
+    "first_commit_sha": "7df304fdfef03b41ed995f327dd9b635e5b1f3ea",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "a1Media"
+  },
+  "a4g": {
+    "file_path": "modules/a4gBidAdapter.js",
+    "first_commit_date": "2017-11-06T22:15:51Z",
+    "first_commit_sha": "6107cc8cd07464c2b381ebce47d6fa36fd632de2",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "a4g"
+  },
+  "ablida": {
+    "file_path": "modules/ablidaBidAdapter.js",
+    "first_commit_date": "2019-10-24T16:39:10Z",
+    "first_commit_sha": "f69ec24b75753edcb53d21802849149b3079cee6",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "ablida"
+  },
+  "acuityads": {
+    "file_path": "modules/acuityadsBidAdapter.js",
+    "first_commit_date": "2022-11-28T16:56:39Z",
+    "first_commit_sha": "4f21a5bc9e2e4ace066a4d26ca1c9c637c46a477",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "acuityads"
+  },
+  "ad2iction": {
+    "file_path": "modules/ad2ictionBidAdapter.js",
+    "first_commit_date": "2024-01-12T15:32:14Z",
+    "first_commit_sha": "672b53579b200f8497f82c3cb954a143f669b200",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "ad2iction"
+  },
+  "adWMG": {
+    "file_path": "modules/adWMGBidAdapter.js",
+    "first_commit_date": "2020-12-09T13:40:23Z",
+    "first_commit_sha": "dd51f245abe600801703c70ca688fb55181a8d78",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adWMG"
+  },
+  "adagio": {
+    "file_path": "modules/adagioBidAdapter.js",
+    "first_commit_date": "2018-10-01T21:58:02Z",
+    "first_commit_sha": "d81dfd2be314e115e2323bffcf8a79bdfe165d0d",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adagio"
+  },
+  "adbutler": {
+    "file_path": "modules/adbutlerBidAdapter.js",
+    "first_commit_date": "2017-06-26T21:45:30Z",
+    "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adbutler"
+  },
+  "addefend": {
+    "file_path": "modules/addefendBidAdapter.js",
+    "first_commit_date": "2021-03-26T14:57:52Z",
+    "first_commit_sha": "aa2463e3353886024dbd233b32bb65e059bcbf65",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "addefend"
+  },
+  "adf": {
+    "file_path": "modules/adfBidAdapter.js",
+    "first_commit_date": "2021-04-23T13:51:42Z",
+    "first_commit_sha": "7dba60cce0c083321047746013663cb51af25895",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adf"
+  },
+  "adfusion": {
+    "file_path": "modules/adfusionBidAdapter.js",
+    "first_commit_date": "2023-09-19T15:34:15Z",
+    "first_commit_sha": "07f8b4e9abc438bb900529aa1ab05ed85f504e08",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adfusion"
+  },
+  "adgeneration": {
+    "file_path": "modules/adgenerationBidAdapter.js",
+    "first_commit_date": "2018-01-30T15:29:10Z",
+    "first_commit_sha": "40627d73a3b34b14fda843bbd08b1763075d6908",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adgeneration"
+  },
+  "adgrid": {
+    "file_path": "modules/adgridBidAdapter.js",
+    "first_commit_date": "2024-09-11T12:36:22Z",
+    "first_commit_sha": "88ec0b23fcede4c50375df3570f12b93cab06fe1",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adgrid"
+  },
+  "adhash": {
+    "file_path": "modules/adhashBidAdapter.js",
+    "first_commit_date": "2021-02-18T21:14:43Z",
+    "first_commit_sha": "2d23cbc4291336050a675b061adf90b8d5063cf6",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adhash"
+  },
+  "adhese": {
+    "file_path": "modules/adheseBidAdapter.js",
+    "first_commit_date": "2019-01-11T16:03:34Z",
+    "first_commit_sha": "13982d8422950283059c40e6089ba854aee253c3",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adhese"
+  },
+  "adipolo": {
+    "file_path": "modules/adipoloBidAdapter.js",
+    "first_commit_date": "2025-04-15T12:58:41Z",
+    "first_commit_sha": "f89550a03586a7517e445bb9635a85ce1de37a05",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adipolo"
+  },
+  "adkernel": {
+    "file_path": "modules/adkernelBidAdapter.js",
+    "first_commit_date": "2017-06-26T21:45:30Z",
+    "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adkernel"
+  },
+  "adkernelAdn": {
+    "file_path": "modules/adkernelAdnBidAdapter.js",
+    "first_commit_date": "2017-11-07T16:15:20Z",
+    "first_commit_sha": "a2b5cfa68fff56d72db649b63364239b6aec85f6",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "adkernelAdn"
+  },
+  "admaru": {
+    "file_path": "modules/admaruBidAdapter.js",
+    "first_commit_date": "2022-03-29T18:32:09Z",
+    "first_commit_sha": "4a9ccb8a4c7dcaaa7c32f6e79b4b15239e900f90",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "admaru"
+  },
+  "bucksense": {
+    "file_path": "modules/bucksenseBidAdapter.js",
+    "first_commit_date": "2019-05-07T14:34:12Z",
+    "first_commit_sha": "10ec9a599f46502b14ef41bf09173c36c959d7d5",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "bucksense"
+  },
+  "buzzoola": {
+    "file_path": "modules/buzzoolaBidAdapter.js",
+    "first_commit_date": "2019-09-10T04:13:28Z",
+    "first_commit_sha": "c520176a8cec2f549fd9c0d4121af1c1b2c898dc",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "buzzoola"
+  },
+  "c1x": {
+    "file_path": "modules/c1xBidAdapter.js",
+    "first_commit_date": "2017-08-04T13:03:38Z",
+    "first_commit_sha": "1a1028c80836a9ebda978431dd7e9c8ec95be8c1",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "c1x"
+  },
+  "caroda": {
+    "file_path": "modules/carodaBidAdapter.js",
+    "first_commit_date": "2022-09-15T19:18:00Z",
+    "first_commit_sha": "3265b0567b693aea22fb9b93d7c0cfe892b11b3e",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "caroda"
+  },
+  "ccx": {
+    "file_path": "modules/ccxBidAdapter.js",
+    "first_commit_date": "2018-05-24T16:58:23Z",
+    "first_commit_sha": "8010ba5ebb48eb484faf5774ab2d402c619c3181",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "ccx"
+  },
+  "chtnw": {
+    "file_path": "modules/chtnwBidAdapter.js",
+    "first_commit_date": "2022-10-21T17:15:32Z",
+    "first_commit_sha": "6c63c6f00267f396176e5b96629b6fc570e40805",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "chtnw"
+  },
+  "clickforce": {
+    "file_path": "modules/clickforceBidAdapter.js",
+    "first_commit_date": "2018-04-02T18:02:09Z",
+    "first_commit_sha": "0397649764d2ebb0189ca0ebe55f63d6bda8eace",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "clickforce"
+  },
+  "codefuel": {
+    "file_path": "modules/codefuelBidAdapter.js",
+    "first_commit_date": "2021-10-14T18:37:05Z",
+    "first_commit_sha": "ff188769cc096d949ef7d9f07d3130588a72c87f",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "codefuel"
+  },
+  "cointraffic": {
+    "file_path": "modules/cointrafficBidAdapter.js",
+    "first_commit_date": "2020-09-09T21:17:19Z",
+    "first_commit_sha": "9a92a2203f5efad3f61ca063a26a285df9c6672b",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "cointraffic"
+  },
+  "coinzilla": {
+    "file_path": "modules/coinzillaBidAdapter.js",
+    "first_commit_date": "2019-01-02T15:17:34Z",
+    "first_commit_sha": "e3c67d00d1349373e6e1317baacaab5e1ac9e7a3",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "coinzilla"
+  },
+  "colombia": {
+    "file_path": "modules/colombiaBidAdapter.js",
+    "first_commit_date": "2018-09-18T13:31:38Z",
+    "first_commit_sha": "6d51add4defcde83f3c29fa75b9b0afe1ee7477a",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "colombia"
+  },
+  "colossusssp": {
+    "file_path": "modules/colossussspBidAdapter.js",
+    "first_commit_date": "2017-10-17T17:46:03Z",
+    "first_commit_sha": "54edd806fb9ae1e9a9418842b23260ef5939ec7d",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "colossusssp"
+  },
+  "compass": {
+    "file_path": "modules/compassBidAdapter.js",
+    "first_commit_date": "2021-12-09T14:42:40Z",
+    "first_commit_sha": "876b5184e1b3e519cba173db5985788432f8286e",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "compass"
+  },
+  "conceptx": {
+    "file_path": "modules/conceptxBidAdapter.js",
+    "first_commit_date": "2023-06-07T15:12:08Z",
+    "first_commit_sha": "254f09888618f05faf74fc1f55c355edd83136a6",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "conceptx"
+  },
+  "concert": {
+    "file_path": "modules/concertBidAdapter.js",
+    "first_commit_date": "2020-08-20T17:38:22Z",
+    "first_commit_sha": "b4c6b47bf90f48e6ffcab8f7e5aa287de0119a57",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "concert"
+  },
+  "condorx": {
+    "file_path": "modules/condorxBidAdapter.js",
+    "first_commit_date": "2025-02-11T15:22:30Z",
+    "first_commit_sha": "31057ff81042505385358f80ec00c54b566b35f4",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "condorx"
+  },
+  "connatix": {
+    "file_path": "modules/connatixBidAdapter.js",
+    "first_commit_date": "2023-08-02T11:09:42Z",
+    "first_commit_sha": "2b422f908305d85d62267d985effcc4027a447eb",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "connatix"
+  },
+  "connectad": {
+    "file_path": "modules/connectadBidAdapter.js",
+    "first_commit_date": "2020-04-10T18:30:25Z",
+    "first_commit_sha": "67a1cb134c784fdf99a60b3b349643e21267e557",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "connectad"
+  },
+  "consumable": {
+    "file_path": "modules/consumableBidAdapter.js",
+    "first_commit_date": "2018-04-26T16:04:08Z",
+    "first_commit_sha": "bb9bc187e2bb8b7478907d0d69ef63c50a72ba38",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "consumable"
+  },
+  "contentexchange": {
+    "file_path": "modules/contentexchangeBidAdapter.js",
+    "first_commit_date": "2024-06-22T19:56:49Z",
+    "first_commit_sha": "850e0e2af883c66d8b2f802329a497d28a25850c",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "contentexchange"
+  },
+  "impactify": {
+    "file_path": "modules/impactifyBidAdapter.js",
+    "first_commit_date": "2021-04-07T15:14:53Z",
+    "first_commit_sha": "56bb4aeedf1457e4345239779bcb8346cd96744b",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "impactify"
+  },
+  "improvedigital": {
+    "file_path": "modules/improvedigitalBidAdapter.js",
+    "first_commit_date": "2017-08-30T22:24:58Z",
+    "first_commit_sha": "65b34c838052730d645dc52a9610c5bda5ac0ece",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "improvedigital"
+  },
+  "inmobi": {
+    "file_path": "modules/inmobiBidAdapter.js",
+    "first_commit_date": "2024-11-21T05:32:26Z",
+    "first_commit_sha": "835a3d35679e2c541abb262982ef8b45ca1ee7db",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "inmobi"
+  },
+  "innity": {
+    "file_path": "modules/innityBidAdapter.js",
+    "first_commit_date": "2017-06-26T21:45:30Z",
+    "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "innity"
+  },
+  "insticator": {
+    "file_path": "modules/insticatorBidAdapter.js",
+    "first_commit_date": "2021-08-26T10:38:59Z",
+    "first_commit_sha": "8e466efae45f18067573b2db5d7234481f368191",
+    "first_release_date": null,
+    "first_release_version": null,
+    "name": "insticator"
+  }
+}

@@ -22,6 +22,7 @@ dependencies = [
 
 [project.scripts]
 repo-modules = "src.repo_modules.main:main"
+build-module-history = "src.repo_modules.build_history_cli:main"
 validate-project = "src.dev_tools.cli:main"
 alias-mappings = "src.alias_mappings.main:main"
 

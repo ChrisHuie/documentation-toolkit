@@ -67,7 +67,13 @@ def generate_repo_output_filename(config: RepoConfig, version: str) -> str:
 def create_parser() -> argparse.ArgumentParser:
     """Create and configure the argument parser."""
     parser = argparse.ArgumentParser(
-        description="Extract data from GitHub repositories",
+        description="""Extract data from GitHub repositories.
+
+For historical data:
+  1. First build cache: build-module-history --repo prebid-js
+  2. Then use cache: repo-modules --repo prebid-js --use-cached-history
+
+This separation ensures efficient extraction without API rate limits.""",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
@@ -113,6 +119,12 @@ def create_parser() -> argparse.ArgumentParser:
 
     parser.add_argument(
         "--limit", type=int, help="Limit number of files to process (for testing)"
+    )
+
+    parser.add_argument(
+        "--use-cached-history",
+        action="store_true",
+        help="Include cached historical data if available (instant, no API calls). Use 'build-module-history' command to build cache first.",
     )
 
     return parser
@@ -279,6 +291,10 @@ def main():
                 args.delay,
                 args.limit,
             )
+
+            # Add history flag to data for parser
+            data["include_history"] = args.use_cached_history
+
             result = parser_instance.parse(data)
 
         # Output result
