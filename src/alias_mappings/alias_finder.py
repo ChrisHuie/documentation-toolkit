@@ -9,6 +9,13 @@ from typing import Any
 import yaml
 
 from ..repo_modules.github_client import GitHubClient
+from ..shared_utilities import get_logger
+
+# Import global_rate_limit_manager if available
+try:
+    from ..shared_utilities import global_rate_limit_manager
+except ImportError:
+    global_rate_limit_manager = None  # type: ignore
 from ..shared_utilities.telemetry import trace_function
 
 
@@ -18,6 +25,7 @@ class AliasFinder:
     def __init__(self, token: str | None = None):
         """Initialize with optional GitHub token."""
         self.client = GitHubClient(token)
+        self.logger = get_logger(__name__)
 
     @trace_function("find_adapter_files_with_aliases", include_args=True)
     def find_adapter_files_with_aliases(
@@ -220,7 +228,11 @@ class AliasFinder:
 
                 # Delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-                    print(f"⏳ Waiting {delay} seconds before next batch...")
+                    self.logger.debug(
+                        "Batch processing delay",
+                        delay_seconds=delay,
+                        operation="alias_processing",
+                    )
                     time.sleep(delay)
 
             # Get commit SHA for metadata
@@ -808,7 +820,11 @@ class AliasFinder:
 
                 # Delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-                    print(f"⏳ Waiting {delay} seconds before next batch...")
+                    self.logger.debug(
+                        "Batch processing delay",
+                        delay_seconds=delay,
+                        operation="alias_processing",
+                    )
                     time.sleep(delay)
 
             # Get commit SHA for metadata
@@ -1009,7 +1025,11 @@ class AliasFinder:
 
                 # Delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-                    print(f"⏳ Waiting {delay} seconds before next batch...")
+                    self.logger.debug(
+                        "Batch processing delay",
+                        delay_seconds=delay,
+                        operation="alias_processing",
+                    )
                     time.sleep(delay)
 
             # Get commit SHA for metadata

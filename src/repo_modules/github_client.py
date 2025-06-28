@@ -12,6 +12,13 @@ from github import Github, GithubException
 from github.ContentFile import ContentFile
 from github.Repository import Repository
 
+from ..shared_utilities import get_logger
+
+# Import global_rate_limit_manager if available
+try:
+    from ..shared_utilities import global_rate_limit_manager
+except ImportError:
+    global_rate_limit_manager = None  # type: ignore
 from .version_cache import MajorVersionInfo, RepoVersionCache, VersionCacheManager
 
 
@@ -21,16 +28,19 @@ class GitHubClient:
     def __init__(self, token: str | None = None):
         """Initialize GitHub client with optional token."""
         self.token = token or os.environ.get("GITHUB_TOKEN")
-        print(f"DEBUG: GitHub token available: {bool(self.token)}")
+        self.logger = get_logger(__name__)
+
+        self.logger.debug(
+            "Initializing GitHub client",
+            authenticated=bool(self.token),
+        )
+
         if self.token:
-            print("DEBUG: Using authenticated GitHub client")
             self.github = Github(self.token)
         else:
-            print("DEBUG: Using unauthenticated GitHub client (rate limited)")
             self.github = Github()
 
         # Initialize version cache manager
-        print("DEBUG: Initializing version cache manager")
         self.cache_manager = VersionCacheManager()
 
     def fetch_repository_data(
@@ -60,14 +70,16 @@ class GitHubClient:
             Dictionary containing file paths and content
         """
         try:
-            print(f"DEBUG: Fetching repository {repo_name}")
+            self.logger.debug("Fetching repository", repo_name=repo_name)
             repo = self.github.get_repo(repo_name)
-            print("DEBUG: Got repository object")
+            self.logger.debug("Repository object retrieved", repo_name=repo_name)
 
             # Get the commit/reference
-            print(f"DEBUG: Getting reference for version {version}")
+            self.logger.debug("Getting repository reference", version=version)
             ref = self._get_reference(repo, version)
-            print(f"DEBUG: Got reference: {ref}")
+            self.logger.debug(
+                "Repository reference retrieved", version=version, ref_sha=ref
+            )
 
             # Handle multi-path fetching for new parsers like prebid-server
             if paths:

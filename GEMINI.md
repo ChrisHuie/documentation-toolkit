@@ -74,16 +74,91 @@ repo-modules-by-version --repo prebid-server-java --version v3.27.0
 repo-modules-by-version --repo prebid-docs  # Always uses master
 ```
 
+### module-history
+**Historical analysis tool** that tracks when modules were first introduced in Prebid.js:
+- Analyze module introduction timeline across major versions
+- Generate historical reports showing first appearance of each module
+- Support multiple output formats (table, CSV, JSON)
+- Cache results for performance and rate limit efficiency
+- Filter by module type or major version
+
+**Key Features:**
+- **Comprehensive Analysis** - Tracks all module types (bid adapters, analytics, RTD, identity, etc.)
+- **Version Timeline** - Shows exactly when each module was first introduced
+- **Smart Caching** - Avoids repeated GitHub API calls with intelligent cache management
+- **Flexible Output** - Table, CSV, or JSON formats with filtering options
+- **Progress Tracking** - Real-time progress indicators for long-running analyses
+- **Error Resilience** - Graceful handling of API limits, network issues, and missing data
+
+**Architecture:**
+- **Leverages Existing Infrastructure** - Uses repo-modules version cache and GitHub client
+- **Semantic Version Sorting** - Properly orders versions for accurate historical analysis
+- **Rate Limit Aware** - Respects GitHub API limits with intelligent delays
+- **Robust Error Handling** - Continues analysis even when individual versions fail
+- **Memory Efficient** - Processes large datasets without excessive memory usage
+
+**Usage:**
+```bash
+# Show all modules in table format
+module-history
+
+# Show only bid adapters as CSV
+module-history --type bid_adapters --format csv
+
+# Show modules introduced in v2.x.x
+module-history --major-version 2
+
+# Save JSON output to file
+module-history --format json -o module_history.json
+
+# Force refresh of cached data
+module-history --force-refresh
+
+# Clear cache
+module-history --clear-cache
+
+# Show cache information
+module-history --cache-info
+
+# Quiet mode (no progress indicators)
+module-history --quiet
+
+# Use specific GitHub token
+module-history --token your_github_token
+```
+
+**Output Example:**
+```
+📦 Bid Adapters (150 modules)
+----------------------------------------
+  33across
+    First Version: v2.15.0
+    Major Version: 2
+    File Path: modules/33acrossBidAdapter.js
+
+  appnexus
+    First Version: v0.1.1
+    Major Version: 0
+    File Path: modules/appnexusBidAdapter.js
+```
+
+**Cache Management:**
+- Cache stored in `cache/module_history/` directory
+- Automatic cache validation and migration
+- Supports force refresh to update with latest data
+- Cache info command shows analysis metadata and statistics
+
 ## Dependencies
 - Python 3.13+
 - PyGitHub for GitHub API interactions
 - python-dotenv for environment variable management
 - click for enhanced CLI features
 - mypy for type checking
-- loguru for enhanced logging
+- loguru for structured logging with OpenTelemetry integration
 - pytest for testing
 - ruff for fast linting and formatting
 - black for code formatting
+- opentelemetry for observability and tracing
 
 ## Setup
 ```bash
@@ -104,6 +179,50 @@ cp .env.example .env
 
 ## Environment Variables
 - `GITHUB_TOKEN` - GitHub Personal Access Token for API access (optional but recommended for higher rate limits)
+- `LOG_LEVEL` - Logging level (DEBUG, INFO, WARNING, ERROR) - defaults to INFO
+- `ENABLE_FILE_LOGGING` - Enable file logging (true/false) - defaults to true
+- `OTEL_EXPORTER_OTLP_ENDPOINT` - OpenTelemetry endpoint for distributed tracing (optional)
+- `OTEL_SERVICE_NAME` - Service name for telemetry identification (optional)
+
+## Logging and Observability
+
+The toolkit uses structured logging with OpenTelemetry integration for comprehensive observability:
+
+### Structured Logging
+- **Framework**: Loguru with structured JSON output for production
+- **Automatic Configuration**: Logging is auto-configured on import with environment-based settings
+- **File Rotation**: Log files are automatically rotated at 10MB with 30-day retention
+- **Contextual Information**: All logs include service name, component, operation context
+
+### OpenTelemetry Integration
+- **Distributed Tracing**: Track operations across components with spans
+- **Metrics Collection**: Performance and business metrics
+- **Automatic Instrumentation**: HTTP requests and database operations
+- **OTLP Export**: Compatible with standard observability platforms
+
+### Usage Example
+```python
+from src.shared_utilities import get_logger
+
+logger = get_logger(__name__)
+
+# Structured logging with context
+logger.info(
+    "Operation completed",
+    operation="fetch_repository",
+    repo="owner/repo",
+    duration_seconds=1.23,
+    files_processed=150,
+)
+```
+
+### Log Configuration
+```bash
+# Environment-based configuration
+export LOG_LEVEL=DEBUG
+export ENABLE_FILE_LOGGING=true
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+```
 
 ## Adding New Tools
 1. Create new directory under `src/your_tool_name/`

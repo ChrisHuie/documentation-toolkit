@@ -2,8 +2,12 @@
 Parser factory for creating repository-specific parsers
 """
 
+import json
+import re
 from abc import ABC, abstractmethod
 from typing import Any
+
+import requests
 
 from .config import RepoConfig
 
@@ -184,8 +188,6 @@ class PrebidJSParser(BaseParser):
         # Add JSON output
         result.append("JSON Output:")
         result.append("-" * 20)
-        import json
-
         result.append(json.dumps(modules, indent=2))
 
         return "\n".join(result)
@@ -234,7 +236,6 @@ class PrebidJSParser(BaseParser):
 
     def _should_use_metadata(self, version: str) -> bool:
         """Determine if version supports metadata approach (v10.0+)."""
-        import re
 
         # Check if version is at least 10.0
         try:
@@ -254,7 +255,6 @@ class PrebidJSParser(BaseParser):
 
     def _parse_from_metadata(self, data: dict[str, Any]) -> dict[str, list[str]]:
         """Parse modules using the metadata/modules.json approach for v10.0+."""
-        import requests
 
         categories: dict[str, list[str]] = {
             "bid_adapters": [],
@@ -301,8 +301,14 @@ class PrebidJSParser(BaseParser):
                 # Fallback to traditional parsing if metadata is not available
                 return self._categorize_modules(data["files"])
 
+        except (requests.exceptions.RequestException, requests.exceptions.Timeout):
+            # Network/HTTP errors - fallback to traditional parsing
+            return self._categorize_modules(data["files"])
+        except (json.JSONDecodeError, KeyError):
+            # JSON parsing or missing key errors - fallback to traditional parsing
+            return self._categorize_modules(data["files"])
         except Exception:
-            # Fallback to traditional parsing on any error
+            # Unexpected errors - fallback to traditional parsing
             return self._categorize_modules(data["files"])
 
         return categories
@@ -344,8 +350,6 @@ class PrebidServerGoParser(BaseParser):
         # Add JSON output
         result.append("JSON Output:")
         result.append("-" * 20)
-        import json
-
         result.append(json.dumps(all_categories, indent=2))
 
         return "\n".join(result)
@@ -435,8 +439,6 @@ class PrebidServerJavaParser(BaseParser):
         # Add JSON output
         result.append("JSON Output:")
         result.append("-" * 20)
-        import json
-
         result.append(json.dumps(all_categories, indent=2))
 
         return "\n".join(result)
@@ -539,8 +541,6 @@ class PrebidDocsParser(BaseParser):
         # Add JSON output
         result.append("JSON Output:")
         result.append("-" * 20)
-        import json
-
         result.append(json.dumps(all_categories, indent=2))
 
         return "\n".join(result)
