@@ -40,26 +40,66 @@ class TestModuleHistoryTracker:
             assert tracker.cache_file == cache_dir / "test_repo_history.json"
 
     def test_cache_loading_and_saving(self):
-        """Test cache persistence."""
+        """Test cache persistence and migration to new file_path-based format."""
         with TemporaryDirectory() as temp_dir:
             cache_dir = Path(temp_dir)
 
-            # Create initial tracker and add data
+            # Create initial tracker and add data using new file_path format
             tracker1 = ModuleHistoryTracker("test/repo", cache_dir)
+            file_path = "modules/test_moduleBidAdapter.js"
             test_info = ModuleHistoryInfo(
                 name="test_module",
                 first_commit_date="2020-06-22T12:53:52Z",
                 first_commit_sha="abc123",
+                file_path=file_path,
             )
-            tracker1._cache["test_module"] = test_info
+            tracker1._cache[file_path] = test_info
             tracker1._save_cache()
 
             # Create new tracker and verify data persisted
             tracker2 = ModuleHistoryTracker("test/repo", cache_dir)
-            assert "test_module" in tracker2._cache
-            cached_info = tracker2._cache["test_module"]
+            assert file_path in tracker2._cache
+            cached_info = tracker2._cache[file_path]
             assert cached_info.name == "test_module"
             assert cached_info.first_commit_date == "2020-06-22T12:53:52Z"
+            assert cached_info.file_path == file_path
+
+    def test_cache_migration_from_old_format(self):
+        """Test migration from old module-name-based cache to file_path-based cache."""
+        with TemporaryDirectory() as temp_dir:
+            cache_dir = Path(temp_dir)
+            cache_file = cache_dir / "test_repo_history.json"
+
+            # Create old format cache file manually
+            old_format_data = {
+                "test_module": {
+                    "name": "test_module",
+                    "first_commit_date": "2020-06-22T12:53:52Z",
+                    "first_commit_sha": "abc123",
+                    "first_release_version": None,
+                    "first_release_date": None,
+                    "file_path": None,  # Old format has no file_path
+                }
+            }
+
+            # Write old format cache
+            import json
+
+            with open(cache_file, "w") as f:
+                json.dump(old_format_data, f)
+
+            # Load with new tracker - should trigger migration
+            tracker = ModuleHistoryTracker("test/repo", cache_dir)
+
+            # Should have migrated to new format with file_path as key
+            expected_path = "modules/test_moduleBidAdapter.js"
+            assert expected_path in tracker._cache
+            assert "test_module" not in tracker._cache  # Old key should be gone
+
+            migrated_info = tracker._cache[expected_path]
+            assert migrated_info.name == "test_module"
+            assert migrated_info.first_commit_date == "2020-06-22T12:53:52Z"
+            assert migrated_info.file_path == expected_path
 
     def test_extract_module_name(self):
         """Test module name extraction from file paths."""
@@ -128,26 +168,40 @@ class TestModuleHistoryTracker:
                     assert info.file_path == "modules/testBidAdapter.js"
 
     def test_enrich_module_data(self):
-        """Test module data enrichment."""
+        """Test module data enrichment with file_path-based cache."""
         with TemporaryDirectory() as temp_dir:
             tracker = ModuleHistoryTracker("test/repo", Path(temp_dir))
 
-            # Add some test data to cache
-            tracker._cache["module1"] = ModuleHistoryInfo(
+            # Add some test data to cache using file_path-based keys
+            module1_path = "modules/module1BidAdapter.js"
+            module2_path = "modules/module2BidAdapter.js"
+
+            tracker._cache[module1_path] = ModuleHistoryInfo(
                 name="module1",
                 first_commit_date="2020-06-22T12:53:52Z",
                 first_commit_sha="abc123",
+                file_path=module1_path,
             )
-            tracker._cache["module2"] = ModuleHistoryInfo(
+            tracker._cache[module2_path] = ModuleHistoryInfo(
                 name="module2",
                 first_commit_date="2021-01-15T10:30:00Z",
                 first_commit_sha="def456",
+                file_path=module2_path,
             )
 
             modules_data = {
                 "bid_adapters": ["module1", "module2", "module3"],
                 "analytics_adapters": [],
             }
+
+            # Mock the enrichment to use cached data only (no API calls)
+            original_method = tracker._get_file_creation_info
+
+            def mock_get_file_creation_info(file_path, module_name):
+                # Return None for modules not in cache (simulates API failure)
+                return None
+
+            tracker._get_file_creation_info = mock_get_file_creation_info
 
             enriched = tracker.enrich_module_data(modules_data)
 
@@ -157,7 +211,7 @@ class TestModuleHistoryTracker:
             assert len(enriched["bid_adapters"]) == 3
             assert len(enriched["analytics_adapters"]) == 0
 
-            # Check enriched data
+            # Check enriched data for cached modules
             bid_adapters = enriched["bid_adapters"]
             module1_data = next(
                 item for item in bid_adapters if item["name"] == "module1"
@@ -165,7 +219,7 @@ class TestModuleHistoryTracker:
             assert module1_data["first_added"] == "2020-06-22T12:53:52Z"
             assert module1_data["first_commit_sha"] == "abc123"
 
-            # Check missing data handling
+            # Check missing data handling for uncached modules
             module3_data = next(
                 item for item in bid_adapters if item["name"] == "module3"
             )

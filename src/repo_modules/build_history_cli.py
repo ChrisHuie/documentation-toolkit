@@ -233,9 +233,9 @@ def get_current_modules(repo_name: str, version: str) -> tuple[list[str], list[s
                         component_types.append(component_type or "other")
 
                 # Sort both lists by module name
-                sorted_data = sorted(zip(modules, component_types))
+                sorted_data = sorted(zip(modules, component_types, strict=False))
                 sorted_modules, sorted_types = (
-                    zip(*sorted_data) if sorted_data else ([], [])
+                    zip(*sorted_data, strict=False) if sorted_data else ([], [])
                 )
                 return list(sorted_modules), list(sorted_types)
 
@@ -276,7 +276,7 @@ def build_history(
     print(f"Repository: {actual_repo}")
     print(f"Version: {version}")
     print(f"Batch size: {batch_size}")
-    print(f"Delay: intelligent rate limiting")
+    print("Delay: intelligent rate limiting")
     print(f"Incremental: {incremental}")
     print(f"Rate limit status: {global_rate_limit_manager.format_status_summary()}")
     print()

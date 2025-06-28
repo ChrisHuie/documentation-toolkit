@@ -5,7 +5,6 @@ Keeps agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md) in sync.
 """
 
 from pathlib import Path
-import os
 
 
 class DocumentationSyncer:
@@ -16,8 +15,16 @@ class DocumentationSyncer:
     documentation drift between different AI agent platforms.
     """
 
-    def __init__(self, project_root: Path):
+    def __init__(self, project_root: Path, min_content_length: int = 100):
+        """
+        Initialize documentation syncer.
+
+        Args:
+            project_root: Project root directory
+            min_content_length: Minimum content length required for sync (default: 100)
+        """
         self.project_root = project_root
+        self.min_content_length = min_content_length
         self.files = {
             "claude": self.project_root / "CLAUDE.md",
             "agents": self.project_root / "AGENTS.md",
@@ -114,9 +121,10 @@ class DocumentationSyncer:
         shared_content = self.extract_content_after_header(contents[most_recent])
 
         # Validate that we have substantial content to sync
-        if len(shared_content.strip()) < 100:
+        if len(shared_content.strip()) < self.min_content_length:
             raise ValueError(
-                f"Source file {most_recent} appears to have insufficient content for sync"
+                f"Source file {most_recent} appears to have insufficient content for sync "
+                f"(minimum: {self.min_content_length} characters, found: {len(shared_content.strip())})"
             )
 
         print(

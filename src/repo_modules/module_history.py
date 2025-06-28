@@ -63,26 +63,52 @@ class ModuleHistoryTracker:
 
             # Handle both old format (module name keys) and new format (file path keys)
             cache = {}
+            migration_needed = False
+
             for key, info in data.items():
                 # Create ModuleHistoryInfo object
                 history_info = ModuleHistoryInfo(**info)
 
-                # If this is old format (no file_path or file_path doesn't match key), migrate it
-                if not info.get("file_path") or info.get("file_path") != key:
-                    # This is old format - use file_path from the data if available
-                    file_path = info.get("file_path")
-                    if file_path:
-                        cache[file_path] = history_info
-                        logger.debug(f"Migrated cache entry: {key} -> {file_path}")
-                    else:
-                        # No file_path available, keep old key but warn
-                        cache[key] = history_info
-                        logger.warning(
-                            f"Cache entry {key} has no file_path, keeping old key"
-                        )
-                else:
-                    # New format - key is already file path
+                # Determine the correct file_path key to use
+                file_path = info.get("file_path")
+
+                if file_path and file_path != key:
+                    # Old format: key is module name, file_path contains the actual path
+                    cache[file_path] = history_info
+                    migration_needed = True
+                    logger.debug(f"Migrated cache entry: {key} -> {file_path}")
+                elif file_path:
+                    # New format: key is already the file path
                     cache[key] = history_info
+                else:
+                    # Legacy format: no file_path available, generate one if possible
+                    module_name = info.get("name", key)
+
+                    # Try to generate file_path based on module name and known patterns
+                    guessed_path = self._guess_file_path_for_migration(module_name)
+                    if guessed_path:
+                        # Update the history info with the guessed path
+                        history_info.file_path = guessed_path
+                        cache[guessed_path] = history_info
+                        migration_needed = True
+                        logger.debug(
+                            f"Generated file_path for migration: {key} -> {guessed_path}"
+                        )
+                    else:
+                        # Can't determine file path, use module name as fallback
+                        fallback_path = f"modules/{module_name}.js"
+                        history_info.file_path = fallback_path
+                        cache[fallback_path] = history_info
+                        migration_needed = True
+                        logger.warning(
+                            f"Cache entry {key} missing file_path, using fallback: {fallback_path}"
+                        )
+
+            # If migration occurred, save the updated cache format
+            if migration_needed:
+                logger.info("Cache migration detected, saving updated format...")
+                self._cache = cache
+                self._save_cache()
 
             logger.info(f"Loaded {len(cache)} cached module histories")
             return cache
@@ -251,6 +277,33 @@ class ModuleHistoryTracker:
             return filename.replace(".js", "")
         else:
             return filename
+
+    def _guess_file_path_for_migration(self, module_name: str) -> str | None:
+        """
+        Try to guess the file path for a module during cache migration.
+
+        Args:
+            module_name: The module name to generate a path for
+
+        Returns:
+            Guessed file path or None if unable to determine
+        """
+        # Apply case corrections for known problematic module names
+        corrected_name = self._apply_case_corrections(module_name)
+
+        # Try common patterns
+        possible_paths = [
+            f"modules/{corrected_name}BidAdapter.js",
+            f"modules/{corrected_name}AnalyticsAdapter.js",
+            f"modules/{corrected_name}RtdProvider.js",
+            f"modules/{corrected_name}IdSystem.js",
+            f"modules/{corrected_name}.js",
+        ]
+
+        # Return the first one (bid adapter is most common)
+        # Note: During migration we can't validate file existence without making API calls
+        # So we use the most likely pattern
+        return possible_paths[0]
 
     def _get_repository_tags(self) -> list[dict[str, Any]]:
         """Get all repository tags sorted by date (oldest first)."""

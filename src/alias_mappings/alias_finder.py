@@ -7,6 +7,7 @@ import time
 from typing import Any
 
 import yaml
+from loguru import logger
 
 from ..repo_modules.github_client import GitHubClient
 from ..shared_utilities import global_rate_limit_manager
@@ -221,8 +222,10 @@ class AliasFinder:
 
                 # Rate limit delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-                    print(f"⏳ Applying rate limit delay before next batch...")
-                    print(f"   📊 {global_rate_limit_manager.format_status_summary()}")
+                    logger.debug("Applying rate limit delay before next batch")
+                    logger.debug(
+                        f"Rate limit status: {global_rate_limit_manager.format_status_summary()}"
+                    )
                     global_rate_limit_manager.wait_if_needed(tool_name="alias_finder")
 
             # Get commit SHA for metadata
@@ -810,8 +813,10 @@ class AliasFinder:
 
                 # Rate limit delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-                    print(f"⏳ Applying rate limit delay before next batch...")
-                    print(f"   📊 {global_rate_limit_manager.format_status_summary()}")
+                    logger.debug("Applying rate limit delay before next batch")
+                    logger.debug(
+                        f"Rate limit status: {global_rate_limit_manager.format_status_summary()}"
+                    )
                     global_rate_limit_manager.wait_if_needed(tool_name="alias_finder")
 
             # Get commit SHA for metadata
@@ -1012,8 +1017,10 @@ class AliasFinder:
 
                 # Rate limit delay between batches (except for the last batch)
                 if batch_num < total_batches - 1:
-                    print(f"⏳ Applying rate limit delay before next batch...")
-                    print(f"   📊 {global_rate_limit_manager.format_status_summary()}")
+                    logger.debug("Applying rate limit delay before next batch")
+                    logger.debug(
+                        f"Rate limit status: {global_rate_limit_manager.format_status_summary()}"
+                    )
                     global_rate_limit_manager.wait_if_needed(tool_name="alias_finder")
 
             # Get commit SHA for metadata
