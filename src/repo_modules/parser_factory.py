@@ -345,58 +345,14 @@ class PrebidJSParser(BaseParser):
     def _enrich_with_history(
         self, modules: dict[str, list[str]] | dict[str, list[dict[str, Any]]], repo: str
     ) -> dict[str, list[str]] | dict[str, list[dict[str, Any]]]:
-        """Enrich module data with cached historical information only."""
-        try:
-            from .module_history import ModuleHistoryTracker
+        """Enrich module data with historical information.
 
-            tracker = ModuleHistoryTracker(repo)
-
-            # Only use cached data - never make API calls during regular extraction
-            enriched_data: dict[str, list[dict[str, Any]]] = {}
-
-            for category, module_list in modules.items():
-                if not module_list:
-                    enriched_data[category] = []
-                    continue
-
-                # Create enriched module entries using only cached data
-                enriched_modules = []
-                for item in module_list:
-                    # Handle both string items and dict items
-                    if isinstance(item, str):
-                        module_name = item
-                    else:
-                        module_name = item.get("name", "unknown")
-                    module_info = {
-                        "name": module_name,
-                        "first_added": None,
-                        "first_version": None,
-                        "first_commit_sha": None,
-                    }
-
-                    # Check if we have cached data for this module
-                    if module_name in tracker._cache:
-                        history = tracker._cache[module_name]
-                        module_info.update(
-                            {
-                                "first_added": history.first_commit_date,
-                                "first_version": history.first_release_version,
-                                "first_commit_sha": history.first_commit_sha,
-                            }
-                        )
-
-                    enriched_modules.append(module_info)
-
-                enriched_data[category] = enriched_modules
-
-            return enriched_data
-
-        except Exception as e:
-            # Fallback to original data if history tracking fails
-            from loguru import logger
-
-            logger.warning(f"Failed to enrich with history data: {e}")
-            return modules
+        Note: Historical enrichment is now handled by the dedicated module-history tool.
+        This method preserves the interface but returns modules without enrichment.
+        """
+        # For now, return modules as-is without historical enrichment
+        # Users should use the dedicated module-history tool for historical analysis
+        return modules
 
 
 class PrebidServerGoParser(BaseParser):

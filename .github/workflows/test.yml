@@ -1,0 +1,183 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: "3.13"
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+    
+    - name: Set up Python
+      run: uv python install ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: uv sync
+    
+    - name: Run unit tests
+      run: uv run pytest tests/ -v --tb=short -x
+    
+    - name: Run validation (formatting, linting, type checking)
+      run: uv run validate-project
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+    
+    - name: Set up Python
+      run: uv python install ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: uv sync
+    
+    - name: Test tool availability
+      run: |
+        uv run repo-modules --help
+        uv run module-history --help
+        uv run alias-mappings --help
+    
+    - name: Test configuration loading
+      run: |
+        uv run module-history --list-repos
+    
+    - name: Test with GitHub token (if available)
+      if: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Test cache info without making API calls
+        uv run module-history --cache-info --repo prebid-js || true
+        
+        # Test small repository analysis if we have a token
+        # uv run repo-modules --repo prebid/prebid-docs --version master --limit 5 || true
+
+  tool-validation:
+    name: Tool Integration Validation
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+    
+    - name: Set up Python
+      run: uv python install ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: uv sync
+    
+    - name: Test repo-modules tool
+      run: |
+        # Test help and configuration
+        uv run repo-modules --help
+        uv run repo-modules --list-repos
+    
+    - name: Test module-history tool  
+      run: |
+        # Test help and configuration
+        uv run module-history --help
+        uv run module-history --list-repos
+        
+        # Test cache operations (should work without GitHub token)
+        uv run module-history --cache-info --repo prebid-js || echo "No cache found (expected)"
+        uv run module-history --clear-cache || true
+    
+    - name: Test alias-mappings tool
+      run: |
+        # Test help 
+        uv run alias-mappings --help
+
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+    
+    - name: Set up Python  
+      run: uv python install ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: uv sync
+    
+    - name: Test cache performance
+      run: |
+        # Test cache loading/saving performance
+        echo "Testing cache operations..."
+        time uv run module-history --cache-info --repo prebid-js || true
+        
+        # Test configuration loading performance
+        echo "Testing configuration loading..."
+        time uv run module-history --list-repos
+    
+    - name: Test tool startup performance
+      run: |
+        echo "Testing tool startup times..."
+        time uv run repo-modules --help > /dev/null
+        time uv run module-history --help > /dev/null  
+        time uv run alias-mappings --help > /dev/null
+
+  documentation-check:
+    name: Documentation Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+    
+    - name: Set up Python
+      run: uv python install ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: uv sync
+    
+    - name: Check documentation sync
+      run: uv run validate-project
+    
+    - name: Verify CLI help examples work
+      run: |
+        # Test that examples from documentation actually work
+        uv run module-history --list-repos
+        uv run repo-modules --list-repos
+        
+        # Test output formats
+        uv run module-history --repo prebid-js --format json --cache-info || true
+        uv run module-history --repo prebid-js --format csv --cache-info || true

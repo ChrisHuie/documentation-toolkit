@@ -6,7 +6,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from src.repo_modules.version_cache import (
+from src.shared_utilities.version_cache import (
     MajorVersionInfo,
     RepoVersionCache,
     VersionCacheManager,

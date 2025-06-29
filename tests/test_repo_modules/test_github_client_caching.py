@@ -5,8 +5,8 @@ Tests for GitHub client caching functionality
 import tempfile
 from unittest.mock import Mock, patch
 
-from src.repo_modules.github_client import GitHubClient
-from src.repo_modules.version_cache import (
+from src.shared_utilities.github_client import GitHubClient
+from src.shared_utilities.version_cache import (
     MajorVersionInfo,
     RepoVersionCache,
 )
@@ -26,10 +26,10 @@ class TestGitHubClientCaching:
         self.mock_repo.default_branch = "master"
 
         # Create client with mocked GitHub
-        with patch("src.repo_modules.github_client.Github") as mock_github_class:
+        with patch("src.shared_utilities.github_client.Github") as mock_github_class:
             mock_github_class.return_value = self.mock_github
             with patch(
-                "src.repo_modules.github_client.VersionCacheManager"
+                "src.shared_utilities.github_client.VersionCacheManager"
             ) as mock_cache_manager_class:
                 self.mock_cache_manager = Mock()
                 self.mock_cache_manager.cache_dir = self.temp_dir

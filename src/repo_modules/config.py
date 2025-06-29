@@ -6,7 +6,7 @@ import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from .github_client import GitHubClient
+from ..shared_utilities.github_client import GitHubClient
 
 CONFIG_FILE = Path(__file__).parent / "repos.json"
 

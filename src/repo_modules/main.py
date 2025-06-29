@@ -14,8 +14,8 @@ from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 
+from ..shared_utilities.github_client import GitHubClient
 from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
-from .github_client import GitHubClient
 from .parser_factory import ParserFactory
 
 # Initialize environment and logging

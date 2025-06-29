@@ -13,7 +13,7 @@ from unittest.mock import Mock, patch
 import pytest
 from github import GithubException
 
-from src.repo_modules.github_client import GitHubClient
+from src.shared_utilities.github_client import GitHubClient
 
 
 class TestFetchStrategies:
@@ -21,10 +21,10 @@ class TestFetchStrategies:
 
     def setup_method(self):
         """Set up test fixtures."""
-        with patch("src.repo_modules.github_client.Github"):
+        with patch("src.shared_utilities.github_client.Github"):
             self.client = GitHubClient()
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_full_content(self, mock_github_class):
         """Test fetch_strategy='full_content' uses _fetch_directory_contents."""
         # Setup mocks
@@ -53,7 +53,7 @@ class TestFetchStrategies:
             assert "files" in result
             assert result["files"] == {"file1.txt": "content"}
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_filenames_only(self, mock_github_class):
         """Test fetch_strategy='filenames_only' uses _fetch_directory_filenames."""
         # Setup mocks
@@ -91,7 +91,7 @@ class TestFetchStrategies:
             )
             assert result["files"] == {"file1.js": ""}
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_directory_names(self, mock_github_class):
         """Test fetch_strategy='directory_names' uses _fetch_directory_names."""
         # Setup mocks
@@ -120,7 +120,7 @@ class TestFetchStrategies:
             mock_fetch.assert_called_once_with(mock_repo, "adapters", "abc123")
             assert result["files"] == {"dir1": "", "dir2": ""}
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_multi_path_filenames_only(self, mock_github_class):
         """Test multi-path fetching with filenames_only strategy."""
         # Setup mocks
@@ -150,7 +150,7 @@ class TestFetchStrategies:
             assert "paths" in result
             assert result["paths"]["docs"] == {"file1.md": ""}
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_multi_path_directory_names(self, mock_github_class):
         """Test multi-path fetching with directory_names strategy."""
         # Setup mocks
@@ -182,7 +182,7 @@ class TestFetchStrategies:
             assert "paths" in result
             assert len(result["paths"]) == 2
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_invalid_fetch_strategy_raises_error(self, mock_github_class):
         """Test that invalid fetch strategy raises ValueError."""
         # Setup mocks
@@ -210,10 +210,10 @@ class TestHardcodedLogicRemoval:
 
     def setup_method(self):
         """Set up test fixtures."""
-        with patch("src.repo_modules.github_client.Github"):
+        with patch("src.shared_utilities.github_client.Github"):
             self.client = GitHubClient()
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_no_hardcoded_prebid_github_io_logic(self, mock_github_class):
         """Test that prebid.github.io is not treated specially in GitHubClient."""
         # Setup mocks
@@ -242,7 +242,7 @@ class TestHardcodedLogicRemoval:
             mock_dir_names.assert_called_once()
             mock_file_names.assert_not_called()
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_any_repo_can_use_any_strategy(self, mock_github_class):
         """Test that any repository can use any fetch strategy."""
         # Setup mocks
@@ -279,10 +279,10 @@ class TestFetchStrategyEdgeCases:
 
     def setup_method(self):
         """Set up test fixtures."""
-        with patch("src.repo_modules.github_client.Github"):
+        with patch("src.shared_utilities.github_client.Github"):
             self.client = GitHubClient()
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_with_no_directory(self, mock_github_class):
         """Test fetch strategy with no directory specified raises appropriate error."""
         # Setup mocks
@@ -302,7 +302,7 @@ class TestFetchStrategyEdgeCases:
                     fetch_strategy="full_content",
                 )
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_fetch_strategy_with_github_exception(self, mock_github_class):
         """Test fetch strategy error handling with GitHub exceptions."""
         # Setup mocks
@@ -338,7 +338,7 @@ class TestFetchStrategyEdgeCases:
                     fetch_strategy="full_content",
                 )
 
-    @patch("src.repo_modules.github_client.Github")
+    @patch("src.shared_utilities.github_client.Github")
     def test_default_fetch_strategy(self, mock_github_class):
         """Test that default fetch_strategy is 'full_content'."""
         # Setup mocks

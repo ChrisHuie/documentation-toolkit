@@ -19,7 +19,7 @@ def mock_token():
 @pytest.fixture
 def alias_finder(mock_token):
     """Create AliasFinder instance with mocked dependencies"""
-    with patch("src.repo_modules.github_client.GitHubClient") as mock_client_class:
+    with patch("src.shared_utilities.github_client.GitHubClient") as mock_client_class:
         mock_client = Mock()
         mock_client_class.return_value = mock_client
         finder = AliasFinder(mock_token)
@@ -532,7 +532,7 @@ class TestErrorHandling:
 @pytest.fixture
 def mock_github_client_integration():
     """Mock GitHub client for integration-style tests"""
-    with patch("src.repo_modules.github_client.GitHubClient") as mock_client_class:
+    with patch("src.shared_utilities.github_client.GitHubClient") as mock_client_class:
         mock_client = Mock()
         mock_client_class.return_value = mock_client
         yield mock_client
