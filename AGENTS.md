@@ -9,26 +9,60 @@ Collection of tools for working with documentation and repository analysis.
 ```
 src/
 ├── __init__.py
+├── shared_utilities/           # Shared infrastructure for all tools
+│   ├── __init__.py
+│   ├── filename_generator.py  # Consistent filename generation across tools
+│   ├── github_client.py       # Generic GitHub API client with caching
+│   ├── logging_config.py      # Structured logging with OpenTelemetry
+│   ├── base_output_formatter.py # Base class for extensible multi-format output
+│   ├── cli_base.py            # Modular CLI components for consistency
+│   ├── data_normalizer.py     # Data normalization for consistent output across formats
+│   ├── report_formatter.py    # Generic report formatting for common patterns
+│   ├── rate_limit_manager.py  # Global rate limiting for API calls
+│   ├── repository_config.py   # Shared repository configuration management
+│   ├── telemetry.py          # OpenTelemetry instrumentation
+│   └── version_cache.py       # Version caching system for performance
 ├── dev_tools/                  # Development and validation tools
 │   ├── __init__.py
 │   ├── cli.py                 # CLI entry point for validation
 │   ├── validator.py           # Project validation logic
-│   ├── docs_sync.py          # Documentation synchronization
-│   └── cleanup.py            # Artifact cleanup utilities
-└── repo_modules_by_version/    # Configuration-driven GitHub repository analysis tool
+│   └── docs_sync.py          # Documentation synchronization
+├── repo_modules/              # Configuration-driven GitHub repository analysis tool
+│   ├── __init__.py
+│   ├── main.py                # CLI entry point with configuration-driven architecture
+│   ├── config.py              # Repository configuration system with new fields
+│   ├── parser_factory.py      # Extensible parsing framework with specialized parsers
+│   └── repos.json             # Repository configurations with fetch strategies
+├── module_history/            # Historical module analysis tool
+│   ├── __init__.py
+│   ├── main.py                # CLI entry point for historical analysis
+│   ├── config.py              # Configuration for module history analysis
+│   ├── core.py                # Core analysis logic
+│   ├── data_models.py         # Data models for module history
+│   └── output_formatter.py    # Specialized output formatting
+├── alias_mappings/            # Prebid.js alias mapping tool
+│   ├── __init__.py
+│   ├── main.py                # CLI entry point for alias mappings
+│   └── alias_finder.py        # Logic for finding and mapping aliases
+└── supported_mediatypes/      # Media type extraction tool for Prebid.js adapters
     ├── __init__.py
-    ├── main.py                 # CLI entry point with configuration-driven architecture
-    ├── config.py              # Repository configuration system with new fields
-    ├── github_client.py       # Generic GitHub API client (no hardcoded logic)
-    ├── parser_factory.py      # Extensible parsing framework
-    ├── repos.json             # Repository configurations with fetch strategies
-    ├── parsers/               # Specialized parsers for different repository types
-    └── version_cache.py       # Version caching system for performance
+    ├── main.py                # CLI entry point for media type analysis
+    ├── extractor.py           # Logic for extracting media types from JavaScript
+    └── output_formatter.py    # Specialized formatting for media type data
+
+Other project directories:
+├── docs/                      # Additional documentation
+│   ├── cli_consistency_analysis.md  # Analysis of CLI patterns across tools
+│   └── cli_implementation_plan.md   # Plan for CLI standardization
+├── tests/                     # Test suite for all tools
+├── cache/                     # Cached data for performance
+├── logs/                      # Application logs
+└── output/                    # Generated output files
 ```
 
 ## Tools
 
-### repo-modules-by-version
+### repo-modules
 **Configuration-driven CLI tool** that allows users to:
 - Extract data from GitHub repositories using configurable fetch strategies
 - Parse through directories using specialized parsers
@@ -59,19 +93,19 @@ src/
 **Usage:**
 ```bash
 # Interactive mode
-repo-modules-by-version
+repo-modules
 
 # Direct usage
-repo-modules-by-version --repo owner/repo --version v1.0.0
+repo-modules --repo owner/repo --version v1.0.0
 
 # List available repos
-repo-modules-by-version --list-repos
+repo-modules --list-repos
 
 # Examples with preconfigured repos
-repo-modules-by-version --repo prebid-js --version v9.51.0
-repo-modules-by-version --repo prebid-server --version v3.8.0
-repo-modules-by-version --repo prebid-server-java --version v3.27.0
-repo-modules-by-version --repo prebid-docs  # Always uses master
+repo-modules --repo prebid-js --version v9.51.0
+repo-modules --repo prebid-server --version v3.8.0
+repo-modules --repo prebid-server-java --version v3.27.0
+repo-modules --repo prebid-docs  # Always uses master
 ```
 
 ### module-history
@@ -147,6 +181,163 @@ module-history --token your_github_token
 - Automatic cache validation and migration
 - Supports force refresh to update with latest data
 - Cache info command shows analysis metadata and statistics
+
+### supported-mediatypes
+**Media type extraction tool** for Prebid.js bid adapters:
+- Extract supported media types (banner, video, native) from bid adapter source code
+- Analyze individual adapters or all adapters in a version
+- Generate summary statistics and combination analysis
+- Multiple output formats with consistent data across all formats
+
+**Key Features:**
+- **Smart Detection** - Multiple patterns to detect media type support
+- **Summary Statistics** - Percentages and counts for media types and combinations
+- **Flexible Output** - Table (with optional JSON), CSV, JSON, Markdown, YAML, HTML
+- **Modular Architecture** - Minimal tool-specific code, leverages shared utilities
+- **ANSI Formatting** - Bold adapter names in terminal output
+- **Order-Independent** - Normalizes media type combinations regardless of import order
+
+**Architecture:**
+- **MediaTypeExtractor** - Extracts media types using regex patterns
+- **MediaTypeOutputFormatter** - Minimal formatter extending ReportFormatter
+- **Uses shared utilities** - DataNormalizer, ReportFormatter, BaseOutputFormatter
+
+**Usage:**
+```bash
+# Show all adapters with default table output
+supported-mediatypes
+
+# Specific version with JSON at bottom
+supported-mediatypes --version v9.51.0 --show-json
+
+# Analyze specific adapter
+supported-mediatypes --adapter appnexus
+
+# Show summary statistics
+supported-mediatypes --summary
+
+# Output to file in different formats
+supported-mediatypes --format csv --output media_types.csv
+supported-mediatypes --format json --output media_types.json
+supported-mediatypes --format markdown --output media_types.md
+```
+
+**Output Example:**
+```
+Prebid.js Supported Media Types Report
+Version: v9.51.0
+Total Adapters: 5
+Adapters with Media Types: 5
+============================================================
+
+Adapters and Supported Media Types:
+============================================================
+
+**appnexus**: [banner, native, video]
+**criteo**: [banner, video]
+**pubmatic**: [banner, native, video]
+**rubicon**: [banner, video]
+
+============================================================
+```
+
+### alias-mappings
+**Prebid.js alias mapping analysis tool** that identifies and analyzes bidder alias relationships:
+- Extract alias mappings from Prebid.js source code
+- Generate comprehensive reports showing alias-to-bidder relationships
+- Support multiple output formats (table, CSV, JSON)
+- Track alias evolution across different versions
+
+**Key Features:**
+- **Alias Discovery** - Automatically finds all bidder aliases in Prebid.js
+- **Relationship Mapping** - Shows which aliases map to which core bidders
+- **Version Tracking** - Analyze alias changes across Prebid.js versions
+- **Multiple Formats** - Output as human-readable tables or machine-readable JSON/CSV
+- **Leverages Shared Infrastructure** - Uses common GitHub client and configuration
+
+**Usage:**
+```bash
+# Analyze current/latest version
+alias-mappings
+
+# Analyze specific version
+alias-mappings --version v9.51.0
+
+# Output as JSON
+alias-mappings --format json
+
+# Output as CSV
+alias-mappings --format csv
+
+# Save to file
+alias-mappings --output alias_report.txt
+```
+
+### supported-mediatypes
+**Media type extraction tool** for Prebid.js bid adapters that analyzes supported ad formats:
+- Extract media types (banner, video, native) from bid adapter source code
+- Generate comprehensive reports showing media type support across adapters
+- Support multiple output formats (table, CSV, JSON, Markdown, YAML, HTML)
+- Analyze specific adapters or entire repository
+- Provide summary statistics on media type usage
+
+**Key Features:**
+- **Smart Detection** - Multiple patterns to identify media type support
+- **Comprehensive Analysis** - Checks imports, declarations, and usage patterns
+- **Flexible Output** - Multiple formats for different use cases
+- **Summary Statistics** - Overview of media type adoption across adapters
+- **Extensible Architecture** - Built on shared base output formatter
+
+**Usage:**
+```bash
+# Analyze latest version
+supported-mediatypes
+
+# Analyze specific version
+supported-mediatypes --version v9.51.0
+
+# Analyze specific adapter
+supported-mediatypes --adapter appnexus
+
+# Show summary statistics
+supported-mediatypes --summary
+
+# Output as JSON
+supported-mediatypes --format json
+
+# Output as CSV (Excel-friendly)
+supported-mediatypes --format csv
+
+# Output as Markdown
+supported-mediatypes --format markdown
+
+# Save to specific file
+supported-mediatypes --format csv --output media_types_report.csv
+```
+
+**Output Formats:**
+- **table** - Human-readable console output (default)
+- **json** - Machine-readable JSON format
+- **csv** - Excel-compatible CSV with Yes/No columns
+- **markdown** - Documentation-ready Markdown tables
+- **yaml** - YAML format for configuration files
+- **html** - HTML report with basic styling
+
+## Shared Infrastructure
+
+The project follows a shared utilities pattern where common functionality is centralized in `src/shared_utilities/`:
+
+- **GitHub Client** - Unified API client with rate limiting and caching
+- **Repository Configuration** - Centralized configuration management for all repository types
+- **Filename Generation** - Consistent naming conventions across all tools
+- **Output Formatting** - Common formatting utilities for reports
+- **Base Output Formatter** - Extensible formatter supporting multiple output formats (JSON, CSV, YAML, HTML, etc.)
+- **Output Manager** - Hierarchical directory management for tool outputs organized by tool/repo/version
+- **Logging & Telemetry** - Structured logging with OpenTelemetry integration
+- **Version Caching** - Performance optimization for repository version queries
+- **Rate Limit Manager** - Global rate limiting for API calls
+
+This architecture allows tools to focus on their core functionality while leveraging shared components for common operations.
 
 ## Dependencies
 - Python 3.13+
@@ -229,7 +420,71 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 2. Add CLI entry point to `pyproject.toml`: `your-tool = "src.your_tool_name.main:main"`
 3. Follow the existing pattern for structure and imports
 
-## Adding New Repositories (repo-modules-by-version)
+## CLI Consistency
+
+The project uses a modular CLI infrastructure to ensure consistency across all tools:
+
+### Shared CLI Components (cli_base.py)
+- **Common Arguments**: Standard flags like `-o/--output`, `-f/--format`, `-q/--quiet`, `-v/--verbose`
+- **Repository Arguments**: Shared flags for tools working with GitHub repos
+- **Rate Limit Arguments**: Consistent rate limiting controls across API-heavy tools
+- **Filter Arguments**: Common filtering options like `--limit`
+- **Cache Arguments**: Standardized cache management flags
+
+### Benefits
+- Users learn one set of flags that work everywhere
+- New tools automatically get common functionality
+- Consistent behavior and error handling
+- Easy to maintain and extend
+
+### Implementation Status
+- Infrastructure created in `shared_utilities/cli_base.py`
+- Supports both argparse and click frameworks
+- Migration plan documented in `docs/cli_implementation_plan.md`
+- Tools will be migrated incrementally to maintain compatibility
+
+For detailed analysis and implementation plans, see:
+- `docs/cli_consistency_analysis.md` - Current state analysis
+- `docs/cli_implementation_plan.md` - Migration strategy
+
+## Modular Architecture
+
+The project follows a highly modular architecture designed for extensibility and code reuse:
+
+### Output Formatting Architecture
+All tools use a three-layer formatting system:
+
+1. **BaseOutputFormatter** (shared_utilities/base_output_formatter.py)
+   - Abstract base class defining the interface for all formatters
+   - Supports 9 output formats: table, json, csv, yaml, markdown, html, xml, tsv, excel
+   - Handles file I/O operations
+
+2. **ReportFormatter** (shared_utilities/report_formatter.py)
+   - Generic report formatter for common report patterns
+   - Handles headers, metadata, summary statistics, and item listings
+   - Automatically normalizes data using DataNormalizer
+   - Provides consistent structure across all tools
+
+3. **Tool-specific formatters** (e.g., supported_mediatypes/output_formatter.py)
+   - Minimal code - only tool-specific formatting logic
+   - Extends ReportFormatter
+   - Overrides only what's needed for the specific tool
+
+### Data Normalization
+**DataNormalizer** (shared_utilities/data_normalizer.py) ensures all output formats receive the same enriched data:
+- Adds percentage calculations to counts
+- Handles both raw and pre-normalized data
+- Sorts combinations for consistent ordering
+- Provides formatting utilities for display
+
+### Benefits of This Architecture
+- **DRY Principle**: Common logic is shared, not duplicated
+- **Consistency**: All tools output data in the same formats
+- **Extensibility**: New tools can leverage existing infrastructure
+- **Maintainability**: Changes to formatting logic happen in one place
+- **Testing**: Shared utilities have comprehensive test coverage
+
+## Adding New Repositories (repo-modules)
 The configuration-driven architecture makes adding new repositories simple:
 
 1. **Add repository configuration to `repos.json`:**
@@ -257,8 +512,62 @@ The configuration-driven architecture makes adding new repositories simple:
    - `paths`: Multi-directory configuration (optional)
 
 3. **Create specialized parser (if needed):**
-   - Add parser class to `src/repo_modules_by_version/parsers/`
+   - Add parser class to `src/repo_modules/parsers/`
    - Update `parser_factory.py` to register new parser type
+
+## Output Directory Management
+
+The toolkit uses a hierarchical output directory structure managed by the `OutputManager` utility:
+
+### Directory Structure
+```
+output/
+├── tool-name/
+│   ├── repository-name/
+│   │   ├── version/
+│   │   │   ├── output-file.json
+│   │   │   ├── output-file.csv
+│   │   │   └── ...
+│   │   └── another-version/
+│   │       └── ...
+│   └── another-repo/
+│       └── ...
+└── another-tool/
+    └── ...
+```
+
+### Using OutputManager
+```python
+from src.shared_utilities import OutputManager, get_output_path, save_output
+
+# Get path for output file (creates directories automatically)
+output_path = get_output_path(
+    tool_name="supported-mediatypes",
+    repo_name="prebid/Prebid.js",
+    version="v9.51.0",
+    filename="media_types.json"
+)
+# Result: output/supported-mediatypes/Prebid.js/9.51.0/media_types.json
+
+# Save content directly
+save_output(
+    content=json_content,
+    tool_name="supported-mediatypes",
+    repo_name="prebid/Prebid.js",
+    version="v9.51.0",
+    filename="media_types.json"
+)
+
+# Clean up empty directories
+cleanup_empty_directories("supported-mediatypes")
+```
+
+### Key Features
+- **Automatic directory creation** - Directories are created as needed
+- **Clean paths** - Repository owner prefixes and version 'v' prefixes are automatically removed
+- **Empty directory cleanup** - Remove empty directories after processing
+- **File discovery** - Find existing outputs by tool, repo, or version
+- **Singleton pattern** - Default manager instance for convenience
 
 ## Post-Change Validation Workflow
 

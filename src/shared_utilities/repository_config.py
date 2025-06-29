@@ -48,7 +48,7 @@ class RepositoryConfigManager:
         # Try to find repos.json in multiple locations
         search_paths = [
             Path(__file__).parent.parent / "repo_modules" / "repos.json",
-            Path(__file__).parent.parent / "repo_modules_by_version" / "repos.json",
+            # Legacy path no longer used
             Path.cwd() / "repos.json",
         ]
 
