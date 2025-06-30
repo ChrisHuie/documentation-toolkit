@@ -13,6 +13,8 @@ from .data_models import (
     CategoryComparison,
     ComparisonMode,
     ComparisonResult,
+    CumulativeComparisonResult,
+    CumulativeModuleChange,
     ModuleInfo,
 )
 
@@ -42,6 +44,7 @@ class ModuleComparator:
         source_version: str,
         target_repo: str,
         target_version: str,
+        cumulative: bool = False,
         progress_callback: Callable[[str], None] | None = None,
     ) -> ComparisonResult:
         """Compare modules between two sources.
@@ -57,11 +60,13 @@ class ModuleComparator:
             ComparisonResult with detailed comparison data
         """
         # Determine comparison mode
-        comparison_mode = (
-            ComparisonMode.VERSION_COMPARISON
-            if source_repo == target_repo
-            else ComparisonMode.REPOSITORY_COMPARISON
-        )
+        if source_repo != target_repo:
+            comparison_mode = ComparisonMode.REPOSITORY_COMPARISON
+            cumulative = False  # Can't do cumulative for cross-repo
+        elif cumulative:
+            comparison_mode = ComparisonMode.CUMULATIVE_COMPARISON
+        else:
+            comparison_mode = ComparisonMode.VERSION_COMPARISON
 
         logger.info(
             "Starting module comparison",
@@ -94,6 +99,13 @@ class ModuleComparator:
                 target_version,
                 target_modules,
             )
+        elif comparison_mode == ComparisonMode.CUMULATIVE_COMPARISON:
+            result = self._compare_cumulative(
+                source_repo,
+                source_version,
+                target_version,
+                progress_callback,
+            )
         else:
             result = self._compare_repositories(
                 source_repo,
@@ -121,39 +133,62 @@ class ModuleComparator:
             Dictionary mapping category names to lists of modules
         """
         # Get repository configuration
-        config = self.config_manager.get_repo_config(repo_key)
+        config = self.config_manager.get_config(repo_key)
         if not config:
             raise ValueError(f"Unknown repository: {repo_key}")
 
-        # Resolve version
-        resolved_version = self.github_client.resolve_version(
-            config["repo"], version, version_override=config.get("version_override")
-        )
+        # Handle version override if configured
+        actual_version = config.get("version_override") or version
 
         # Fetch repository data
         repo_data = self.github_client.fetch_repository_data(
-            config["repo"],
-            resolved_version,
-            config.get("paths", {}),
-            config.get("fetch_strategy", "full_content"),
-            config.get("parser_type", "default"),
+            repo_name=config["repo"],
+            version=actual_version,
+            paths=config.get("paths", {}),
+            fetch_strategy=config.get("fetch_strategy", "full_content"),
         )
 
         # Organize modules by category
         modules_by_category = defaultdict(list)
-        for category, items in repo_data.items():
-            for item in items:
-                # Extract module name from filename/path
+
+        # Handle the response structure from GitHub client
+        if "paths" in repo_data:
+            # Multi-path structure
+            paths_data = repo_data["paths"]
+            # Map paths to categories from config
+            path_to_category = {v: k for k, v in config.get("paths", {}).items()}
+
+            for path, files in paths_data.items():
+                category = path_to_category.get(path, "Other")
+                for file_path, _ in files.items():
+                    # Extract filename from full path
+                    filename = file_path.split("/")[-1]
+                    module_name = self._extract_module_name(
+                        filename, config.get("parser_type")
+                    )
+                    module_info = ModuleInfo(
+                        name=module_name,
+                        path=file_path,
+                        category=category,
+                        repo=repo_key,
+                    )
+                    modules_by_category[category].append(module_info)
+        else:
+            # Legacy single directory structure - shouldn't happen with our conversion
+            logger.warning(f"Unexpected repo_data structure for {repo_key}")
+            # Try to handle it as a flat dictionary
+            for file_path, _ in repo_data.get("files", {}).items():
+                filename = file_path.split("/")[-1]
                 module_name = self._extract_module_name(
-                    item["name"], config.get("parser_type")
+                    filename, config.get("parser_type")
                 )
                 module_info = ModuleInfo(
                     name=module_name,
-                    path=item["path"],
-                    category=category,
+                    path=file_path,
+                    category="Modules",
                     repo=repo_key,
                 )
-                modules_by_category[category].append(module_info)
+                modules_by_category["Modules"].append(module_info)
 
         return dict(modules_by_category)
 
@@ -297,5 +332,210 @@ class ModuleComparator:
             )
 
             result.categories[category] = category_comparison
+
+        return result
+
+    def _compare_cumulative(
+        self,
+        repo: str,
+        source_version: str,
+        target_version: str,
+        progress_callback: Callable[[str], None] | None = None,
+    ) -> CumulativeComparisonResult:
+        """Compare modules cumulatively across all versions between source and target.
+
+        This tracks ALL module changes that occurred between two versions,
+        not just the direct difference between endpoints.
+
+        Args:
+            repo: Repository identifier
+            source_version: Starting version
+            target_version: Ending version
+            progress_callback: Optional callback for progress updates
+
+        Returns:
+            CumulativeComparisonResult with all module changes tracked
+        """
+        logger.info(
+            "Starting cumulative comparison",
+            repo=repo,
+            source_version=source_version,
+            target_version=target_version,
+        )
+
+        # Get version cache to find intermediate versions
+        version_cache = self.version_cache.load_cache(
+            self.config_manager.get_config(repo)["repo"]
+        )
+        if not version_cache:
+            # Fall back to empty cumulative result if no cache
+            logger.warning(
+                "No version cache available, returning empty cumulative result"
+            )
+            return CumulativeComparisonResult(
+                source_repo=repo,
+                source_version=source_version,
+                target_repo=repo,
+                target_version=target_version,
+                comparison_mode=ComparisonMode.CUMULATIVE_COMPARISON,
+                cumulative_changes={},
+                versions_analyzed=[source_version, target_version],
+            )
+
+        # Parse version numbers for comparison
+        def parse_version(v: str) -> tuple[int, int, int]:
+            clean = v.lstrip("v")
+            parts = clean.split(".")
+            try:
+                major = int(parts[0]) if len(parts) > 0 else 0
+                minor = int(parts[1]) if len(parts) > 1 else 0
+                patch = int(parts[2]) if len(parts) > 2 else 0
+                return (major, minor, patch)
+            except (ValueError, IndexError):
+                return (0, 0, 0)
+
+        source_parsed = parse_version(source_version)
+        target_parsed = parse_version(target_version)
+
+        # Get all versions between source and target
+        all_versions = []
+        for version in version_cache.latest_versions:
+            v_parsed = parse_version(version)
+            if source_parsed <= v_parsed <= target_parsed:
+                all_versions.append(version)
+
+        # Also check major versions for any missing versions
+        for major_info in version_cache.major_versions.values():
+            for v in [major_info.first_version, major_info.last_version]:
+                v_parsed = parse_version(v)
+                if source_parsed <= v_parsed <= target_parsed and v not in all_versions:
+                    all_versions.append(v)
+
+        # Sort versions
+        all_versions.sort(key=parse_version)
+
+        if not all_versions:
+            all_versions = [source_version, target_version]
+
+        # Ensure source and target are included
+        if source_version not in all_versions:
+            all_versions.insert(0, source_version)
+        if target_version not in all_versions:
+            all_versions.append(target_version)
+
+        logger.info(f"Analyzing {len(all_versions)} versions for cumulative changes")
+
+        # Track all modules seen across versions
+        cumulative_changes = defaultdict(list)
+        all_modules_by_version = {}
+
+        # Fetch modules for each version
+        for i, version in enumerate(all_versions):
+            if progress_callback:
+                progress_callback(
+                    f"Analyzing version {version} ({i + 1}/{len(all_versions)})"
+                )
+
+            modules = self._fetch_modules(repo, version)
+            all_modules_by_version[version] = modules
+
+        # Track module lifecycle
+        module_first_seen = {}
+        module_last_seen = {}
+        all_modules_ever = set()
+
+        # Process versions in order to track when modules appear/disappear
+        for version in all_versions:
+            modules = all_modules_by_version[version]
+
+            # Flatten all modules with category info
+            current_modules = set()
+            for category, mod_list in modules.items():
+                for mod in mod_list:
+                    key = (mod.name, category)
+                    current_modules.add(key)
+                    all_modules_ever.add(key)
+
+                    if key not in module_first_seen:
+                        module_first_seen[key] = version
+                    module_last_seen[key] = version
+
+        # Get final state modules
+        target_modules = all_modules_by_version[target_version]
+        target_module_keys = set()
+        for category, mod_list in target_modules.items():
+            for mod in mod_list:
+                target_module_keys.add((mod.name, category))
+
+        # Create cumulative change entries
+        for module_key in all_modules_ever:
+            name, category = module_key
+            first_version = module_first_seen[module_key]
+
+            # Skip if module existed in source version
+            source_modules = all_modules_by_version[source_version]
+            existed_in_source = any(
+                mod.name == name
+                for cat_mods in source_modules.values()
+                for mod in cat_mods
+                if cat_mods
+            )
+
+            if existed_in_source:
+                continue
+
+            # This module was added after source version
+            module_info = ModuleInfo(
+                name=name,
+                path="",  # Path will be filled from actual module data
+                category=category,
+                repo=repo,
+            )
+
+            # Find actual module info from when it was first seen
+            for mod_list in all_modules_by_version[first_version].values():
+                for mod in mod_list:
+                    if mod.name == name:
+                        module_info = mod
+                        break
+
+            # Check if module was removed
+            removed_version = None
+            if module_key not in target_module_keys:
+                # Module was removed - find when
+                last_version = module_last_seen[module_key]
+                last_idx = all_versions.index(last_version)
+                if last_idx < len(all_versions) - 1:
+                    removed_version = all_versions[last_idx + 1]
+
+            change = CumulativeModuleChange(
+                module=module_info,
+                added_in_version=first_version,
+                removed_in_version=removed_version,
+                is_present_in_target=module_key in target_module_keys,
+            )
+
+            cumulative_changes[category].append(change)
+
+        # Sort changes by module name
+        for changes in cumulative_changes.values():
+            changes.sort(key=lambda x: x.module.name)
+
+        # Create result
+        result = CumulativeComparisonResult(
+            source_repo=repo,
+            source_version=source_version,
+            target_repo=repo,
+            target_version=target_version,
+            comparison_mode=ComparisonMode.CUMULATIVE_COMPARISON,
+            cumulative_changes=dict(cumulative_changes),
+            versions_analyzed=all_versions,
+        )
+
+        logger.info(
+            "Cumulative comparison completed",
+            total_changes=sum(len(changes) for changes in cumulative_changes.values()),
+            versions_analyzed=len(all_versions),
+        )
 
         return result

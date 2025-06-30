@@ -1,13 +1,11 @@
 """Tests for module comparison data models."""
 
-import pytest
 from src.module_compare.data_models import (
-    ComparisonMode,
-    ChangeType,
-    ModuleInfo,
     CategoryComparison,
+    ChangeType,
+    ComparisonMode,
     ComparisonResult,
-    ComparisonStatistics,
+    ModuleInfo,
 )
 
 

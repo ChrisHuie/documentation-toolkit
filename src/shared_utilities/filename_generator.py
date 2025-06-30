@@ -192,3 +192,88 @@ def generate_unique_filename(
         if not (directory_path / numbered_filename).exists():
             return numbered_filename
         counter += 1
+
+
+def generate_comparison_filename(
+    source_repo: str,
+    source_version: str,
+    target_repo: str | None = None,
+    target_version: str | None = None,
+    custom_source_slug: str | None = None,
+    custom_target_slug: str | None = None,
+    extension: str = "txt",
+) -> str:
+    """
+    Generate filename for module comparison output.
+
+    For same repo comparison: {repo_slug}_module_compare_{earlier_version}_{later_version}.{ext}
+    For cross-repo comparison: {repo1_slug}_{version1}_module_compare_{repo2_slug}_{version2}.{ext}
+
+    Args:
+        source_repo: Source repository name in format "owner/repo"
+        source_version: Source version string
+        target_repo: Target repository name (None for same-repo comparison)
+        target_version: Target version string (None uses source_version)
+        custom_source_slug: Custom slug for source repository
+        custom_target_slug: Custom slug for target repository
+        extension: File extension
+
+    Returns:
+        Generated filename string
+    """
+    # Map repository names to standardized slugs
+    repo_slugs = {
+        "prebid/Prebid.js": "prebid.js",
+        "prebid/prebid-server": "prebid.server.go",
+        "prebid/prebid-server-java": "prebid.server.java",
+        "prebid/prebid.github.io": "prebid.github.io",
+    }
+
+    # Get source repo slug
+    if custom_source_slug:
+        source_slug = custom_source_slug
+    elif source_repo in repo_slugs:
+        source_slug = repo_slugs[source_repo]
+    else:
+        owner, repo_part = source_repo.split("/")
+        source_slug = repo_part.lower().replace("-", ".")
+
+    # Clean versions
+    source_version_clean = clean_version_for_filename(source_version)
+
+    # Same repository comparison
+    if target_repo is None or target_repo == source_repo:
+        target_version_clean = clean_version_for_filename(
+            target_version or source_version
+        )
+
+        # Determine version order (put earlier version first)
+        # Simple heuristic: if source starts with a number and target is "master"/"main",
+        # source is earlier. Otherwise, lexical comparison
+        if target_version in ["master", "main"] and source_version[0].isdigit():
+            earlier, later = source_version_clean, target_version_clean
+        elif (
+            source_version in ["master", "main"] and (target_version or "")[0].isdigit()
+        ):
+            earlier, later = target_version_clean, source_version_clean
+        else:
+            # Lexical comparison
+            versions = sorted([source_version_clean, target_version_clean])
+            earlier, later = versions[0], versions[1]
+
+        return f"{source_slug}_module_compare_{earlier}_{later}.{extension}"
+
+    # Cross-repository comparison
+    else:
+        # Get target repo slug
+        if custom_target_slug:
+            target_slug = custom_target_slug
+        elif target_repo in repo_slugs:
+            target_slug = repo_slugs[target_repo]
+        else:
+            owner, repo_part = target_repo.split("/")
+            target_slug = repo_part.lower().replace("-", ".")
+
+        target_version_clean = clean_version_for_filename(target_version or "latest")
+
+        return f"{source_slug}_{source_version_clean}_module_compare_{target_slug}_{target_version_clean}.{extension}"

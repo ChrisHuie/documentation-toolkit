@@ -14,20 +14,30 @@ from src.shared_utilities.github_client import GitHubClient
 class TestGitHubClientInit:
     """Test GitHubClient initialization."""
 
+    @patch("src.shared_utilities.github_client.Auth")
     @patch("src.shared_utilities.github_client.Github")
-    def test_init_with_token(self, mock_github):
+    def test_init_with_token(self, mock_github, mock_auth):
         """Test initialization with explicit token."""
+        mock_token = Mock()
+        mock_auth.Token.return_value = mock_token
+
         client = GitHubClient(token="test_token")
         assert client.token == "test_token"
-        mock_github.assert_called_once_with("test_token")
+        mock_auth.Token.assert_called_once_with("test_token")
+        mock_github.assert_called_once_with(auth=mock_token)
 
+    @patch("src.shared_utilities.github_client.Auth")
     @patch("src.shared_utilities.github_client.Github")
     @patch.dict(os.environ, {"GITHUB_TOKEN": "env_token"})
-    def test_init_with_env_token(self, mock_github):
+    def test_init_with_env_token(self, mock_github, mock_auth):
         """Test initialization with environment variable token."""
+        mock_token = Mock()
+        mock_auth.Token.return_value = mock_token
+
         client = GitHubClient()
         assert client.token == "env_token"
-        mock_github.assert_called_once_with("env_token")
+        mock_auth.Token.assert_called_once_with("env_token")
+        mock_github.assert_called_once_with(auth=mock_token)
 
     @patch("src.shared_utilities.github_client.Github")
     @patch.dict(os.environ, {}, clear=True)

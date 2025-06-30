@@ -66,7 +66,27 @@ class RepositoryConfigManager:
         """Load repository configurations from file."""
         try:
             with open(self.config_file) as f:
-                self.configs = json.load(f)
+                raw_configs = json.load(f)
+
+            # Convert old 'directory' field to 'paths' for backward compatibility
+            self.configs = {}
+            for name, config in raw_configs.items():
+                # Convert directory field to paths if needed
+                if "directory" in config and "paths" not in config:
+                    # Extract module type from parser_type for category name
+                    category_map = {
+                        "prebid_js": "Bid Adapters",
+                        "prebid_server_go": "Bid Adapters",
+                        "prebid_server_java": "Bid Adapters",
+                        "prebid_docs": "Dev Docs",
+                    }
+                    category = category_map.get(
+                        config.get("parser_type", ""), "Modules"
+                    )
+                    config["paths"] = {category: config["directory"]}
+
+                self.configs[name] = config
+
             logger.info(f"Loaded {len(self.configs)} repository configurations")
         except Exception as e:
             logger.error(f"Failed to load repository configs: {e}")

@@ -6,6 +6,7 @@ from .base_output_formatter import BaseOutputFormatter, OutputFormat, TableForma
 from .logging_config import configure_logging, get_logger, get_logging_manager
 from .output_manager import (
     OutputManager,
+    cleanup_active_tools,
     cleanup_empty_directories,
     get_output_path,
     save_output,
@@ -34,4 +35,5 @@ __all__ = [
     "get_output_path",
     "save_output",
     "cleanup_empty_directories",
+    "cleanup_active_tools",
 ]

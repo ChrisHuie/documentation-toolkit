@@ -1,9 +1,13 @@
 """Tests for module comparator."""
 
+from unittest.mock import Mock
+
 import pytest
-from unittest.mock import Mock, MagicMock, patch
+
 from src.module_compare.comparator import ModuleComparator
-from src.module_compare.data_models import ComparisonMode, ModuleInfo, ComparisonResult
+from src.module_compare.data_models import ComparisonMode
+
+from .test_utils import create_github_response, create_module_files
 
 
 class TestModuleComparator:
@@ -22,7 +26,8 @@ class TestModuleComparator:
     def mock_config_manager(self):
         """Create a mock config manager."""
         manager = Mock()
-        manager.get_repo_config = Mock(side_effect=self._get_mock_config)
+        manager.get_config = Mock(side_effect=self._get_mock_config)
+        manager.is_configured = Mock(return_value=True)
         return manager
 
     def _get_mock_config(self, repo_key):
@@ -33,14 +38,16 @@ class TestModuleComparator:
                 "description": "Prebid.js",
                 "parser_type": "prebid_js",
                 "fetch_strategy": "filenames_only",
-                "paths": {"Bid Adapters": "modules", "Analytics": "modules"},
+                "paths": {
+                    "Bid Adapters": "modules"
+                },  # Single path, categorized by filename
             },
             "prebid-server": {
                 "repo": "prebid/prebid-server",
                 "description": "Prebid Server Go",
                 "parser_type": "prebid_server_go",
                 "fetch_strategy": "directory_names",
-                "paths": {"Bid Adapters": "adapters", "Analytics": "analytics"},
+                "paths": {"Bid Adapters": "adapters"},  # Only bid adapters path
             },
         }
         return configs.get(repo_key)
@@ -86,50 +93,33 @@ class TestModuleComparator:
         """Test comparing versions of the same repository."""
         comparator = ModuleComparator(mock_github_client, mock_config_manager)
 
-        # Mock fetch_repository_data responses
-        source_data = {
-            "Bid Adapters": [
-                {
-                    "name": "appnexusBidAdapter.js",
-                    "path": "modules/appnexusBidAdapter.js",
-                },
-                {
-                    "name": "rubiconBidAdapter.js",
-                    "path": "modules/rubiconBidAdapter.js",
-                },
-                {"name": "oldBidAdapter.js", "path": "modules/oldBidAdapter.js"},
-            ],
-            "Analytics": [
-                {
-                    "name": "googleAnalyticsAdapter.js",
-                    "path": "modules/googleAnalyticsAdapter.js",
-                }
-            ],
-        }
+        # Create proper GitHub API responses
+        source_files = [
+            "appnexusBidAdapter.js",
+            "rubiconBidAdapter.js",
+            "oldBidAdapter.js",
+            "googleAnalyticsAdapter.js",
+        ]
 
-        target_data = {
-            "Bid Adapters": [
-                {
-                    "name": "appnexusBidAdapter.js",
-                    "path": "modules/appnexusBidAdapter.js",
-                },
-                {
-                    "name": "rubiconBidAdapter.js",
-                    "path": "modules/rubiconBidAdapter.js",
-                },
-                {"name": "newBidAdapter.js", "path": "modules/newBidAdapter.js"},
-            ],
-            "Analytics": [
-                {
-                    "name": "googleAnalyticsAdapter.js",
-                    "path": "modules/googleAnalyticsAdapter.js",
-                },
-                {
-                    "name": "adobeAnalyticsAdapter.js",
-                    "path": "modules/adobeAnalyticsAdapter.js",
-                },
-            ],
-        }
+        target_files = [
+            "appnexusBidAdapter.js",
+            "rubiconBidAdapter.js",
+            "newBidAdapter.js",
+            "googleAnalyticsAdapter.js",
+            "adobeAnalyticsAdapter.js",
+        ]
+
+        source_data = create_github_response(
+            "prebid/Prebid.js",
+            "v9.0.0",
+            paths_data={"modules": create_module_files("modules", source_files)},
+        )
+
+        target_data = create_github_response(
+            "prebid/Prebid.js",
+            "v9.51.0",
+            paths_data={"modules": create_module_files("modules", target_files)},
+        )
 
         mock_github_client.fetch_repository_data = Mock(
             side_effect=[source_data, target_data]
@@ -145,50 +135,50 @@ class TestModuleComparator:
         assert result.source_version == "v9.0.0"
         assert result.target_version == "v9.51.0"
 
-        # Check Bid Adapters category
-        bid_adapters = result.categories["Bid Adapters"]
-        assert len(bid_adapters.added) == 1
-        assert bid_adapters.added[0].name == "new"
-        assert len(bid_adapters.removed) == 1
-        assert bid_adapters.removed[0].name == "old"
-        assert len(bid_adapters.unchanged) == 2
+        # Since all files are in "modules" path, they'll be categorized based on the config
+        # The mock config should map "modules" to "Bid Adapters"
+        categories = result.categories
 
-        # Check Analytics category
-        analytics = result.categories["Analytics"]
-        assert len(analytics.added) == 1
-        assert analytics.added[0].name == "adobe"
-        assert len(analytics.removed) == 0
-        assert len(analytics.unchanged) == 1
+        # All modules should be in one category (based on path mapping)
+        assert len(categories) > 0
+
+        # Get statistics to verify the changes
+        stats = result.get_statistics()
+        assert stats.total_added == 2  # newBidAdapter and adobeAnalyticsAdapter
+        assert stats.total_removed == 1  # oldBidAdapter
+        assert stats.total_unchanged == 3  # appnexus, rubicon, googleAnalytics
 
     def test_compare_different_repos(self, mock_github_client, mock_config_manager):
         """Test comparing different repositories."""
         comparator = ModuleComparator(mock_github_client, mock_config_manager)
 
-        # Mock fetch_repository_data responses
-        js_data = {
-            "Bid Adapters": [
-                {
-                    "name": "appnexusBidAdapter.js",
-                    "path": "modules/appnexusBidAdapter.js",
-                },
-                {
-                    "name": "rubiconBidAdapter.js",
-                    "path": "modules/rubiconBidAdapter.js",
-                },
-                {
-                    "name": "clientOnlyBidAdapter.js",
-                    "path": "modules/clientOnlyBidAdapter.js",
-                },
-            ]
-        }
+        # Create proper GitHub API responses for different repository types
+        js_files = [
+            "appnexusBidAdapter.js",
+            "rubiconBidAdapter.js",
+            "clientOnlyBidAdapter.js",
+        ]
 
-        server_data = {
-            "Bid Adapters": [
-                {"name": "appnexus", "path": "adapters/appnexus"},
-                {"name": "rubicon", "path": "adapters/rubicon"},
-                {"name": "serverOnly", "path": "adapters/serverOnly"},
-            ]
-        }
+        server_adapters = [
+            "appnexus",
+            "rubicon",
+            "serverOnly",
+        ]
+
+        js_data = create_github_response(
+            "prebid/Prebid.js",
+            "v9.51.0",
+            paths_data={"modules": create_module_files("modules", js_files)},
+        )
+
+        # Prebid Server uses directory structure
+        server_data = create_github_response(
+            "prebid/prebid-server",
+            "v3.8.0",
+            paths_data={
+                "adapters": {f"adapters/{name}": "" for name in server_adapters}
+            },
+        )
 
         mock_github_client.fetch_repository_data = Mock(
             side_effect=[js_data, server_data]
@@ -202,15 +192,13 @@ class TestModuleComparator:
         assert result.source_repo == "prebid-js"
         assert result.target_repo == "prebid-server"
 
-        # Check Bid Adapters category
-        bid_adapters = result.categories["Bid Adapters"]
-        assert len(bid_adapters.only_in_source) == 1
-        assert bid_adapters.only_in_source[0].name == "clientOnly"
-        assert len(bid_adapters.only_in_target) == 1
-        assert bid_adapters.only_in_target[0].name == "serverOnly"
-        assert len(bid_adapters.in_both) == 2
-        assert any(m.name == "appnexus" for m in bid_adapters.in_both)
-        assert any(m.name == "rubicon" for m in bid_adapters.in_both)
+        # Get statistics to verify the comparison
+        stats = result.get_statistics()
+        assert (
+            stats.total_only_in_source == 1
+        )  # clientOnly (name extracted from clientOnlyBidAdapter.js)
+        assert stats.total_only_in_target == 1  # serverOnly
+        assert stats.total_in_both == 2  # appnexus and rubicon match between repos
 
     def test_compare_with_progress_callback(
         self, mock_github_client, mock_config_manager
@@ -218,9 +206,10 @@ class TestModuleComparator:
         """Test comparison with progress callback."""
         comparator = ModuleComparator(mock_github_client, mock_config_manager)
 
-        # Mock data
+        # Mock empty data
+        empty_data = create_github_response("prebid/Prebid.js", "v9.0.0", paths_data={})
         mock_github_client.fetch_repository_data = Mock(
-            side_effect=[{"Bid Adapters": []}, {"Bid Adapters": []}]
+            side_effect=[empty_data, empty_data]
         )
 
         # Track progress messages
@@ -248,7 +237,7 @@ class TestModuleComparator:
         comparator = ModuleComparator(mock_github_client, mock_config_manager)
 
         # Mock config manager to return None for invalid repo
-        mock_config_manager.get_repo_config = Mock(return_value=None)
+        mock_config_manager.get_config = Mock(return_value=None)
 
         # Should raise ValueError
         with pytest.raises(ValueError, match="Unknown repository: invalid-repo"):

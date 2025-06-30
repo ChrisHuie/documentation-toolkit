@@ -4,10 +4,10 @@ import sys
 
 import click
 
-from src.shared_utilities import get_logger, get_output_path
+from src.shared_utilities import cleanup_active_tools, get_logger, get_output_path
+from src.shared_utilities.filename_generator import generate_comparison_filename
 from src.shared_utilities.github_client import GitHubClient
 from src.shared_utilities.repository_config import RepositoryConfigManager
-from src.shared_utilities.telemetry import init_telemetry
 
 from .comparator import ModuleComparator
 from .output_formatter import ModuleCompareOutputFormatter
@@ -57,19 +57,24 @@ def parse_repo_version(spec: str) -> tuple[str, str]:
 @click.option(
     "-o",
     "--output",
-    help="Output file path",
+    help="Custom output file path (default: auto-generated filename)",
 )
 @click.option(
     "-f",
     "--format",
-    type=click.Choice(["table", "json", "csv", "markdown", "yaml", "html"]),
+    type=click.Choice(["table", "json", "csv", "markdown", "yaml", "html", "all"]),
     default="table",
-    help="Output format (default: table)",
+    help="Output format (default: table, 'all' generates all formats)",
 )
 @click.option(
     "--show-unchanged",
     is_flag=True,
     help="Include unchanged/common modules in output (default: changes only)",
+)
+@click.option(
+    "--cumulative/--no-cumulative",
+    default=None,
+    help="Track all module changes across intermediate versions (default: True for same repo, False for cross-repo)",
 )
 @click.option(
     "--list-repos",
@@ -81,6 +86,11 @@ def parse_repo_version(spec: str) -> tuple[str, str]:
     "--quiet",
     is_flag=True,
     help="Suppress progress messages",
+)
+@click.option(
+    "--stdout",
+    is_flag=True,
+    help="Print to stdout instead of saving to file",
 )
 @click.option(
     "--token",
@@ -96,8 +106,10 @@ def main(
     output: str | None,
     format: str,
     show_unchanged: bool,
+    cumulative: bool | None,
     list_repos: bool,
     quiet: bool,
+    stdout: bool,
     token: str | None,
 ) -> None:
     """Compare modules between different versions or repositories.
@@ -121,18 +133,15 @@ def main(
     By default, only changes are shown. Use --show-unchanged to see all modules.
     """
     try:
-        # Initialize telemetry
-        init_telemetry("module-compare")
-
         # Initialize configuration manager
         config_manager = RepositoryConfigManager()
 
         # Handle --list-repos
         if list_repos:
-            repos = config_manager.list_repos()
+            repos = config_manager.list_repositories()
             click.echo("Available repositories:")
             for repo_name in sorted(repos):
-                config = config_manager.get_repo_config(repo_name)
+                config = config_manager.get_config(repo_name)
                 click.echo(f"  {repo_name}: {config['description']}")
             return
 
@@ -149,11 +158,11 @@ def main(
             target_repo, target_version = parse_repo_version(target_spec)
         else:
             # Interactive mode - show menu
-            repos = config_manager.list_repos()
+            repos = config_manager.list_repositories()
 
             click.echo("Select source repository:")
             for i, repo_name in enumerate(sorted(repos), 1):
-                config = config_manager.get_repo_config(repo_name)
+                config = config_manager.get_config(repo_name)
                 click.echo(f"  {i}. {repo_name}: {config['description']}")
 
             choice = click.prompt("Enter number", type=int)
@@ -167,7 +176,7 @@ def main(
 
             click.echo("\nSelect target repository:")
             for i, repo_name in enumerate(sorted(repos), 1):
-                config = config_manager.get_repo_config(repo_name)
+                config = config_manager.get_config(repo_name)
                 click.echo(f"  {i}. {repo_name}: {config['description']}")
 
             choice = click.prompt("Enter number", type=int)
@@ -180,18 +189,22 @@ def main(
             )
 
         # Validate repositories
-        if not config_manager.get_repo_config(source_repo):
+        if not config_manager.is_configured(source_repo):
             click.echo(f"Unknown repository: {source_repo}", err=True)
             click.echo("Use --list-repos to see available repositories", err=True)
             sys.exit(1)
 
-        if not config_manager.get_repo_config(target_repo):
+        if not config_manager.is_configured(target_repo):
             click.echo(f"Unknown repository: {target_repo}", err=True)
             click.echo("Use --list-repos to see available repositories", err=True)
             sys.exit(1)
 
         # Initialize GitHub client
         github_client = GitHubClient(token)
+
+        # Determine cumulative default based on comparison type
+        is_same_repo = source_repo == target_repo
+        use_cumulative = cumulative if cumulative is not None else is_same_repo
 
         # Initialize comparator
         comparator = ModuleComparator(github_client, config_manager)
@@ -204,8 +217,9 @@ def main(
         # Perform comparison
         if not quiet:
             if source_repo == target_repo:
+                mode_str = " (cumulative)" if use_cumulative else " (direct)"
                 click.echo(
-                    f"Comparing {source_repo}: {source_version} → {target_version}"
+                    f"Comparing {source_repo}: {source_version} → {target_version}{mode_str}"
                 )
             else:
                 click.echo(
@@ -217,33 +231,127 @@ def main(
             source_version,
             target_repo,
             target_version,
+            cumulative=use_cumulative,
             progress_callback=progress_callback,
         )
 
-        # Format output
-        formatter = ModuleCompareOutputFormatter()
-        formatted_output = formatter.format_output(
-            result, format, show_unchanged=show_unchanged
+        # Handle stdout flag - print to console instead of file
+        if stdout:
+            # Format output for stdout
+            formatter = ModuleCompareOutputFormatter()
+            formatted_output = formatter.format_output(
+                result,
+                format if format != "all" else "table",
+                show_unchanged=show_unchanged,
+            )
+            click.echo(formatted_output)
+
+            # Print summary statistics if not quiet and format is not table
+            if not quiet and format != "table":
+                stats = result.get_statistics()
+                click.echo("\n" + "-" * 40)
+
+                if result.comparison_mode.value == "version":
+                    click.echo(
+                        f"Total changes: {stats.total_added + stats.total_removed}"
+                    )
+                    click.echo(f"Net change: {stats.net_change:+d} modules")
+                else:
+                    click.echo(f"Common modules: {stats.total_in_both}")
+                    click.echo(f"Unique to {source_repo}: {stats.total_only_in_source}")
+                    click.echo(f"Unique to {target_repo}: {stats.total_only_in_target}")
+            return
+
+        # Handle "all" format - generate all supported formats
+        if format == "all":
+            formats_to_generate = ["table", "json", "csv", "markdown", "yaml", "html"]
+        else:
+            formats_to_generate = [format]
+
+        # Get repository configs for filename generation
+        config_manager = RepositoryConfigManager()
+        source_config = config_manager.get_config(source_repo)
+        target_config = (
+            config_manager.get_config(target_repo)
+            if target_repo != source_repo
+            else source_config
         )
 
-        # Output results
-        if output:
+        # Get full repo names from configs
+        source_repo_full = source_config.get("repo", source_repo)
+        target_repo_full = (
+            target_config.get("repo", target_repo)
+            if target_repo != source_repo
+            else None
+        )
+
+        # Get custom slugs if available
+        source_slug = source_config.get("output_filename_slug")
+        target_slug = (
+            target_config.get("output_filename_slug")
+            if target_repo != source_repo
+            else None
+        )
+
+        # Generate outputs for each format
+        formatter = ModuleCompareOutputFormatter()
+        output_paths = []
+
+        for fmt in formats_to_generate:
+            # Format output
+            formatted_output = formatter.format_output(
+                result, fmt, show_unchanged=show_unchanged
+            )
+
+            # Determine extension
+            extension = fmt if fmt != "table" else "txt"
+
+            if output:
+                # User provided custom filename
+                if len(formats_to_generate) == 1:
+                    # Single format - use provided filename as-is
+                    filename = output
+                else:
+                    # Multiple formats - append format to base filename
+                    base, ext = output.rsplit(".", 1) if "." in output else (output, "")
+                    filename = f"{base}.{extension}"
+            else:
+                # Generate standard filename
+                filename = generate_comparison_filename(
+                    source_repo=source_repo_full,
+                    source_version=source_version,
+                    target_repo=(
+                        target_repo_full if target_repo != source_repo else None
+                    ),
+                    target_version=(
+                        target_version if target_repo != source_repo else target_version
+                    ),
+                    custom_source_slug=source_slug,
+                    custom_target_slug=target_slug,
+                    extension=extension,
+                )
+
             # Save to file - use source repo and version for path
             output_path = get_output_path(
                 tool_name="module-compare",
                 repo_name=source_repo,
                 version=source_version,
-                filename=output,
+                filename=filename,
             )
 
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(formatted_output)
 
-            if not quiet:
-                click.echo(f"\nOutput saved to: {output_path}")
-        else:
-            # Print to stdout
-            click.echo(formatted_output)
+            output_paths.append(output_path)
+
+        # Show output paths
+        if not quiet:
+            if len(output_paths) == 1:
+                click.echo(f"\nOutput saved to: {output_paths[0]}")
+            else:
+                click.echo("\nOutputs saved to:")
+                for path in output_paths:
+                    click.echo(f"  - {path}")
 
         # Print summary statistics if not quiet
         if not quiet and format != "table":
@@ -253,10 +361,8 @@ def main(
             if result.comparison_mode.value == "version":
                 click.echo(f"Total changes: {stats.total_added + stats.total_removed}")
                 click.echo(f"Net change: {stats.net_change:+d} modules")
-                click.echo(f"Growth rate: {stats.overall_change_percentage:+.1f}%")
             else:
                 click.echo(f"Common modules: {stats.total_in_both}")
-                click.echo(f"Overlap rate: {stats.overall_overlap_percentage:.1f}%")
                 click.echo(f"Unique to {source_repo}: {stats.total_only_in_source}")
                 click.echo(f"Unique to {target_repo}: {stats.total_only_in_target}")
 
@@ -266,6 +372,9 @@ def main(
         logger.error(f"Error during comparison: {e}")
         click.echo(f"Error: {e}", err=True)
         sys.exit(1)
+    finally:
+        # Clean up empty directories for tools used in this session
+        cleanup_active_tools()
 
 
 if __name__ == "__main__":

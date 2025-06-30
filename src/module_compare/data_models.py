@@ -10,6 +10,7 @@ class ComparisonMode(Enum):
 
     VERSION_COMPARISON = "version"  # Same repo, different versions
     REPOSITORY_COMPARISON = "repository"  # Different repos
+    CUMULATIVE_COMPARISON = "cumulative"  # Track all changes across versions
 
 
 class ChangeType(Enum):
@@ -374,7 +375,6 @@ class ComparisonResult:
                     "removed": stats.total_removed,
                     "unchanged": stats.total_unchanged,
                     "net_change": stats.net_change,
-                    "change_percentage": round(stats.overall_change_percentage, 1),
                 }
             )
         else:
@@ -383,7 +383,6 @@ class ComparisonResult:
                     "only_in_source": stats.total_only_in_source,
                     "only_in_target": stats.total_only_in_target,
                     "in_both": stats.total_in_both,
-                    "overlap_percentage": round(stats.overall_overlap_percentage, 1),
                 }
             )
 
@@ -464,3 +463,58 @@ class ComparisonResult:
     def get_categories_with_changes(self) -> list[str]:
         """Get list of categories that have changes."""
         return [cat for cat, comp in self.categories.items() if comp.has_changes]
+
+
+@dataclass
+class CumulativeModuleChange:
+    """Represents a module's cumulative change history across versions."""
+
+    module: ModuleInfo
+    added_in_version: str  # Version where module was first added
+    removed_in_version: str | None = (
+        None  # Version where module was removed (if applicable)
+    )
+    is_present_in_target: bool = True  # Whether module exists in target version
+
+    @property
+    def was_removed(self) -> bool:
+        """Check if module was removed at some point."""
+        return self.removed_in_version is not None
+
+    @property
+    def is_transient(self) -> bool:
+        """Check if module was added and then removed."""
+        return self.removed_in_version is not None and not self.is_present_in_target
+
+
+@dataclass
+class CumulativeComparisonResult(ComparisonResult):
+    """Result of cumulative comparison tracking all changes across versions."""
+
+    cumulative_changes: dict[str, list[CumulativeModuleChange]] = field(
+        default_factory=dict
+    )
+    versions_analyzed: list[str] = field(default_factory=list)
+
+    @property
+    def all_added_modules(self) -> list[CumulativeModuleChange]:
+        """Get all modules that were added at any point."""
+        modules = []
+        for changes in self.cumulative_changes.values():
+            modules.extend(changes)
+        return modules
+
+    @property
+    def transient_modules(self) -> list[CumulativeModuleChange]:
+        """Get modules that were added and later removed."""
+        return [m for m in self.all_added_modules if m.is_transient]
+
+    @property
+    def permanently_added_modules(self) -> list[CumulativeModuleChange]:
+        """Get modules that were added and still exist."""
+        return [m for m in self.all_added_modules if m.is_present_in_target]
+
+    @property
+    def removed_modules(self) -> list[CumulativeModuleChange]:
+        """Get modules that were removed at any point."""
+        return [m for m in self.all_added_modules if m.was_removed]

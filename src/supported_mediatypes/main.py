@@ -8,7 +8,7 @@ import sys
 
 from dotenv import load_dotenv
 
-from ..shared_utilities import get_logger
+from ..shared_utilities import cleanup_active_tools, get_logger
 from ..shared_utilities.filename_generator import generate_output_filename
 from ..shared_utilities.github_client import GitHubClient
 from ..shared_utilities.output_manager import OutputManager
@@ -159,6 +159,9 @@ def main() -> int:
     except Exception as e:
         logger.error(f"Error: {str(e)}")
         return 1
+    finally:
+        # Clean up empty directories for tools used in this session
+        cleanup_active_tools()
 
 
 if __name__ == "__main__":

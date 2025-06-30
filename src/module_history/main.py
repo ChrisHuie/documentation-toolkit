@@ -4,7 +4,7 @@ Main CLI entry point for module history analysis.
 
 import click
 
-from ..shared_utilities import get_logger
+from ..shared_utilities import cleanup_active_tools, get_logger
 from ..shared_utilities.telemetry import trace_function
 from .core import ModuleHistoryError, ModuleHistoryTracker
 from .output_formatter import ModuleHistoryFormatter
@@ -233,6 +233,9 @@ def main(
         logger.error(f"Unexpected error: {e}")
         click.echo(f"Error: {e}", err=True)
         raise click.Abort() from e
+    finally:
+        # Clean up empty directories for tools used in this session
+        cleanup_active_tools()
 
 
 if __name__ == "__main__":

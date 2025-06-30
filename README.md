@@ -170,18 +170,30 @@ module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0 --sho
 # Output to different formats
 module-compare --from prebid-js:v9.0.0 --to prebid-js:v9.51.0 --format json
 module-compare --from prebid-js --to prebid-server --format csv --output comparison.csv
+
+# Use direct comparison instead of cumulative (for same repo)
+module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0 --no-cumulative
+
+# Force cumulative comparison for cross-repo (normally disabled)
+module-compare --from prebid-js:v9.0.0 --to prebid-js:master --cumulative
 ```
 
 **Features:**
-- Two comparison modes: version-to-version and repository-to-repository
+- Three comparison modes: direct, cumulative, and cross-repository
 - Smart module matching by name and category
-- Comprehensive statistics including growth rates and category breakdowns
+- Comprehensive statistics with category breakdowns
 - Focus on changes by default (use --show-unchanged to see all)
 - Multiple output formats with detailed change analysis
+- Automatic cumulative tracking for same-repository comparisons
 
 **Comparison Modes:**
-- **Version Comparison**: Shows added/removed modules between versions of the same repository
-- **Repository Comparison**: Shows modules unique to each repository and common modules
+- **Direct Comparison**: Shows modules added/removed between two specific versions (endpoint comparison)
+- **Cumulative Comparison**: Tracks ALL module changes across intermediate versions (default for same repo)
+- **Repository Comparison**: Shows modules unique to each repository and common modules (cross-repo)
+
+**Cumulative vs Direct:**
+- **Cumulative** (default for same repo): Shows all modules that were added/removed at any point between versions
+- **Direct** (use --no-cumulative): Shows only the net difference between the two endpoints
 
 ## Development
 
@@ -337,4 +349,4 @@ Other project directories:
 - `OTEL_EXPORTER_OTLP_ENDPOINT` - OpenTelemetry endpoint for distributed tracing (optional)
 - `OTEL_SERVICE_NAME` - Service name for telemetry identification (optional)
 
-Last updated: 2025-06-29 20:36:27
+Last updated: 2025-06-30 11:27:54

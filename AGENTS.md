@@ -333,20 +333,23 @@ supported-mediatypes --format csv --output media_types_report.csv
 **Module comparison tool** for analyzing differences between versions and repositories:
 - Compare modules between two versions of the same repository (version comparison)
 - Compare modules between different repositories (cross-repository comparison)
+- Track cumulative changes across intermediate versions (cumulative comparison)
 - Show comprehensive statistics by module type/category
 - Support for unchanged/common module visibility via --show-unchanged flag
 - Multiple output formats with detailed change analysis
 
 **Key Features:**
-- **Two Comparison Modes** - Version-to-version (same repo) or repo-to-repo (cross-repo)
+- **Three Comparison Modes** - Direct, cumulative, and cross-repository
 - **Smart Matching** - Matches modules by name and category for accurate comparison
 - **Change Focus** - By default shows only changes, not unchanged/common modules
-- **Comprehensive Statistics** - Category breakdowns, growth rates, overlap analysis
+- **Comprehensive Statistics** - Category breakdowns, overlap analysis
 - **Flexible Output** - All standard formats (table, JSON, CSV, Markdown, YAML, HTML)
+- **Automatic Defaults** - Cumulative mode defaults to true for same-repo comparisons
 
 **Comparison Modes:**
-1. **Version Comparison** - Shows added/removed/unchanged modules between versions
-2. **Repository Comparison** - Shows modules unique to each repo and common modules
+1. **Direct Comparison** - Shows modules added/removed between two specific versions (endpoint comparison)
+2. **Cumulative Comparison** - Tracks ALL module changes across intermediate versions (default for same repo)
+3. **Repository Comparison** - Shows modules unique to each repo and common modules
 
 **Usage:**
 ```bash
@@ -363,6 +366,9 @@ module-compare --from prebid-js --to prebid-server-java
 
 # Show all modules including unchanged/common
 module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0 --show-unchanged
+
+# Use direct comparison instead of cumulative
+module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0 --no-cumulative
 
 # Output to different formats
 module-compare --from prebid-js:v9.0.0 --to prebid-js:v9.51.0 --format json
@@ -382,19 +388,50 @@ Module Comparison: prebid-js (v9.0.0 → v9.51.0)
 SUMMARY
 - Added: 25 modules
 - Removed: 3 modules  
-- Net Change: +22 modules (+14.7%)
+- Net Change: +22 modules
 
 DETAILED STATISTICS
 Changes by Category:
-Category               Added   Removed    Net    Change
-Bid Adapters             20         2     +18    +12.5%
-Analytics                 3         0      +3    +25.0%
-RTD Modules               2         1      +1     +8.3%
+Category               Added   Removed    Net
+Bid Adapters             20         2     +18
+Analytics                 3         0      +3
+RTD Modules               2         1      +1
 
 MODULE CHANGES
 Bid Adapters - Added (20 modules):
   newBidder1              newBidder2
   anotherBidder           yetAnotherBidder
+  ...
+```
+
+Cumulative Comparison (tracking all changes):
+```
+Cumulative Module Comparison: prebid-js (v9.0.0 → v9.51.0)
+=========================================================
+
+SUMMARY
+- Total Changes: 28 modules
+- Permanently Added: 25 modules
+- Removed: 3 modules  
+- Transient: 3 modules
+
+DETAILED STATISTICS
+Changes by Category:
+Category            Total Added  Still Present  Removed
+Bid Adapters                 23             20        3
+Analytics                     3              3        0
+RTD Modules                   2              2        0
+
+Versions Analyzed: 52 versions from v9.0.0 to v9.51.0
+
+MODULE CHANGES
+Bid Adapters - Added (still present):
+  adapter1 (added in v9.2.0)
+  adapter2 (added in v9.5.0)
+  ...
+
+Bid Adapters - Added then removed:
+  tempAdapter (added: v9.10.0, removed: v9.25.0)
   ...
 ```
 
@@ -406,7 +443,7 @@ Module Comparison: prebid-js vs prebid-server
 SUMMARY  
 - Only in prebid-js: 122 modules
 - Only in prebid-server: 45 modules
-- Common modules: 50 (overlap: 29.1%)
+- Common modules: 50
 
 DETAILED STATISTICS
 Category Distribution:

@@ -17,14 +17,17 @@ logger = get_logger(__name__)
 class OutputManager:
     """Manages output directory structure for tools."""
 
-    def __init__(self, base_output_dir: str = "output"):
+    def __init__(self, base_output_dir: str = "output", auto_cleanup: bool = True):
         """
         Initialize the output manager.
 
         Args:
             base_output_dir: Base directory for all outputs (default: "output")
+            auto_cleanup: Whether to automatically clean up empty directories after operations
         """
         self.base_dir = Path(base_output_dir)
+        self.auto_cleanup = auto_cleanup
+        self._active_tools: set[str] = set()  # Track tools that have been used
 
     def get_output_path(
         self,
@@ -68,6 +71,9 @@ class OutputManager:
                 repo=repo_name,
                 version=clean_version,
             )
+
+        # Track this tool as active
+        self._active_tools.add(tool_name)
 
         return output_path
 
@@ -207,6 +213,26 @@ class OutputManager:
 
         return [p for p in outputs if p.is_file()]
 
+    def cleanup_active_tools(self) -> int:
+        """
+        Clean up empty directories for all tools that have been used in this session.
+
+        Returns:
+            Total number of directories removed
+        """
+        if not self.auto_cleanup:
+            return 0
+
+        total_removed = 0
+        for tool_name in self._active_tools:
+            removed = self.cleanup_empty_directories(tool_name)
+            total_removed += removed
+
+        # Clear the active tools set after cleanup
+        self._active_tools.clear()
+
+        return total_removed
+
     def get_output_structure(self, tool_name: str | None = None) -> dict:
         """
         Get the current output directory structure as a nested dictionary.
@@ -302,3 +328,12 @@ def cleanup_empty_directories(tool_name: str | None = None) -> int:
     See OutputManager.cleanup_empty_directories for details.
     """
     return get_default_output_manager().cleanup_empty_directories(tool_name)
+
+
+def cleanup_active_tools() -> int:
+    """
+    Clean up empty directories for all tools that have been used in this session.
+
+    See OutputManager.cleanup_active_tools for details.
+    """
+    return get_default_output_manager().cleanup_active_tools()

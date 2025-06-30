@@ -8,7 +8,7 @@ import re
 import time
 from typing import Any
 
-from github import Github, GithubException
+from github import Auth, Github, GithubException
 from github.ContentFile import ContentFile
 from github.Repository import Repository
 
@@ -30,7 +30,8 @@ class GitHubClient:
         )
 
         if self.token:
-            self.github = Github(self.token)
+            auth = Auth.Token(self.token)
+            self.github = Github(auth=auth)
         else:
             self.github = Github()
 

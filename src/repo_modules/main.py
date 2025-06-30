@@ -14,6 +14,7 @@ from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 
+from ..shared_utilities import cleanup_active_tools
 from ..shared_utilities.github_client import GitHubClient
 from .config import RepoConfig, get_available_repos, get_repo_config_with_versions
 from .parser_factory import ParserFactory
@@ -197,68 +198,68 @@ def show_version_menu(repo_config: RepoConfig) -> str | None:
 
 def main():
     """Main CLI entry point."""
-    with tracer.start_as_current_span("main"):
-        parser = create_parser()
-        args = parser.parse_args()
+    try:
+        with tracer.start_as_current_span("main"):
+            parser = create_parser()
+            args = parser.parse_args()
 
-    # Handle list repos command
-    if args.list_repos:
-        repos = get_available_repos()
-        if repos:
-            logger.info("Available repositories:")
-            for name, config in repos.items():
-                logger.info(f"- {name}: {config.repo}")
-        else:
-            logger.error("No preconfigured repositories available.")
-        sys.exit(0)
-
-    # Determine repository
-    repo_name = None
-    repo_config = None
-
-    if args.repo:
-        # Check if it's a preconfigured repo
-        repos = get_available_repos()
-        if args.repo in repos:
-            repo_name = args.repo
-            repo_config = get_repo_config_with_versions(args.repo)
-        else:
-            # Treat as custom GitHub repo
-            repo_config = RepoConfig(
-                repo=args.repo,
-                directory="",  # Will need to be specified later
-                description="Custom repository",
-                versions=[],
-            )
-    else:
-        # Show menu for preconfigured repos
-        repo_name = show_repo_menu()
-        if not repo_name:
+        # Handle list repos command
+        if args.list_repos:
+            repos = get_available_repos()
+            if repos:
+                logger.info("Available repositories:")
+                for name, config in repos.items():
+                    logger.info(f"- {name}: {config.repo}")
+            else:
+                logger.error("No preconfigured repositories available.")
             sys.exit(0)
 
-        # Get repo config with dynamic versions
-        repo_config = get_repo_config_with_versions(repo_name)
+        # Determine repository
+        repo_name = None
+        repo_config = None
 
-    # Determine version
-    version = args.version
-    if not version:
-        if repo_config.versions:
-            version = show_version_menu(repo_config)
-            if not version:
-                sys.exit(0)
+        if args.repo:
+            # Check if it's a preconfigured repo
+            repos = get_available_repos()
+            if args.repo in repos:
+                repo_name = args.repo
+                repo_config = get_repo_config_with_versions(args.repo)
+            else:
+                # Treat as custom GitHub repo
+                repo_config = RepoConfig(
+                    repo=args.repo,
+                    directory="",  # Will need to be specified later
+                    description="Custom repository",
+                    versions=[],
+                )
         else:
-            logger.error(
-                "No version specified and no preconfigured versions available."
-            )
-            logger.error("Please specify a version using --version")
-            sys.exit(1)
+            # Show menu for preconfigured repos
+            repo_name = show_repo_menu()
+            if not repo_name:
+                sys.exit(0)
 
-    # Apply version override if configured
-    if repo_config.version_override:
-        version = repo_config.version_override
+            # Get repo config with dynamic versions
+            repo_config = get_repo_config_with_versions(repo_name)
 
-    # Initialize GitHub client and parser
-    try:
+        # Determine version
+        version = args.version
+        if not version:
+            if repo_config.versions:
+                version = show_version_menu(repo_config)
+                if not version:
+                    sys.exit(0)
+            else:
+                logger.error(
+                    "No version specified and no preconfigured versions available."
+                )
+                logger.error("Please specify a version using --version")
+                sys.exit(1)
+
+        # Apply version override if configured
+        if repo_config.version_override:
+            version = repo_config.version_override
+
+        # Initialize GitHub client and parser
         with tracer.start_as_current_span("initialize_clients"):
             logger.info("Creating GitHubClient instance...")
             github_client = GitHubClient()
@@ -330,6 +331,9 @@ def main():
     except Exception as e:
         logger.error("Error: %s", e)
         sys.exit(1)
+    finally:
+        # Clean up empty directories for tools used in this session
+        cleanup_active_tools()
 
 
 if __name__ == "__main__":

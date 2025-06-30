@@ -1,16 +1,18 @@
 """Tests for module comparison output formatter."""
 
-import json
 import csv
+import json
 from io import StringIO
+
 import pytest
-from src.module_compare.output_formatter import ModuleCompareOutputFormatter
+
 from src.module_compare.data_models import (
+    CategoryComparison,
     ComparisonMode,
     ComparisonResult,
-    CategoryComparison,
     ModuleInfo,
 )
+from src.module_compare.output_formatter import ModuleCompareOutputFormatter
 
 
 class TestModuleCompareOutputFormatter:
@@ -230,7 +232,6 @@ class TestModuleCompareOutputFormatter:
         assert "overall" in stats
         assert "by_category" in stats
         assert "top_changes" in stats
-        assert "highest_growth" in stats
 
         # Check category statistics
         by_category = stats["by_category"]

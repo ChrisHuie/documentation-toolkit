@@ -4,6 +4,7 @@ CLI entry point for alias mappings tool
 
 import click
 
+from ..shared_utilities import cleanup_active_tools
 from ..shared_utilities.output_formatter import (
     OutputFormatter,
     create_output_metadata_from_result,
@@ -230,6 +231,9 @@ def main(
     except Exception as e:
         click.echo(f"Error: {e}", err=True)
         raise click.Abort() from e
+    finally:
+        # Clean up empty directories for tools used in this session
+        cleanup_active_tools()
 
 
 def _generate_output_file_with_shared_utilities(

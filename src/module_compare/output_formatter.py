@@ -7,7 +7,12 @@ from typing import Any
 
 from src.shared_utilities.base_output_formatter import BaseOutputFormatter
 
-from .data_models import ComparisonMode, ComparisonResult, ComparisonStatistics
+from .data_models import (
+    ComparisonMode,
+    ComparisonResult,
+    ComparisonStatistics,
+    CumulativeComparisonResult,
+)
 
 
 class ModuleCompareOutputFormatter(BaseOutputFormatter):
@@ -45,6 +50,10 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
         Returns:
             Dictionary with prepared data for formatting
         """
+        # Handle cumulative comparison results differently
+        if isinstance(result, CumulativeComparisonResult):
+            return self._prepare_cumulative_data(result)
+
         stats = result.get_statistics()
 
         # Build header based on comparison mode
@@ -91,10 +100,6 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                     "added": {"value": stats.total_added, "percentage": None},
                     "removed": {"value": stats.total_removed, "percentage": None},
                     "net_change": {"value": stats.net_change, "percentage": None},
-                    "change_rate": {
-                        "value": f"{stats.overall_change_percentage:+.1f}%",
-                        "percentage": None,
-                    },
                 }
             )
         else:
@@ -109,10 +114,6 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                         "percentage": None,
                     },
                     "in_both": {"value": stats.total_in_both, "percentage": None},
-                    "overlap": {
-                        "value": f"{stats.overall_overlap_percentage:.1f}%",
-                        "percentage": None,
-                    },
                 }
             )
 
@@ -190,7 +191,7 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
 
     def _build_statistics(self, stats: ComparisonStatistics) -> dict[str, Any]:
         """Build detailed statistics section."""
-        statistics = {
+        statistics: dict[str, Any] = {
             "overall": {
                 "source_total": stats.source_total,
                 "target_total": stats.target_total,
@@ -204,7 +205,6 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 {
                     "total_changes": stats.total_added + stats.total_removed,
                     "net_change": stats.net_change,
-                    "growth_rate": f"{stats.overall_change_percentage:+.1f}%",
                 }
             )
 
@@ -216,7 +216,6 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                         "added": cat_stat["added"],
                         "removed": cat_stat["removed"],
                         "net": cat_stat["net_change"],
-                        "change_rate": f"{cat_stat['change_percentage']:+.1f}%",
                     }
                 )
 
@@ -226,17 +225,12 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 for cat, changes in stats.categories_with_most_changes[:5]
             ]
 
-            statistics["highest_growth"] = [
-                {"category": cat, "growth": f"{growth:+.1f}%"}
-                for cat, growth in stats.categories_by_growth_rate[:5]
-            ]
         else:
             statistics["overall"].update(
                 {
                     "unique_modules": stats.total_only_in_source
                     + stats.total_only_in_target,
                     "common_modules": stats.total_in_both,
-                    "overlap_rate": f"{stats.overall_overlap_percentage:.1f}%",
                 }
             )
 
@@ -248,7 +242,6 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                         "only_in_source": cat_stat["only_in_source"],
                         "only_in_target": cat_stat["only_in_target"],
                         "in_both": cat_stat["in_both"],
-                        "overlap": f"{cat_stat['overlap_percentage']:.1f}%",
                     }
                 )
 
@@ -260,6 +253,108 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
             }
 
         return statistics
+
+    def _prepare_cumulative_data(
+        self, result: CumulativeComparisonResult
+    ) -> dict[str, Any]:
+        """Prepare cumulative comparison data for formatting."""
+        header = f"Cumulative Module Comparison: {result.source_repo} ({result.source_version} → {result.target_version})"
+
+        metadata = {
+            "Repository": result.source_repo,
+            "From Version": result.source_version,
+            "To Version": result.target_version,
+            "Comparison Type": "Cumulative",
+            "Versions Analyzed": len(result.versions_analyzed),
+        }
+
+        # Calculate summary statistics
+        all_changes = result.all_added_modules
+        total_added = len(all_changes)
+        permanently_added = len(result.permanently_added_modules)
+        removed = len(result.removed_modules)
+        transient = len(result.transient_modules)
+
+        summary = {
+            "total_changes": {"value": total_added, "percentage": None},
+            "permanently_added": {"value": permanently_added, "percentage": None},
+            "removed": {"value": removed, "percentage": None},
+            "transient": {"value": transient, "percentage": None},
+        }
+
+        # Build items for each category
+        items = []
+
+        for category, changes in result.cumulative_changes.items():
+            if not changes:
+                continue
+
+            # Group by status
+            added_and_present = [
+                c for c in changes if c.is_present_in_target and not c.was_removed
+            ]
+            added_and_removed = [c for c in changes if c.was_removed]
+
+            if added_and_present:
+                items.append(
+                    {
+                        "category": f"{category} - Added (still present)",
+                        "modules": [
+                            f"{c.module.name} (added in {c.added_in_version})"
+                            for c in sorted(
+                                added_and_present, key=lambda x: x.module.name
+                            )
+                        ],
+                        "count": len(added_and_present),
+                    }
+                )
+
+            if added_and_removed:
+                items.append(
+                    {
+                        "category": f"{category} - Added then removed",
+                        "modules": [
+                            f"{c.module.name} (added: {c.added_in_version}, removed: {c.removed_in_version})"
+                            for c in sorted(
+                                added_and_removed, key=lambda x: x.module.name
+                            )
+                        ],
+                        "count": len(added_and_removed),
+                    }
+                )
+
+        # Build statistics
+        statistics: dict[str, Any] = {
+            "overall": {
+                "total_modules_added": total_added,
+                "still_present": permanently_added,
+                "removed": removed,
+                "transient": transient,
+            },
+            "versions_analyzed": result.versions_analyzed,
+            "by_category": [],
+        }
+
+        # Category breakdown
+        for category, changes in result.cumulative_changes.items():
+            if changes:
+                cat_stat = {
+                    "category": category,
+                    "total_added": len(changes),
+                    "still_present": len(
+                        [c for c in changes if c.is_present_in_target]
+                    ),
+                    "removed": len([c for c in changes if c.was_removed]),
+                }
+                statistics["by_category"].append(cat_stat)
+
+        return {
+            "header": header,
+            "metadata": metadata,
+            "summary": summary,
+            "items": items,
+            "statistics": statistics,
+        }
 
     def _format_table(self, data: dict[str, Any], **kwargs) -> str:
         """Format comparison as a table."""
@@ -300,24 +395,35 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 if data["metadata"]["Comparison Type"] == "Version":
                     # Version comparison table
                     lines.append(
-                        f"{'Category':<30} {'Added':>8} {'Removed':>8} {'Net':>8} {'Change':>10}"
+                        f"{'Category':<30} {'Added':>8} {'Removed':>8} {'Net':>8}"
+                    )
+                    lines.append("-" * 56)
+                    for cat in stats["by_category"]:
+                        lines.append(
+                            f"{cat['category']:<30} {cat['added']:>8} {cat['removed']:>8} "
+                            f"{cat['net']:>8}"
+                        )
+                elif data["metadata"]["Comparison Type"] == "Cumulative":
+                    # Cumulative comparison table
+                    lines.append(
+                        f"{'Category':<30} {'Total Added':>12} {'Still Present':>14} {'Removed':>8}"
                     )
                     lines.append("-" * 66)
                     for cat in stats["by_category"]:
                         lines.append(
-                            f"{cat['category']:<30} {cat['added']:>8} {cat['removed']:>8} "
-                            f"{cat['net']:>8} {cat['change_rate']:>10}"
+                            f"{cat['category']:<30} {cat['total_added']:>12} "
+                            f"{cat['still_present']:>14} {cat['removed']:>8}"
                         )
                 else:
                     # Repository comparison table
                     lines.append(
-                        f"{'Category':<30} {'Source Only':>12} {'Target Only':>12} {'Both':>8} {'Overlap':>10}"
+                        f"{'Category':<30} {'Source Only':>12} {'Target Only':>12} {'Both':>8}"
                     )
-                    lines.append("-" * 74)
+                    lines.append("-" * 64)
                     for cat in stats["by_category"]:
                         lines.append(
                             f"{cat['category']:<30} {cat['only_in_source']:>12} "
-                            f"{cat['only_in_target']:>12} {cat['in_both']:>8} {cat['overlap']:>10}"
+                            f"{cat['only_in_target']:>12} {cat['in_both']:>8}"
                         )
 
             # Top changes or unique categories
@@ -337,6 +443,19 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 lines.append(
                     f"Common categories: {', '.join(stats['unique_categories']['common'])}"
                 )
+
+            # Versions analyzed for cumulative comparison
+            if stats.get("versions_analyzed") and isinstance(
+                stats["versions_analyzed"], list
+            ):
+                lines.append("\nVersions Analyzed:")
+                lines.append(f"Total: {len(stats['versions_analyzed'])} versions")
+                if len(stats["versions_analyzed"]) <= 10:
+                    lines.append(f"Versions: {', '.join(stats['versions_analyzed'])}")
+                else:
+                    lines.append(
+                        f"From {stats['versions_analyzed'][0]} to {stats['versions_analyzed'][-1]}"
+                    )
 
         lines.append("")
 
@@ -449,28 +568,20 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 lines.append("")
 
                 if data["metadata"]["Comparison Type"] == "Version":
-                    lines.append(
-                        "| Category | Added | Removed | Net Change | Change Rate |"
-                    )
-                    lines.append(
-                        "|----------|-------|---------|------------|-------------|"
-                    )
+                    lines.append("| Category | Added | Removed | Net Change |")
+                    lines.append("|----------|-------|---------|------------|")
                     for cat in stats["by_category"]:
                         lines.append(
                             f"| {cat['category']} | {cat['added']} | {cat['removed']} | "
-                            f"{cat['net']} | {cat['change_rate']} |"
+                            f"{cat['net']} |"
                         )
                 else:
-                    lines.append(
-                        "| Category | Source Only | Target Only | In Both | Overlap |"
-                    )
-                    lines.append(
-                        "|----------|-------------|-------------|---------|---------|"
-                    )
+                    lines.append("| Category | Source Only | Target Only | In Both |")
+                    lines.append("|----------|-------------|-------------|---------|")
                     for cat in stats["by_category"]:
                         lines.append(
                             f"| {cat['category']} | {cat['only_in_source']} | "
-                            f"{cat['only_in_target']} | {cat['in_both']} | {cat['overlap']} |"
+                            f"{cat['only_in_target']} | {cat['in_both']} |"
                         )
                 lines.append("")
 
