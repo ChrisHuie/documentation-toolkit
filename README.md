@@ -148,6 +148,41 @@ supported-mediatypes --format json --output media_types.json
 - Summary statistics showing media type adoption
 - Per-adapter analysis capability
 
+### module-compare
+
+Compare modules between different versions or repositories to track changes and analyze differences:
+
+```bash
+# Interactive mode
+module-compare
+
+# Compare versions of same repository
+module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0
+module-compare --from prebid-js:v9.0.0 --to prebid-js:v9.51.0
+
+# Compare different repositories
+module-compare --from prebid-js:v9.51.0 --to prebid-server:v3.8.0
+module-compare --from prebid-js --to prebid-server-java
+
+# Show all modules including unchanged/common
+module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0 --show-unchanged
+
+# Output to different formats
+module-compare --from prebid-js:v9.0.0 --to prebid-js:v9.51.0 --format json
+module-compare --from prebid-js --to prebid-server --format csv --output comparison.csv
+```
+
+**Features:**
+- Two comparison modes: version-to-version and repository-to-repository
+- Smart module matching by name and category
+- Comprehensive statistics including growth rates and category breakdowns
+- Focus on changes by default (use --show-unchanged to see all)
+- Multiple output formats with detailed change analysis
+
+**Comparison Modes:**
+- **Version Comparison**: Shows added/removed modules between versions of the same repository
+- **Repository Comparison**: Shows modules unique to each repository and common modules
+
 ## Development
 
 After making changes, run the validation script:
@@ -302,4 +337,4 @@ Other project directories:
 - `OTEL_EXPORTER_OTLP_ENDPOINT` - OpenTelemetry endpoint for distributed tracing (optional)
 - `OTEL_SERVICE_NAME` - Service name for telemetry identification (optional)
 
-Last updated: 2025-06-29 12:08:25
+Last updated: 2025-06-29 20:36:27

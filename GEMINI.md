@@ -44,11 +44,17 @@ src/
 │   ├── __init__.py
 │   ├── main.py                # CLI entry point for alias mappings
 │   └── alias_finder.py        # Logic for finding and mapping aliases
-└── supported_mediatypes/      # Media type extraction tool for Prebid.js adapters
+├── supported_mediatypes/      # Media type extraction tool for Prebid.js adapters
+│   ├── __init__.py
+│   ├── main.py                # CLI entry point for media type analysis
+│   ├── extractor.py           # Logic for extracting media types from JavaScript
+│   └── output_formatter.py    # Specialized formatting for media type data
+└── module_compare/            # Module comparison tool for versions and repositories
     ├── __init__.py
-    ├── main.py                # CLI entry point for media type analysis
-    ├── extractor.py           # Logic for extracting media types from JavaScript
-    └── output_formatter.py    # Specialized formatting for media type data
+    ├── main.py                # CLI entry point for module comparison
+    ├── comparator.py          # Core comparison logic
+    ├── data_models.py         # Data models for comparison results
+    └── output_formatter.py    # Extends ReportFormatter for comparison output
 
 Other project directories:
 ├── docs/                      # Additional documentation
@@ -322,6 +328,97 @@ supported-mediatypes --format csv --output media_types_report.csv
 - **markdown** - Documentation-ready Markdown tables
 - **yaml** - YAML format for configuration files
 - **html** - HTML report with basic styling
+
+### module-compare
+**Module comparison tool** for analyzing differences between versions and repositories:
+- Compare modules between two versions of the same repository (version comparison)
+- Compare modules between different repositories (cross-repository comparison)
+- Show comprehensive statistics by module type/category
+- Support for unchanged/common module visibility via --show-unchanged flag
+- Multiple output formats with detailed change analysis
+
+**Key Features:**
+- **Two Comparison Modes** - Version-to-version (same repo) or repo-to-repo (cross-repo)
+- **Smart Matching** - Matches modules by name and category for accurate comparison
+- **Change Focus** - By default shows only changes, not unchanged/common modules
+- **Comprehensive Statistics** - Category breakdowns, growth rates, overlap analysis
+- **Flexible Output** - All standard formats (table, JSON, CSV, Markdown, YAML, HTML)
+
+**Comparison Modes:**
+1. **Version Comparison** - Shows added/removed/unchanged modules between versions
+2. **Repository Comparison** - Shows modules unique to each repo and common modules
+
+**Usage:**
+```bash
+# Interactive mode
+module-compare
+
+# Compare versions of same repository
+module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0
+module-compare --from prebid-js:v9.0.0 --to prebid-js:v9.51.0
+
+# Compare different repositories
+module-compare --from prebid-js:v9.51.0 --to prebid-server:v3.8.0
+module-compare --from prebid-js --to prebid-server-java
+
+# Show all modules including unchanged/common
+module-compare --repo prebid-js --from-version v9.0.0 --to-version v9.51.0 --show-unchanged
+
+# Output to different formats
+module-compare --from prebid-js:v9.0.0 --to prebid-js:v9.51.0 --format json
+module-compare --from prebid-js --to prebid-server --format csv --output comparison.csv
+
+# List available repositories
+module-compare --list-repos
+```
+
+**Output Examples:**
+
+Version Comparison (changes only):
+```
+Module Comparison: prebid-js (v9.0.0 → v9.51.0)
+================================================
+
+SUMMARY
+- Added: 25 modules
+- Removed: 3 modules  
+- Net Change: +22 modules (+14.7%)
+
+DETAILED STATISTICS
+Changes by Category:
+Category               Added   Removed    Net    Change
+Bid Adapters             20         2     +18    +12.5%
+Analytics                 3         0      +3    +25.0%
+RTD Modules               2         1      +1     +8.3%
+
+MODULE CHANGES
+Bid Adapters - Added (20 modules):
+  newBidder1              newBidder2
+  anotherBidder           yetAnotherBidder
+  ...
+```
+
+Repository Comparison (differences only):
+```
+Module Comparison: prebid-js vs prebid-server
+==============================================
+
+SUMMARY  
+- Only in prebid-js: 122 modules
+- Only in prebid-server: 45 modules
+- Common modules: 50 (overlap: 29.1%)
+
+DETAILED STATISTICS
+Category Distribution:
+Unique to prebid-js: Analytics, RTD Modules, ID Systems
+Unique to prebid-server: Exchange Modules
+Common categories: Bid Adapters
+
+MODULE CHANGES
+Bid Adapters - Only in prebid-js (95 modules):
+  clientOnlyAdapter1      clientOnlyAdapter2
+  browserSpecific         ...
+```
 
 ## Shared Infrastructure
 

@@ -26,6 +26,7 @@ module-history = "src.module_history.main:main"
 validate-project = "src.dev_tools.cli:main"
 alias-mappings = "src.alias_mappings.main:main"
 supported-mediatypes = "src.supported_mediatypes.main:main"
+module-compare = "src.module_compare.main:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
