@@ -308,7 +308,7 @@ class TestDataStructureContracts:
         assert call_kwargs["fetch_strategy"] == fetch_strategy
 
     def test_parser_type_contract(self):
-        """Test that all parser types follow the same extraction contract."""
+        """Test that all parser types follow the same parsing contract."""
         comparator = ModuleComparator(Mock(), Mock())
 
         parser_types = [
@@ -316,16 +316,29 @@ class TestDataStructureContracts:
             "prebid_server_go",
             "prebid_server_java",
             "prebid_docs",
-            None,
+            "default",
         ]
 
-        for parser_type in parser_types:
-            # All parsers should return a string (possibly empty)
-            result = comparator._extract_module_name("test/file.js", parser_type)
-            assert isinstance(result, str)
+        # Test repo data
+        repo_data = {
+            "paths": {
+                "modules": {"test.js": None},
+                "adapters": {"test": None},
+                "src": {"test.java": None},
+            }
+        }
 
-            # Empty input should return empty string
-            assert comparator._extract_module_name("", parser_type) == ""
+        for parser_type in parser_types:
+            # All parsers should return a dict of categories
+            result = comparator.module_parser.parse_modules(
+                repo_data=repo_data, parser_type=parser_type, repo_key="test-repo"
+            )
+            assert isinstance(result, dict)
+
+            # Each category should map to a list
+            for category, modules in result.items():
+                assert isinstance(category, str)
+                assert isinstance(modules, list)
 
     def test_version_override_contract(self):
         """Test that version override is consistently applied."""

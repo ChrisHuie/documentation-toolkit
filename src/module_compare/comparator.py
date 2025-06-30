@@ -3,7 +3,7 @@
 from collections import defaultdict
 from collections.abc import Callable
 
-from src.shared_utilities import get_logger
+from src.shared_utilities import ModuleParser, get_logger
 from src.shared_utilities.github_client import GitHubClient
 from src.shared_utilities.repository_config import RepositoryConfigManager
 from src.shared_utilities.telemetry import trace_operation
@@ -16,6 +16,7 @@ from .data_models import (
     CumulativeComparisonResult,
     CumulativeModuleChange,
     ModuleInfo,
+    ModuleRename,
 )
 
 logger = get_logger(__name__)
@@ -36,6 +37,7 @@ class ModuleComparator:
         self.github_client = github_client
         self.config_manager = config_manager
         self.version_cache = VersionCacheManager()
+        self.module_parser = ModuleParser()
 
     @trace_operation("compare_modules")
     def compare(
@@ -148,84 +150,223 @@ class ModuleComparator:
             fetch_strategy=config.get("fetch_strategy", "full_content"),
         )
 
-        # Organize modules by category
-        modules_by_category = defaultdict(list)
+        # Use the shared module parser
+        parser_type = config.get("parser_type", "default")
+        paths_config = config.get("paths", {})
 
-        # Handle the response structure from GitHub client
-        if "paths" in repo_data:
-            # Multi-path structure
-            paths_data = repo_data["paths"]
-            # Map paths to categories from config
-            path_to_category = {v: k for k, v in config.get("paths", {}).items()}
-
-            for path, files in paths_data.items():
-                category = path_to_category.get(path, "Other")
-                for file_path, _ in files.items():
-                    # Extract filename from full path
-                    filename = file_path.split("/")[-1]
-                    module_name = self._extract_module_name(
-                        filename, config.get("parser_type")
-                    )
-                    module_info = ModuleInfo(
-                        name=module_name,
-                        path=file_path,
-                        category=category,
-                        repo=repo_key,
-                    )
-                    modules_by_category[category].append(module_info)
-        else:
-            # Legacy single directory structure - shouldn't happen with our conversion
-            logger.warning(f"Unexpected repo_data structure for {repo_key}")
-            # Try to handle it as a flat dictionary
-            for file_path, _ in repo_data.get("files", {}).items():
-                filename = file_path.split("/")[-1]
-                module_name = self._extract_module_name(
-                    filename, config.get("parser_type")
-                )
-                module_info = ModuleInfo(
-                    name=module_name,
-                    path=file_path,
-                    category="Modules",
-                    repo=repo_key,
-                )
-                modules_by_category["Modules"].append(module_info)
-
-        return dict(modules_by_category)
-
-    def _extract_module_name(self, filename: str, parser_type: str | None) -> str:
-        """Extract module name from filename based on parser type.
-
-        Args:
-            filename: The filename to extract from
-            parser_type: The parser type for the repository
-
-        Returns:
-            Extracted module name
-        """
-        # Remove file extensions
-        name = (
-            filename.replace(".js", "")
-            .replace(".go", "")
-            .replace(".java", "")
-            .replace(".md", "")
+        # Parse modules using the shared parser
+        parsed_modules = self.module_parser.parse_modules(
+            repo_data=repo_data,
+            parser_type=parser_type,
+            repo_key=repo_key,
+            paths_config=paths_config,
         )
 
-        # Handle specific parser types
-        if parser_type == "prebid_js":
-            # Remove "BidAdapter" suffix for bid adapters
-            if name.endswith("BidAdapter"):
-                name = name[:-10]
-            # Remove "AnalyticsAdapter" suffix
-            elif name.endswith("AnalyticsAdapter"):
-                name = name[:-16]
-            # Remove "RtdProvider" suffix
-            elif name.endswith("RtdProvider"):
-                name = name[:-11]
-            # Remove "IdSystem" suffix
-            elif name.endswith("IdSystem"):
-                name = name[:-8]
+        # Convert from shared ModuleInfo to local ModuleInfo
+        # This is needed because the data models still use a local ModuleInfo class
+        modules_by_category = {}
+        for category, modules in parsed_modules.items():
+            local_modules = []
+            for mod in modules:
+                local_module = ModuleInfo(
+                    name=mod.name,
+                    path=mod.path,
+                    category=mod.category,
+                    repo=mod.repo,
+                )
+                local_modules.append(local_module)
+            modules_by_category[category] = local_modules
 
-        return name
+        return modules_by_category
+
+    def _detect_renames(
+        self, removed_modules: list[ModuleInfo], added_modules: list[ModuleInfo]
+    ) -> tuple[list[ModuleRename], list[ModuleInfo], list[ModuleInfo]]:
+        """Detect potential module renames based on similarity.
+
+        Args:
+            removed_modules: Modules that were removed
+            added_modules: Modules that were added
+
+        Returns:
+            Tuple of (renames, remaining_removed, remaining_added)
+        """
+        renames = []
+        matched_removed = set()
+        matched_added = set()
+
+        # Known renames from git history/PRs
+        known_renames = {
+            # Based on PR history and commits
+            "imds": "advertising",  # PR #12878 - ownership change from IMDS to Advertising.com
+            "gothamads": "intenze",  # PR #6010 - rebranding to Intenze
+            # Note: BT -> blockthrough is not a rename, BT is the file name but bidder code is blockthrough
+            # Note: growadvertising exists as growadvertisingBidAdapter with bidder code 'growads'
+        }
+
+        # Common rename patterns
+        def normalize_name(name: str) -> str:
+            """Normalize name for comparison."""
+            # Convert to lowercase and remove common separators
+            normalized = name.lower()
+            # Replace common separators with consistent one
+            for sep in ["_", "-", "."]:
+                normalized = normalized.replace(sep, "")
+            return normalized
+
+        def calculate_similarity(name1: str, name2: str) -> float:
+            """Calculate similarity score between two names."""
+            # Exact match after normalization
+            if normalize_name(name1) == normalize_name(name2):
+                return 1.0
+
+            # Check if one is contained in the other (common for abbreviations)
+            norm1, norm2 = normalize_name(name1), normalize_name(name2)
+            if norm1 in norm2 or norm2 in norm1:
+                return 0.8
+
+            # Check if shorter name is abbreviation of longer name
+            shorter, longer = (
+                (name1.lower(), name2.lower())
+                if len(name1) < len(name2)
+                else (name2.lower(), name1.lower())
+            )
+            if self._is_abbreviation(shorter, longer):
+                return 0.85
+
+            # Levenshtein-like simple character comparison
+            # Count common characters in same positions
+            common = sum(
+                1 for a, b in zip(name1.lower(), name2.lower(), strict=False) if a == b
+            )
+            max_len = max(len(name1), len(name2))
+            if max_len == 0:
+                return 0.0
+            return common / max_len
+
+        # First, check known renames
+        for removed in removed_modules:
+            if removed.name in known_renames:
+                # Look for the known rename target
+                for added in added_modules:
+                    if (
+                        added.name == known_renames[removed.name]
+                        and added not in matched_added
+                    ):
+                        renames.append(
+                            ModuleRename(
+                                old_module=removed,
+                                new_module=added,
+                                similarity_score=1.0,  # Known rename, perfect score
+                                detection_method="git_history",
+                            )
+                        )
+                        matched_removed.add(removed)
+                        matched_added.add(added)
+                        break
+
+        # Then try to match remaining modules based on similarity
+        for removed in removed_modules:
+            if removed in matched_removed:
+                continue
+
+            best_match = None
+            best_score = 0.0
+            best_method = "similarity"
+
+            for added in added_modules:
+                if added in matched_added:
+                    continue
+
+                # Skip if different categories
+                if removed.category != added.category:
+                    continue
+
+                # Special cases for known patterns
+                # camelCase to snake_case conversion
+                camel_to_snake = self._camel_to_snake(removed.name)
+                if camel_to_snake == added.name:
+                    score = 0.95
+                    detection_method = "case_change"
+                # snake_case to camelCase conversion
+                elif self._snake_to_camel(added.name) == removed.name:
+                    score = 0.95
+                    detection_method = "case_change"
+                # Check for substring match first (more specific)
+                elif normalize_name(removed.name) in normalize_name(
+                    added.name
+                ) or normalize_name(added.name) in normalize_name(removed.name):
+                    score = 0.85
+                    detection_method = "substring"
+                # Check if it's an abbreviation match
+                elif self._is_abbreviation(
+                    removed.name.lower(), added.name.lower()
+                ) or self._is_abbreviation(added.name.lower(), removed.name.lower()):
+                    score = 0.9
+                    detection_method = "abbreviation"
+                else:
+                    # Calculate similarity score as fallback
+                    score = calculate_similarity(removed.name, added.name)
+                    detection_method = "similarity"
+
+                if score > best_score and score >= 0.7:  # Minimum threshold
+                    best_match = added
+                    best_score = score
+                    best_method = detection_method
+
+            if best_match:
+                renames.append(
+                    ModuleRename(
+                        old_module=removed,
+                        new_module=best_match,
+                        similarity_score=best_score,
+                        detection_method=best_method,
+                    )
+                )
+                matched_removed.add(removed)
+                matched_added.add(best_match)
+
+        # Return remaining modules that weren't matched
+        remaining_removed = list(set(removed_modules) - matched_removed)
+        remaining_added = list(set(added_modules) - matched_added)
+
+        return renames, remaining_removed, remaining_added
+
+    def _camel_to_snake(self, name: str) -> str:
+        """Convert camelCase to snake_case."""
+        import re
+
+        # Insert underscore before uppercase letters
+        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+        # Insert underscore before uppercase letters that follow lowercase
+        return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+
+    def _snake_to_camel(self, name: str) -> str:
+        """Convert snake_case to camelCase."""
+        components = name.split("_")
+        if not components:
+            return name
+        # First component stays lowercase, rest are capitalized
+        return components[0] + "".join(x.capitalize() for x in components[1:])
+
+    def _is_abbreviation(self, shorter: str, longer: str) -> bool:
+        """Check if shorter string is an abbreviation of longer string.
+
+        For example: 'incrx' could be abbreviation of 'incrementx'
+        """
+        # All characters in shorter must appear in longer in order
+        j = 0  # pointer for longer string
+        for char in shorter:
+            found = False
+            while j < len(longer):
+                if longer[j] == char:
+                    found = True
+                    j += 1
+                    break
+                j += 1
+            if not found:
+                return False
+        return True
 
     def _compare_versions(
         self,
@@ -256,17 +397,23 @@ class ModuleComparator:
             source_mods = set(source_modules.get(category, []))
             target_mods = set(target_modules.get(category, []))
 
-            # Calculate differences
+            # Calculate initial differences
             added = target_mods - source_mods
             removed = source_mods - target_mods
             unchanged = source_mods & target_mods
 
+            # Detect renames among added/removed modules
+            renames, remaining_removed, remaining_added = self._detect_renames(
+                list(removed), list(added)
+            )
+
             category_comparison = CategoryComparison(
                 category=category,
                 comparison_mode=ComparisonMode.VERSION_COMPARISON,
-                added=sorted(added, key=lambda x: x.name),
-                removed=sorted(removed, key=lambda x: x.name),
+                added=sorted(remaining_added, key=lambda x: x.name),
+                removed=sorted(remaining_removed, key=lambda x: x.name),
                 unchanged=sorted(unchanged, key=lambda x: x.name),
+                renamed=sorted(renames, key=lambda x: x.old_module.name),
             )
 
             result.categories[category] = category_comparison

@@ -518,5 +518,8 @@ class TestEndToEnd:
             assert output_file.exists()
             with open(output_file) as f:
                 saved_content = f.read()
-            assert "Added: 100" in saved_content
-            assert "Removed: 50" in saved_content
+            # With rename detection, the test now detects 50 as renames
+            assert "Added: 50" in saved_content
+            assert "Removed: 0" in saved_content
+            assert "Renamed: 50" in saved_content
+            assert "Net Change: 50" in saved_content

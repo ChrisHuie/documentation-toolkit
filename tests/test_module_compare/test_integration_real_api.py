@@ -247,33 +247,24 @@ class TestRealAPIIntegration:
 
         comparator = ModuleComparator(mock_github_client, real_config_manager)
 
-        # Test prebid_js parser extracts names correctly
-        assert (
-            comparator._extract_module_name("33acrossBidAdapter.js", "prebid_js")
-            == "33across"
-        )
-        assert (
-            comparator._extract_module_name("googleAnalyticsAdapter.js", "prebid_js")
-            == "google"
-        )  # Analytics adapters remove the AnalyticsAdapter suffix
-        assert (
-            comparator._extract_module_name("identityLinkIdSystem.js", "prebid_js")
-            == "identityLink"
-        )
-        assert (
-            comparator._extract_module_name("browsiRtdProvider.js", "prebid_js")
-            == "browsi"
+        # Parse the real data
+        modules = comparator.module_parser.parse_modules(
+            repo_data=real_api_response_prebid_js,
+            parser_type="prebid_js",
+            repo_key="prebid-js",
         )
 
-        # Test prebid_server_go parser
-        assert (
-            comparator._extract_module_name("33across", "prebid_server_go")
-            == "33across"
-        )
-        assert (
-            comparator._extract_module_name("appnexus", "prebid_server_go")
-            == "appnexus"
-        )
+        # Check that modules were correctly parsed
+        bid_adapter_names = [m.name for m in modules.get("Bid Adapters", [])]
+        analytics_names = [m.name for m in modules.get("Analytics Adapters", [])]
+        id_system_names = [m.name for m in modules.get("User ID Modules", [])]
+        rtd_names = [m.name for m in modules.get("Real-Time Data Modules", [])]
+
+        # Test that expected modules are in the right categories
+        assert "33across" in bid_adapter_names
+        assert "google" in analytics_names
+        assert "identityLink" in id_system_names
+        assert "browsi" in rtd_names
 
     def test_malformed_api_response_handling(
         self, mock_github_client, real_config_manager

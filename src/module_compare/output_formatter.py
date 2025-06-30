@@ -99,6 +99,7 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 {
                     "added": {"value": stats.total_added, "percentage": None},
                     "removed": {"value": stats.total_removed, "percentage": None},
+                    "renamed": {"value": stats.total_renamed, "percentage": None},
                     "net_change": {"value": stats.net_change, "percentage": None},
                 }
             )
@@ -146,6 +147,29 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                             "category": f"{cat_name} - Removed",
                             "modules": [mod.name for mod in category.removed],
                             "count": len(category.removed),
+                        }
+                    )
+
+                if category.renamed:
+                    # Format renames with detection method
+                    rename_strings = []
+                    for rename in category.renamed:
+                        method_label = {
+                            "git_history": "[CONFIRMED]",
+                            "case_change": "[case]",
+                            "abbreviation": "[abbrev]",
+                            "substring": "[substr]",
+                            "similarity": "[similar]",
+                        }.get(rename.detection_method, f"[{rename.detection_method}]")
+                        rename_strings.append(
+                            f"{rename.old_module.name} → {rename.new_module.name} {method_label}"
+                        )
+
+                    items.append(
+                        {
+                            "category": f"{cat_name} - Renamed",
+                            "modules": rename_strings,
+                            "count": len(category.renamed),
                         }
                     )
 
@@ -478,6 +502,16 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                         else:
                             lines.append(f"  {modules[i]}")
 
+            # Add legend for rename detection methods if there are renames
+            has_renames = any("Renamed" in item["category"] for item in data["items"])
+            if has_renames:
+                lines.append("\nRename Detection Methods:")
+                lines.append("  [CONFIRMED] - Verified via git history/PRs")
+                lines.append("  [case] - Case change (e.g., camelCase to snake_case)")
+                lines.append("  [abbrev] - Abbreviation detected")
+                lines.append("  [substr] - Substring match")
+                lines.append("  [similar] - Character similarity")
+
         return "\n".join(lines)
 
     def _format_csv(self, data: dict[str, Any], **kwargs) -> str:
@@ -501,6 +535,8 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                     change_type = "added"
                 elif "Removed" in category_name:
                     change_type = "removed"
+                elif "Renamed" in category_name:
+                    change_type = "renamed"
                 else:
                     change_type = "unchanged"
             else:
@@ -568,12 +604,17 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 lines.append("")
 
                 if data["metadata"]["Comparison Type"] == "Version":
-                    lines.append("| Category | Added | Removed | Net Change |")
-                    lines.append("|----------|-------|---------|------------|")
+                    lines.append(
+                        "| Category | Added | Removed | Renamed | Net Change |"
+                    )
+                    lines.append(
+                        "|----------|-------|---------|---------|------------|"
+                    )
                     for cat in stats["by_category"]:
+                        renamed = cat.get("renamed", 0)
                         lines.append(
                             f"| {cat['category']} | {cat['added']} | {cat['removed']} | "
-                            f"{cat['net']} |"
+                            f"{renamed} | {cat['net']} |"
                         )
                 else:
                     lines.append("| Category | Source Only | Target Only | In Both |")

@@ -5,7 +5,7 @@ from unittest.mock import Mock
 import pytest
 
 from src.module_compare.comparator import ModuleComparator
-from src.module_compare.data_models import ComparisonMode
+from src.module_compare.data_models import ComparisonMode, ModuleInfo
 
 from .test_utils import create_github_response, create_module_files
 
@@ -52,42 +52,52 @@ class TestModuleComparator:
         }
         return configs.get(repo_key)
 
-    def test_extract_module_name_prebid_js(
-        self, mock_github_client, mock_config_manager
-    ):
-        """Test module name extraction for Prebid.js."""
+    def test_module_parser_integration(self, mock_github_client, mock_config_manager):
+        """Test that the comparator correctly uses the module parser."""
         comparator = ModuleComparator(mock_github_client, mock_config_manager)
 
-        # Test various Prebid.js module types
-        assert (
-            comparator._extract_module_name("appnexusBidAdapter.js", "prebid_js")
-            == "appnexus"
-        )
-        assert (
-            comparator._extract_module_name("googleAnalyticsAdapter.js", "prebid_js")
-            == "google"
-        )
-        assert (
-            comparator._extract_module_name("permutiveRtdProvider.js", "prebid_js")
-            == "permutive"
-        )
-        assert (
-            comparator._extract_module_name("sharedIdSystem.js", "prebid_js")
-            == "shared"
-        )
-        assert (
-            comparator._extract_module_name("someModule.js", "prebid_js")
-            == "someModule"
+        # Test that module parser is initialized
+        assert comparator.module_parser is not None
+
+        # Test parsing a simple module structure
+        repo_data = {
+            "paths": {
+                "modules": {
+                    "appnexusBidAdapter.js": None,
+                    "googleAnalyticsAdapter.js": None,
+                    "permutiveRtdProvider.js": None,
+                    "sharedIdSystem.js": None,
+                    "someModule.js": None,
+                }
+            }
+        }
+
+        modules = comparator.module_parser.parse_modules(
+            repo_data=repo_data, parser_type="prebid_js", repo_key="test-repo"
         )
 
-    def test_extract_module_name_other(self, mock_github_client, mock_config_manager):
-        """Test module name extraction for other repository types."""
-        comparator = ModuleComparator(mock_github_client, mock_config_manager)
+        # Verify parsed modules
+        assert "Bid Adapters" in modules
+        assert "Analytics Adapters" in modules
+        assert "Real-Time Data Modules" in modules
+        assert "User ID Modules" in modules
+        assert "Other Modules" in modules
 
-        # Test generic extraction
-        assert comparator._extract_module_name("adapter.go", None) == "adapter"
-        assert comparator._extract_module_name("module.java", None) == "module"
-        assert comparator._extract_module_name("doc.md", None) == "doc"
+        # Check specific modules
+        bid_adapter_names = [m.name for m in modules["Bid Adapters"]]
+        assert "appnexus" in bid_adapter_names
+
+        analytics_names = [m.name for m in modules["Analytics Adapters"]]
+        assert "google" in analytics_names
+
+        rtd_module_names = [m.name for m in modules["Real-Time Data Modules"]]
+        assert "permutive" in rtd_module_names
+
+        id_module_names = [m.name for m in modules["User ID Modules"]]
+        assert "shared" in id_module_names
+
+        other_module_names = [m.name for m in modules["Other Modules"]]
+        assert "someModule" in other_module_names
 
     def test_compare_versions_same_repo(self, mock_github_client, mock_config_manager):
         """Test comparing versions of the same repository."""
@@ -242,3 +252,180 @@ class TestModuleComparator:
         # Should raise ValueError
         with pytest.raises(ValueError, match="Unknown repository: invalid-repo"):
             comparator.compare("invalid-repo", "v1.0.0", "prebid-js", "v9.51.0")
+
+    def test_rename_detection_git_history(
+        self, mock_github_client, mock_config_manager
+    ):
+        """Test rename detection using git history."""
+        comparator = ModuleComparator(mock_github_client, mock_config_manager)
+
+        # Test modules that should be detected as renames
+        removed_modules = [
+            ModuleInfo(
+                name="imds",
+                path="modules/imdsBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+            ModuleInfo(
+                name="gothamads",
+                path="modules/gothamadsBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        added_modules = [
+            ModuleInfo(
+                name="advertising",
+                path="modules/advertisingBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+            ModuleInfo(
+                name="intenze",
+                path="modules/intenzeBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        renames, remaining_removed, remaining_added = comparator._detect_renames(
+            removed_modules, added_modules
+        )
+
+        # Should detect both as renames from git history
+        assert len(renames) == 2
+        assert len(remaining_removed) == 0
+        assert len(remaining_added) == 0
+
+        # Check specific renames
+        rename_map = {r.old_module.name: r for r in renames}
+        assert "imds" in rename_map
+        assert rename_map["imds"].new_module.name == "advertising"
+        assert rename_map["imds"].detection_method == "git_history"
+        assert rename_map["imds"].similarity_score == 1.0
+
+        assert "gothamads" in rename_map
+        assert rename_map["gothamads"].new_module.name == "intenze"
+        assert rename_map["gothamads"].detection_method == "git_history"
+
+    def test_rename_detection_case_change(
+        self, mock_github_client, mock_config_manager
+    ):
+        """Test rename detection for case changes."""
+        comparator = ModuleComparator(mock_github_client, mock_config_manager)
+
+        removed_modules = [
+            ModuleInfo(
+                name="cadentApertureMX",
+                path="modules/cadentApertureMXBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+            ModuleInfo(
+                name="epomDsp",
+                path="modules/epomDspBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        added_modules = [
+            ModuleInfo(
+                name="cadent_aperture_mx",
+                path="modules/cadent_aperture_mxBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+            ModuleInfo(
+                name="epom_dsp",
+                path="modules/epom_dspBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        renames, _, _ = comparator._detect_renames(removed_modules, added_modules)
+
+        assert len(renames) == 2
+        for rename in renames:
+            assert rename.detection_method == "case_change"
+            assert rename.similarity_score == 0.95
+
+    def test_rename_detection_abbreviation(
+        self, mock_github_client, mock_config_manager
+    ):
+        """Test rename detection for abbreviations."""
+        comparator = ModuleComparator(mock_github_client, mock_config_manager)
+
+        removed_modules = [
+            ModuleInfo(
+                name="incrx",
+                path="modules/incrxBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+            ModuleInfo(
+                name="rads",
+                path="modules/radsBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        added_modules = [
+            ModuleInfo(
+                name="incrementx",
+                path="modules/incrementxBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+            ModuleInfo(
+                name="sonarads",
+                path="modules/sonaradsBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        renames, _, _ = comparator._detect_renames(removed_modules, added_modules)
+
+        assert len(renames) == 2
+        rename_map = {r.old_module.name: r for r in renames}
+
+        # incrx -> incrementx should be detected as abbreviation
+        assert "incrx" in rename_map
+        assert rename_map["incrx"].new_module.name == "incrementx"
+        assert rename_map["incrx"].detection_method == "abbreviation"
+
+    def test_rename_detection_no_match(self, mock_github_client, mock_config_manager):
+        """Test rename detection when modules don't match."""
+        comparator = ModuleComparator(mock_github_client, mock_config_manager)
+
+        removed_modules = [
+            ModuleInfo(
+                name="completely",
+                path="modules/completelyBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        added_modules = [
+            ModuleInfo(
+                name="different",
+                path="modules/differentBidAdapter.js",
+                category="Bid Adapters",
+                repo="prebid-js",
+            ),
+        ]
+
+        renames, remaining_removed, remaining_added = comparator._detect_renames(
+            removed_modules, added_modules
+        )
+
+        # Should not detect any renames
+        assert len(renames) == 0
+        assert len(remaining_removed) == 1
+        assert len(remaining_added) == 1

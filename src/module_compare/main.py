@@ -307,16 +307,43 @@ def main(
             extension = fmt if fmt != "table" else "txt"
 
             if output:
-                # User provided custom filename
-                if len(formats_to_generate) == 1:
-                    # Single format - use provided filename as-is
-                    filename = output
+                # User provided custom filename/path
+                import os
+
+                if os.path.dirname(output):
+                    # User provided a path with directories - use as-is
+                    if len(formats_to_generate) == 1:
+                        output_path = output
+                    else:
+                        # Multiple formats - append format to base filename
+                        base, ext = (
+                            output.rsplit(".", 1) if "." in output else (output, "")
+                        )
+                        output_path = f"{base}.{extension}"
+
+                    # Ensure directory exists
+                    os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 else:
-                    # Multiple formats - append format to base filename
-                    base, ext = output.rsplit(".", 1) if "." in output else (output, "")
-                    filename = f"{base}.{extension}"
+                    # User provided just a filename - use with standard directory structure
+                    if len(formats_to_generate) == 1:
+                        filename = output
+                    else:
+                        # Multiple formats - append format to base filename
+                        base, ext = (
+                            output.rsplit(".", 1) if "." in output else (output, "")
+                        )
+                        filename = f"{base}.{extension}"
+
+                    output_path = str(
+                        get_output_path(
+                            tool_name="module-compare",
+                            repo_name=source_repo,
+                            version=source_version,
+                            filename=filename,
+                        )
+                    )
             else:
-                # Generate standard filename
+                # Generate standard filename and path
                 filename = generate_comparison_filename(
                     source_repo=source_repo_full,
                     source_version=source_version,
@@ -331,13 +358,14 @@ def main(
                     extension=extension,
                 )
 
-            # Save to file - use source repo and version for path
-            output_path = get_output_path(
-                tool_name="module-compare",
-                repo_name=source_repo,
-                version=source_version,
-                filename=filename,
-            )
+                output_path = str(
+                    get_output_path(
+                        tool_name="module-compare",
+                        repo_name=source_repo,
+                        version=source_version,
+                        filename=filename,
+                    )
+                )
 
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(formatted_output)

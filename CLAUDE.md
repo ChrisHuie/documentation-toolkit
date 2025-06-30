@@ -14,6 +14,7 @@ src/
 │   ├── filename_generator.py  # Consistent filename generation across tools
 │   ├── github_client.py       # Generic GitHub API client with caching
 │   ├── logging_config.py      # Structured logging with OpenTelemetry
+│   ├── module_parser.py       # Shared module parsing with TypeScript/JavaScript deduplication
 │   ├── base_output_formatter.py # Base class for extensible multi-format output
 │   ├── cli_base.py            # Modular CLI components for consistency
 │   ├── data_normalizer.py     # Data normalization for consistent output across formats
@@ -341,8 +342,10 @@ supported-mediatypes --format csv --output media_types_report.csv
 **Key Features:**
 - **Three Comparison Modes** - Direct, cumulative, and cross-repository
 - **Smart Matching** - Matches modules by name and category for accurate comparison
+- **Rename Detection** - Intelligently detects module renames using multiple methods (git history, case changes, abbreviations)
+- **TypeScript Support** - Treats .js and .ts files as the same module (no false positives for JS→TS conversions)
 - **Change Focus** - By default shows only changes, not unchanged/common modules
-- **Comprehensive Statistics** - Category breakdowns, overlap analysis
+- **Comprehensive Statistics** - Category breakdowns, overlap analysis, rename tracking
 - **Flexible Output** - All standard formats (table, JSON, CSV, Markdown, YAML, HTML)
 - **Automatic Defaults** - Cumulative mode defaults to true for same-repo comparisons
 
@@ -388,20 +391,35 @@ Module Comparison: prebid-js (v9.0.0 → v9.51.0)
 SUMMARY
 - Added: 25 modules
 - Removed: 3 modules  
+- Renamed: 5 modules
 - Net Change: +22 modules
 
 DETAILED STATISTICS
 Changes by Category:
-Category               Added   Removed    Net
-Bid Adapters             20         2     +18
-Analytics                 3         0      +3
-RTD Modules               2         1      +1
+Category               Added   Removed  Renamed    Net
+Bid Adapters             20         2        5     +18
+Analytics                 3         0        0      +3
+RTD Modules               2         1        0      +1
 
 MODULE CHANGES
 Bid Adapters - Added (20 modules):
   newBidder1              newBidder2
   anotherBidder           yetAnotherBidder
   ...
+
+Bid Adapters - Renamed (5 modules):
+  imds → advertising [CONFIRMED]
+  gothamads → intenze [CONFIRMED]
+  cadentApertureMX → cadent_aperture_mx [case]
+  incrx → incrementx [abbrev]
+  growadvertising → growthcode [similar]
+
+Rename Detection Methods:
+  [CONFIRMED] - Verified via git history/PRs
+  [case] - Case change (e.g., camelCase to snake_case)
+  [abbrev] - Abbreviation detected
+  [substr] - Substring match
+  [similar] - Character similarity
 ```
 
 Cumulative Comparison (tracking all changes):
@@ -463,6 +481,7 @@ The project follows a shared utilities pattern where common functionality is cen
 
 - **GitHub Client** - Unified API client with rate limiting and caching
 - **Repository Configuration** - Centralized configuration management for all repository types
+- **Module Parser** - Shared module parsing logic with TypeScript/JavaScript deduplication
 - **Filename Generation** - Consistent naming conventions across all tools
 - **Output Formatting** - Common formatting utilities for reports
 - **Base Output Formatter** - Extensible formatter supporting multiple output formats (JSON, CSV, YAML, HTML, etc.)

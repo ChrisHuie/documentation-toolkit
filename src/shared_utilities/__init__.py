@@ -4,6 +4,7 @@ Common utilities shared across tools
 
 from .base_output_formatter import BaseOutputFormatter, OutputFormat, TableFormatter
 from .logging_config import configure_logging, get_logger, get_logging_manager
+from .module_parser import ModuleInfo, ModuleParser
 from .output_manager import (
     OutputManager,
     cleanup_active_tools,
@@ -36,4 +37,6 @@ __all__ = [
     "save_output",
     "cleanup_empty_directories",
     "cleanup_active_tools",
+    "ModuleParser",
+    "ModuleInfo",
 ]

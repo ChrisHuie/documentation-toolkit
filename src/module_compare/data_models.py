@@ -57,6 +57,18 @@ class ModuleDifference:
 
 
 @dataclass
+class ModuleRename:
+    """Represents a module that was renamed between versions."""
+
+    old_module: ModuleInfo  # Module info from source version
+    new_module: ModuleInfo  # Module info from target version
+    similarity_score: float = 0.0  # How confident we are this is a rename (0-1)
+    detection_method: str = (
+        "similarity"  # Method used: "git_history", "similarity", "abbreviation", etc.
+    )
+
+
+@dataclass
 class CategoryComparison:
     """Comparison results for a specific category."""
 
@@ -67,6 +79,7 @@ class CategoryComparison:
     added: list[ModuleInfo] = field(default_factory=list)
     removed: list[ModuleInfo] = field(default_factory=list)
     unchanged: list[ModuleInfo] = field(default_factory=list)
+    renamed: list[ModuleRename] = field(default_factory=list)  # New field for renames
 
     # For repository comparison (cross-repo)
     only_in_source: list[ModuleInfo] = field(default_factory=list)
@@ -77,7 +90,7 @@ class CategoryComparison:
     def total_source(self) -> int:
         """Total modules in source."""
         if self.comparison_mode == ComparisonMode.VERSION_COMPARISON:
-            return len(self.removed) + len(self.unchanged)
+            return len(self.removed) + len(self.unchanged) + len(self.renamed)
         else:
             return len(self.only_in_source) + len(self.in_both)
 
@@ -85,7 +98,7 @@ class CategoryComparison:
     def total_target(self) -> int:
         """Total modules in target."""
         if self.comparison_mode == ComparisonMode.VERSION_COMPARISON:
-            return len(self.added) + len(self.unchanged)
+            return len(self.added) + len(self.unchanged) + len(self.renamed)
         else:
             return len(self.only_in_target) + len(self.in_both)
 
@@ -93,7 +106,7 @@ class CategoryComparison:
     def has_changes(self) -> bool:
         """Check if there are any changes."""
         if self.comparison_mode == ComparisonMode.VERSION_COMPARISON:
-            return bool(self.added or self.removed)
+            return bool(self.added or self.removed or self.renamed)
         else:
             return bool(self.only_in_source or self.only_in_target)
 
@@ -135,6 +148,7 @@ class CategoryComparison:
                     "added": len(self.added),
                     "removed": len(self.removed),
                     "unchanged": len(self.unchanged),
+                    "renamed": len(self.renamed),
                     "net_change": self.net_change,
                     "change_percentage": round(self.change_percentage, 1),
                 }
@@ -167,6 +181,7 @@ class ComparisonStatistics:
     total_added: int = 0
     total_removed: int = 0
     total_unchanged: int = 0
+    total_renamed: int = 0
     net_change: int = 0
     overall_change_percentage: float = 0.0
 
@@ -234,6 +249,16 @@ class ComparisonResult:
         return modules
 
     @property
+    def all_renamed(self) -> list[ModuleRename]:
+        """Get all renamed modules (version comparison only)."""
+        if self.comparison_mode != ComparisonMode.VERSION_COMPARISON:
+            return []
+        renames = []
+        for category in self.categories.values():
+            renames.extend(category.renamed)
+        return renames
+
+    @property
     def all_only_in_source(self) -> list[ModuleInfo]:
         """Get modules only in source (repository comparison only)."""
         if self.comparison_mode != ComparisonMode.REPOSITORY_COMPARISON:
@@ -292,6 +317,7 @@ class ComparisonResult:
             stats.total_added = len(self.all_added)
             stats.total_removed = len(self.all_removed)
             stats.total_unchanged = len(self.all_unchanged)
+            stats.total_renamed = len(self.all_renamed)
             stats.net_change = stats.total_added - stats.total_removed
 
             if stats.source_total > 0:
@@ -374,6 +400,7 @@ class ComparisonResult:
                     "added": stats.total_added,
                     "removed": stats.total_removed,
                     "unchanged": stats.total_unchanged,
+                    "renamed": stats.total_renamed,
                     "net_change": stats.net_change,
                 }
             )
@@ -518,3 +545,20 @@ class CumulativeComparisonResult(ComparisonResult):
     def removed_modules(self) -> list[CumulativeModuleChange]:
         """Get modules that were removed at any point."""
         return [m for m in self.all_added_modules if m.was_removed]
+
+    @property
+    def summary_stats(self) -> dict[str, Any]:
+        """Get summary statistics for the cumulative comparison."""
+        return {
+            "source_repo": self.source_repo,
+            "source_version": self.source_version,
+            "target_repo": self.target_repo,
+            "target_version": self.target_version,
+            "comparison_mode": "cumulative",
+            "total_changes": len(self.all_added_modules),
+            "permanently_added": len(self.permanently_added_modules),
+            "removed": len(self.removed_modules),
+            "transient": len(self.transient_modules),
+            "versions_analyzed": len(self.versions_analyzed),
+            "categories": len(self.categories),
+        }
