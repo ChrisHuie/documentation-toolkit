@@ -1,0 +1,356 @@
+header: "Cumulative Module Comparison: prebid-js (v9.0.0 \u2192 master)"
+items:
+- category: Bid Adapters - Added (still present)
+  count: 70
+  modules:
+  - 360playvid (added in master)
+  - adgrid (added in master)
+  - adipolo (added in master)
+  - ads_interactive (added in master)
+  - advertising (added in master)
+  - adverxo (added in master)
+  - akcelo (added in master)
+  - bidtheatre (added in master)
+  - bitmedia (added in master)
+  - blockthrough (added in master)
+  - blue (added in master)
+  - bms (added in master)
+  - bmtm (added in master)
+  - brainx (added in master)
+  - cadent_aperture_mx (added in master)
+  - condorx (added in master)
+  - copper6ssp (added in master)
+  - dexerto (added in master)
+  - digitalMatter (added in master)
+  - djax (added in master)
+  - dochase (added in master)
+  - dvgroup (added in master)
+  - eclick (added in master)
+  - ehealthcaresolutions (added in master)
+  - epom_dsp (added in master)
+  - equativ (added in master)
+  - escalax (added in master)
+  - exco (added in master)
+  - fan (added in master)
+  - fwssp (added in master)
+  - growads (added in master)
+  - incrementx (added in master)
+  - inmobi (added in master)
+  - intenze (added in master)
+  - lane4 (added in master)
+  - loopme (added in master)
+  - madsense (added in master)
+  - mediaConsortium (added in master)
+  - mediaeyes (added in master)
+  - michao (added in master)
+  - mobilefuse (added in master)
+  - mobkoi (added in master)
+  - nativery (added in master)
+  - nexverse (added in master)
+  - omnidex (added in master)
+  - opaMarketplace (added in master)
+  - oraki (added in master)
+  - ownadx (added in master)
+  - pinkLion (added in master)
+  - programmaticX (added in master)
+  - pubrise (added in master)
+  - pwbid (added in master)
+  - rediads (added in master)
+  - responsiveAds (added in master)
+  - richaudience (added in master)
+  - robusta (added in master)
+  - rocketlab (added in master)
+  - smoot (added in master)
+  - sonarads (added in master)
+  - ssp_geniee (added in master)
+  - stackadapt (added in master)
+  - startio (added in master)
+  - suim (added in master)
+  - tapnative (added in master)
+  - teal (added in master)
+  - uniquest (added in master)
+  - valuad (added in master)
+  - viant (added in master)
+  - vistars (added in master)
+  - zeta_global (added in master)
+  modules_detailed:
+  - added_in: master
+    name: 360playvid
+  - added_in: master
+    name: adgrid
+  - added_in: master
+    name: adipolo
+  - added_in: master
+    name: ads_interactive
+  - added_in: master
+    name: advertising
+  - added_in: master
+    name: adverxo
+  - added_in: master
+    name: akcelo
+  - added_in: master
+    name: bidtheatre
+  - added_in: master
+    name: bitmedia
+  - added_in: master
+    name: blockthrough
+  - added_in: master
+    name: blue
+  - added_in: master
+    name: bms
+  - added_in: master
+    name: bmtm
+  - added_in: master
+    name: brainx
+  - added_in: master
+    name: cadent_aperture_mx
+  - added_in: master
+    name: condorx
+  - added_in: master
+    name: copper6ssp
+  - added_in: master
+    name: dexerto
+  - added_in: master
+    name: digitalMatter
+  - added_in: master
+    name: djax
+  - added_in: master
+    name: dochase
+  - added_in: master
+    name: dvgroup
+  - added_in: master
+    name: eclick
+  - added_in: master
+    name: ehealthcaresolutions
+  - added_in: master
+    name: epom_dsp
+  - added_in: master
+    name: equativ
+  - added_in: master
+    name: escalax
+  - added_in: master
+    name: exco
+  - added_in: master
+    name: fan
+  - added_in: master
+    name: fwssp
+  - added_in: master
+    name: growads
+  - added_in: master
+    name: incrementx
+  - added_in: master
+    name: inmobi
+  - added_in: master
+    name: intenze
+  - added_in: master
+    name: lane4
+  - added_in: master
+    name: loopme
+  - added_in: master
+    name: madsense
+  - added_in: master
+    name: mediaConsortium
+  - added_in: master
+    name: mediaeyes
+  - added_in: master
+    name: michao
+  - added_in: master
+    name: mobilefuse
+  - added_in: master
+    name: mobkoi
+  - added_in: master
+    name: nativery
+  - added_in: master
+    name: nexverse
+  - added_in: master
+    name: omnidex
+  - added_in: master
+    name: opaMarketplace
+  - added_in: master
+    name: oraki
+  - added_in: master
+    name: ownadx
+  - added_in: master
+    name: pinkLion
+  - added_in: master
+    name: programmaticX
+  - added_in: master
+    name: pubrise
+  - added_in: master
+    name: pwbid
+  - added_in: master
+    name: rediads
+  - added_in: master
+    name: responsiveAds
+  - added_in: master
+    name: richaudience
+  - added_in: master
+    name: robusta
+  - added_in: master
+    name: rocketlab
+  - added_in: master
+    name: smoot
+  - added_in: master
+    name: sonarads
+  - added_in: master
+    name: ssp_geniee
+  - added_in: master
+    name: stackadapt
+  - added_in: master
+    name: startio
+  - added_in: master
+    name: suim
+  - added_in: master
+    name: tapnative
+  - added_in: master
+    name: teal
+  - added_in: master
+    name: uniquest
+  - added_in: master
+    name: valuad
+  - added_in: master
+    name: viant
+  - added_in: master
+    name: vistars
+  - added_in: master
+    name: zeta_global
+- category: Real-Time Data Modules - Added (still present)
+  count: 11
+  modules:
+  - adlane (added in master)
+  - chromeAi (added in master)
+  - gamera (added in master)
+  - humansecurity (added in master)
+  - mobian (added in master)
+  - nodalsAi (added in master)
+  - overtone (added in master)
+  - raveltech (added in master)
+  - semantiq (added in master)
+  - symitriDap (added in master)
+  - wurfl (added in master)
+  modules_detailed:
+  - added_in: master
+    name: adlane
+  - added_in: master
+    name: chromeAi
+  - added_in: master
+    name: gamera
+  - added_in: master
+    name: humansecurity
+  - added_in: master
+    name: mobian
+  - added_in: master
+    name: nodalsAi
+  - added_in: master
+    name: overtone
+  - added_in: master
+    name: raveltech
+  - added_in: master
+    name: semantiq
+  - added_in: master
+    name: symitriDap
+  - added_in: master
+    name: wurfl
+- category: Analytics Adapters - Added (still present)
+  count: 4
+  modules:
+  - advRed (added in master)
+  - mobkoi (added in master)
+  - symitri (added in master)
+  - uniquest (added in master)
+  modules_detailed:
+  - added_in: master
+    name: advRed
+  - added_in: master
+    name: mobkoi
+  - added_in: master
+    name: symitri
+  - added_in: master
+    name: uniquest
+- category: Other Modules - Added (still present)
+  count: 6
+  modules:
+  - _moduleMetadata (added in master)
+  - adplayerproVideoProvider (added in master)
+  - gamAdServerVideo (added in master)
+  - gamAdpod (added in master)
+  - storageControl (added in master)
+  - targetVideoAdServerVideo (added in master)
+  modules_detailed:
+  - added_in: master
+    name: _moduleMetadata
+  - added_in: master
+    name: adplayerproVideoProvider
+  - added_in: master
+    name: gamAdServerVideo
+  - added_in: master
+    name: gamAdpod
+  - added_in: master
+    name: storageControl
+  - added_in: master
+    name: targetVideoAdServerVideo
+- category: User ID Modules - Added (still present)
+  count: 4
+  modules:
+  - mobkoi (added in master)
+  - openPair (added in master)
+  - permutiveIdentityManager (added in master)
+  - rewardedInterest (added in master)
+  modules_detailed:
+  - added_in: master
+    name: mobkoi
+  - added_in: master
+    name: openPair
+  - added_in: master
+    name: permutiveIdentityManager
+  - added_in: master
+    name: rewardedInterest
+metadata:
+  Comparison Type: Cumulative
+  From Version: v9.0.0
+  Repository: prebid-js
+  To Version: master
+  Versions Analyzed: 2
+statistics:
+  by_category:
+  - category: Bid Adapters
+    removed: 0
+    still_present: 70
+    total_added: 70
+  - category: Real-Time Data Modules
+    removed: 0
+    still_present: 11
+    total_added: 11
+  - category: Analytics Adapters
+    removed: 0
+    still_present: 4
+    total_added: 4
+  - category: Other Modules
+    removed: 0
+    still_present: 6
+    total_added: 6
+  - category: User ID Modules
+    removed: 0
+    still_present: 4
+    total_added: 4
+  overall:
+    removed: 0
+    still_present: 95
+    total_modules_added: 95
+    transient: 0
+  versions_analyzed:
+  - v9.0.0
+  - master
+summary:
+  permanently_added:
+    percentage: null
+    value: 95
+  removed:
+    percentage: null
+    value: 0
+  total_changes:
+    percentage: null
+    value: 95
+  transient:
+    percentage: null
+    value: 0

@@ -329,6 +329,12 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                                 added_and_present, key=lambda x: x.module.name
                             )
                         ],
+                        "modules_detailed": [
+                            {"name": c.module.name, "added_in": c.added_in_version}
+                            for c in sorted(
+                                added_and_present, key=lambda x: x.module.name
+                            )
+                        ],
                         "count": len(added_and_present),
                     }
                 )
@@ -339,6 +345,16 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                         "category": f"{category} - Added then removed",
                         "modules": [
                             f"{c.module.name} (added: {c.added_in_version}, removed: {c.removed_in_version})"
+                            for c in sorted(
+                                added_and_removed, key=lambda x: x.module.name
+                            )
+                        ],
+                        "modules_detailed": [
+                            {
+                                "name": c.module.name,
+                                "added_in": c.added_in_version,
+                                "removed_in": c.removed_in_version,
+                            }
                             for c in sorted(
                                 added_and_removed, key=lambda x: x.module.name
                             )
@@ -458,11 +474,24 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
 
             if stats.get("unique_categories"):
                 lines.append("\nCategory Distribution:")
+                # Handle different metadata formats
+                source_repo = ""
+                target_repo = ""
+                if "Source" in data["metadata"]:
+                    source_repo = data["metadata"]["Source"].split("@")[0]
+                elif "Repository" in data["metadata"]:
+                    source_repo = data["metadata"]["Repository"]
+
+                if "Target" in data["metadata"]:
+                    target_repo = data["metadata"]["Target"].split("@")[0]
+                elif "Repository" in data["metadata"]:
+                    target_repo = data["metadata"]["Repository"]
+
                 lines.append(
-                    f"Unique to {data['metadata']['Source'].split('@')[0]}: {', '.join(stats['unique_categories']['source_only']) or 'None'}"
+                    f"Unique to {source_repo}: {', '.join(stats['unique_categories']['source_only']) or 'None'}"
                 )
                 lines.append(
-                    f"Unique to {data['metadata']['Target'].split('@')[0]}: {', '.join(stats['unique_categories']['target_only']) or 'None'}"
+                    f"Unique to {target_repo}: {', '.join(stats['unique_categories']['target_only']) or 'None'}"
                 )
                 lines.append(
                     f"Common categories: {', '.join(stats['unique_categories']['common'])}"
@@ -490,17 +519,31 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
 
             for item in data["items"]:
                 lines.append(f"\n{item['category']} ({item['count']} modules):")
-                # Format modules in columns
-                modules = item["modules"]
-                if modules:
-                    # Sort modules for consistent output
-                    modules = sorted(modules)
-                    # Display in 2 columns for better readability
-                    for i in range(0, len(modules), 2):
-                        if i + 1 < len(modules):
-                            lines.append(f"  {modules[i]:<40} {modules[i + 1]}")
-                        else:
-                            lines.append(f"  {modules[i]}")
+
+                # Check if we have detailed module information
+                if "modules_detailed" in item and item["modules_detailed"]:
+                    # Use detailed format with version info on the same line but separated
+                    for module_info in sorted(
+                        item["modules_detailed"], key=lambda x: x["name"]
+                    ):
+                        version_info = ""
+                        if "added_in" in module_info:
+                            version_info = f" | added in {module_info['added_in']}"
+                        if "removed_in" in module_info:
+                            version_info += f", removed in {module_info['removed_in']}"
+                        lines.append(f"  {module_info['name']}{version_info}")
+                else:
+                    # Format modules in columns
+                    modules = item["modules"]
+                    if modules:
+                        # Sort modules for consistent output
+                        modules = sorted(modules)
+                        # Display in 2 columns for better readability
+                        for i in range(0, len(modules), 2):
+                            if i + 1 < len(modules):
+                                lines.append(f"  {modules[i]:<40} {modules[i + 1]}")
+                            else:
+                                lines.append(f"  {modules[i]}")
 
             # Add legend for rename detection methods if there are renames
             has_renames = any("Renamed" in item["category"] for item in data["items"])
@@ -517,20 +560,46 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
     def _format_csv(self, data: dict[str, Any], **kwargs) -> str:
         """Format data as CSV with rows for each module change."""
         output = io.StringIO()
-        writer = csv.DictWriter(
-            output, fieldnames=["category", "module", "change_type"]
-        )
-        writer.writeheader()
+
+        # Determine if we have detailed module data
+        has_detailed = any("modules_detailed" in item for item in data["items"])
 
         # Determine comparison mode
-        is_version_comparison = data["metadata"]["Comparison Type"] == "Version"
+        comparison_type = data["metadata"]["Comparison Type"]
+        is_cumulative = comparison_type == "Cumulative"
+
+        if has_detailed and is_cumulative:
+            # Use detailed format with separate columns for cumulative comparisons
+            fieldnames = [
+                "category",
+                "module",
+                "added_in_version",
+                "removed_in_version",
+                "change_type",
+            ]
+            writer = csv.DictWriter(output, fieldnames=fieldnames)
+            writer.writeheader()
+        else:
+            # Use standard format
+            fieldnames = ["category", "module", "change_type"]
+            writer = csv.DictWriter(output, fieldnames=fieldnames)
+            writer.writeheader()
 
         # Write rows for each module
         for item in data["items"]:
             category_name = item["category"]
 
             # Extract change type from category name
-            if is_version_comparison:
+            if is_cumulative:
+                # Cumulative comparison types
+                if "still present" in category_name:
+                    change_type = "added_still_present"
+                elif "then removed" in category_name:
+                    change_type = "added_then_removed"
+                else:
+                    change_type = "changed"
+            elif comparison_type == "Version":
+                # Version comparison types
                 if "Added" in category_name:
                     change_type = "added"
                 elif "Removed" in category_name:
@@ -540,16 +609,26 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 else:
                     change_type = "unchanged"
             else:
-                if (
-                    "Only in" in category_name
-                    and data["metadata"]["Source"] in category_name
-                ):
-                    change_type = "only_in_source"
-                elif (
-                    "Only in" in category_name
-                    and data["metadata"]["Target"] in category_name
-                ):
-                    change_type = "only_in_target"
+                # Repository comparison types
+                if "Only in" in category_name:
+                    # Parse repository name from category to determine source/target
+                    if (
+                        "Source" in data["metadata"]
+                        and data["metadata"]["Source"].split(" @ ")[0] in category_name
+                    ):
+                        change_type = "only_in_source"
+                    elif (
+                        "Target" in data["metadata"]
+                        and data["metadata"]["Target"].split(" @ ")[0] in category_name
+                    ):
+                        change_type = "only_in_target"
+                    else:
+                        # Fallback: check which repo appears in the category name
+                        change_type = (
+                            "only_in_source"
+                            if "source" in category_name.lower()
+                            else "only_in_target"
+                        )
                 else:
                     change_type = "in_both"
 
@@ -557,14 +636,65 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
             base_category = category_name.split(" - ")[0]
 
             # Write a row for each module
-            for module in sorted(item["modules"]):
-                writer.writerow(
-                    {
-                        "category": base_category,
-                        "module": module,
-                        "change_type": change_type,
-                    }
-                )
+            if has_detailed and is_cumulative and "modules_detailed" in item:
+                for module_info in item["modules_detailed"]:
+                    writer.writerow(
+                        {
+                            "category": base_category,
+                            "module": module_info["name"],
+                            "added_in_version": module_info.get("added_in", ""),
+                            "removed_in_version": module_info.get("removed_in", ""),
+                            "change_type": change_type,
+                        }
+                    )
+            else:
+                # Standard format or no detailed data available
+                for module in sorted(item["modules"]):
+                    # For cumulative comparisons, extract version info from module string
+                    if is_cumulative and "(" in module and ")" in module:
+                        # Parse module name and version info
+                        module_name = module.split(" (")[0]
+                        version_info = module.split(" (")[1].rstrip(")")
+
+                        if has_detailed:
+                            # Extract version details
+                            added_in = ""
+                            removed_in = ""
+                            if "added in " in version_info:
+                                added_in = version_info.replace("added in ", "")
+                            elif (
+                                "added: " in version_info
+                                and "removed: " in version_info
+                            ):
+                                parts = version_info.split(", ")
+                                added_in = parts[0].replace("added: ", "")
+                                removed_in = parts[1].replace("removed: ", "")
+
+                            writer.writerow(
+                                {
+                                    "category": base_category,
+                                    "module": module_name,
+                                    "added_in_version": added_in,
+                                    "removed_in_version": removed_in,
+                                    "change_type": change_type,
+                                }
+                            )
+                        else:
+                            writer.writerow(
+                                {
+                                    "category": base_category,
+                                    "module": module,
+                                    "change_type": change_type,
+                                }
+                            )
+                    else:
+                        writer.writerow(
+                            {
+                                "category": base_category,
+                                "module": module,
+                                "change_type": change_type,
+                            }
+                        )
 
         return output.getvalue()
 
@@ -603,7 +733,9 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 lines.append("### By Category")
                 lines.append("")
 
-                if data["metadata"]["Comparison Type"] == "Version":
+                comparison_type = data["metadata"]["Comparison Type"]
+
+                if comparison_type == "Version":
                     lines.append(
                         "| Category | Added | Removed | Renamed | Net Change |"
                     )
@@ -615,6 +747,14 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                         lines.append(
                             f"| {cat['category']} | {cat['added']} | {cat['removed']} | "
                             f"{renamed} | {cat['net']} |"
+                        )
+                elif comparison_type == "Cumulative":
+                    lines.append("| Category | Total Added | Still Present | Removed |")
+                    lines.append("|----------|-------------|---------------|---------|")
+                    for cat in stats["by_category"]:
+                        lines.append(
+                            f"| {cat['category']} | {cat['total_added']} | "
+                            f"{cat['still_present']} | {cat['removed']} |"
                         )
                 else:
                     lines.append("| Category | Source Only | Target Only | In Both |")
@@ -635,10 +775,35 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
                 lines.append(f"### {item['category']} ({item['count']} modules)")
                 lines.append("")
 
-                # Format modules in a bullet list
-                modules = sorted(item["modules"])
-                for module in modules:
-                    lines.append(f"- {module}")
+                # Check if we have detailed module information
+                if "modules_detailed" in item and item["modules_detailed"]:
+                    # Create a table for detailed information
+                    if any("removed_in" in m for m in item["modules_detailed"]):
+                        # Has both added and removed columns
+                        lines.append("| Module | Added In | Removed In |")
+                        lines.append("|--------|----------|------------|")
+                        for module_info in sorted(
+                            item["modules_detailed"], key=lambda x: x["name"]
+                        ):
+                            lines.append(
+                                f"| {module_info['name']} | {module_info.get('added_in', '')} | "
+                                f"{module_info.get('removed_in', '')} |"
+                            )
+                    else:
+                        # Only has added column
+                        lines.append("| Module | Added In |")
+                        lines.append("|--------|----------|")
+                        for module_info in sorted(
+                            item["modules_detailed"], key=lambda x: x["name"]
+                        ):
+                            lines.append(
+                                f"| {module_info['name']} | {module_info.get('added_in', '')} |"
+                            )
+                else:
+                    # Format modules in a bullet list
+                    modules = sorted(item["modules"])
+                    for module in modules:
+                        lines.append(f"- {module}")
                 lines.append("")
 
         return "\n".join(lines)
@@ -647,17 +812,67 @@ class ModuleCompareOutputFormatter(BaseOutputFormatter):
         """Format data as JSON with proper structure."""
         # Create a flattened structure for JSON output
         output = {
-            "metadata": {
-                "source_repo": data["metadata"]["Source"].split(" @ ")[0],
-                "target_repo": data["metadata"]["Target"].split(" @ ")[0],
-                "source_version": data["metadata"]["Source"].split(" @ ")[1],
-                "target_version": data["metadata"]["Target"].split(" @ ")[1],
-                "comparison_type": data["metadata"]["Comparison Type"],
-            },
+            "metadata": {},
             "summary": {},
-            "items": data["items"],
+            "items": [],
             "statistics": data["statistics"],
         }
+
+        # Process items to include modules_detailed if available
+        for item in data["items"]:
+            new_item = {
+                "category": item["category"],
+                "count": item["count"],
+                "modules": item["modules"],
+            }
+            if "modules_detailed" in item:
+                new_item["modules_detailed"] = item["modules_detailed"]
+            output["items"].append(new_item)
+
+        # Parse metadata safely - handle both regular and cumulative comparison formats
+        if "Source" in data["metadata"] and " @ " in data["metadata"]["Source"]:
+            # Regular comparison format
+            source_parts = data["metadata"]["Source"].split(" @ ", 1)
+            output["metadata"]["source_repo"] = source_parts[0]
+            output["metadata"]["source_version"] = (
+                source_parts[1] if len(source_parts) > 1 else ""
+            )
+        elif "Repository" in data["metadata"]:
+            # Cumulative comparison format
+            output["metadata"]["source_repo"] = data["metadata"].get("Repository", "")
+            output["metadata"]["source_version"] = data["metadata"].get(
+                "From Version", ""
+            )
+        else:
+            output["metadata"]["source_repo"] = data["metadata"].get("Source", "")
+            output["metadata"]["source_version"] = ""
+
+        if "Target" in data["metadata"] and " @ " in data["metadata"]["Target"]:
+            # Regular comparison format
+            target_parts = data["metadata"]["Target"].split(" @ ", 1)
+            output["metadata"]["target_repo"] = target_parts[0]
+            output["metadata"]["target_version"] = (
+                target_parts[1] if len(target_parts) > 1 else ""
+            )
+        elif "Repository" in data["metadata"]:
+            # Cumulative comparison format (same repo)
+            output["metadata"]["target_repo"] = data["metadata"].get("Repository", "")
+            output["metadata"]["target_version"] = data["metadata"].get(
+                "To Version", ""
+            )
+        else:
+            output["metadata"]["target_repo"] = data["metadata"].get("Target", "")
+            output["metadata"]["target_version"] = ""
+
+        output["metadata"]["comparison_type"] = data["metadata"].get(
+            "Comparison Type", ""
+        )
+
+        # Add versions analyzed for cumulative comparisons
+        if "Versions Analyzed" in data["metadata"]:
+            output["metadata"]["versions_analyzed"] = data["metadata"][
+                "Versions Analyzed"
+            ]
 
         # Flatten summary values
         for key, value in data["summary"].items():

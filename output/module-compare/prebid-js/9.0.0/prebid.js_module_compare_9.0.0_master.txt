@@ -9,8 +9,8 @@ Versions Analyzed: 2
 
 SUMMARY
 ----------------------------------------
-Total Changes: 77
-Permanently Added: 77
+Total Changes: 95
+Permanently Added: 95
 Removed: 0
 Transient: 0
 
@@ -20,7 +20,11 @@ DETAILED STATISTICS
 Changes by Category:
 Category                        Total Added  Still Present  Removed
 ------------------------------------------------------------------
-Bid Adapters                             77             77        0
+Bid Adapters                             70             70        0
+Real-Time Data Modules                   11             11        0
+Analytics Adapters                        4              4        0
+Other Modules                             6              6        0
+User ID Modules                           4              4        0
 
 Versions Analyzed:
 Total: 2 versions
@@ -29,43 +33,107 @@ Versions: v9.0.0, master
 MODULE CHANGES
 ----------------------------------------
 
-Bid Adapters - Added (still present) (77 modules):
-  360playvid (added in master)             adgrid (added in master)
-  adipolo (added in master)                adlane (added in master)
-  adplayerproVideoProvider (added in master) ads_interactive (added in master)
-  advRed (added in master)                 adverxo (added in master)
-  akcelo (added in master)                 bidtheatre (added in master)
-  bitmedia (added in master)               blue (added in master)
-  bms (added in master)                    brainx (added in master)
-  bridgeupp (added in master)              chromeAi (added in master)
-  condorx (added in master)                copper6ssp (added in master)
-  dexerto (added in master)                digitalMatter (added in master)
-  djax (added in master)                   dochase (added in master)
-  dvgroup (added in master)                eclickads (added in master)
-  ehealthcaresolutions (added in master)   epomDsp (added in master)
-  equativ (added in master)                escalax (added in master)
-  exco (added in master)                   fanAdapter (added in master)
-  fwssp (added in master)                  gamera (added in master)
-  humansecurity (added in master)          inmobi (added in master)
-  lane4 (added in master)                  loopme (added in master)
-  madsense (added in master)               mediaConsortium (added in master)
-  mediaeyes (added in master)              michao (added in master)
-  mobian (added in master)                 mobilefuse (added in master)
-  mobkoi (added in master)                 nativery (added in master)
-  nexverse (added in master)               nodalsAi (added in master)
-  omnidex (added in master)                opaMarketplace (added in master)
-  openPair (added in master)               oraki (added in master)
-  overtone (added in master)               ownadx (added in master)
-  permutiveIdentityManager (added in master) pinkLion (added in master)
-  programmaticX (added in master)          pubrise (added in master)
-  raveltech (added in master)              rediads (added in master)
-  responsiveAds (added in master)          rewardedInterest (added in master)
-  robusta (added in master)                rocketlab (added in master)
-  semantiq (added in master)               smoot (added in master)
-  ssp_geniee (added in master)             stackadapt (added in master)
-  startio (added in master)                suim (added in master)
-  symitri (added in master)                symitriDap (added in master)
-  tapnative (added in master)              targetVideoAdServerVideo (added in master)
-  teal (added in master)                   uniquest (added in master)
-  valuad (added in master)                 vistars (added in master)
-  wurfl (added in master)
+Bid Adapters - Added (still present) (70 modules):
+  360playvid | added in master
+  adgrid | added in master
+  adipolo | added in master
+  ads_interactive | added in master
+  advertising | added in master
+  adverxo | added in master
+  akcelo | added in master
+  bidtheatre | added in master
+  bitmedia | added in master
+  blockthrough | added in master
+  blue | added in master
+  bms | added in master
+  bmtm | added in master
+  brainx | added in master
+  cadent_aperture_mx | added in master
+  condorx | added in master
+  copper6ssp | added in master
+  dexerto | added in master
+  digitalMatter | added in master
+  djax | added in master
+  dochase | added in master
+  dvgroup | added in master
+  eclick | added in master
+  ehealthcaresolutions | added in master
+  epom_dsp | added in master
+  equativ | added in master
+  escalax | added in master
+  exco | added in master
+  fan | added in master
+  fwssp | added in master
+  growads | added in master
+  incrementx | added in master
+  inmobi | added in master
+  intenze | added in master
+  lane4 | added in master
+  loopme | added in master
+  madsense | added in master
+  mediaConsortium | added in master
+  mediaeyes | added in master
+  michao | added in master
+  mobilefuse | added in master
+  mobkoi | added in master
+  nativery | added in master
+  nexverse | added in master
+  omnidex | added in master
+  opaMarketplace | added in master
+  oraki | added in master
+  ownadx | added in master
+  pinkLion | added in master
+  programmaticX | added in master
+  pubrise | added in master
+  pwbid | added in master
+  rediads | added in master
+  responsiveAds | added in master
+  richaudience | added in master
+  robusta | added in master
+  rocketlab | added in master
+  smoot | added in master
+  sonarads | added in master
+  ssp_geniee | added in master
+  stackadapt | added in master
+  startio | added in master
+  suim | added in master
+  tapnative | added in master
+  teal | added in master
+  uniquest | added in master
+  valuad | added in master
+  viant | added in master
+  vistars | added in master
+  zeta_global | added in master
+
+Real-Time Data Modules - Added (still present) (11 modules):
+  adlane | added in master
+  chromeAi | added in master
+  gamera | added in master
+  humansecurity | added in master
+  mobian | added in master
+  nodalsAi | added in master
+  overtone | added in master
+  raveltech | added in master
+  semantiq | added in master
+  symitriDap | added in master
+  wurfl | added in master
+
+Analytics Adapters - Added (still present) (4 modules):
+  advRed | added in master
+  mobkoi | added in master
+  symitri | added in master
+  uniquest | added in master
+
+Other Modules - Added (still present) (6 modules):
+  _moduleMetadata | added in master
+  adplayerproVideoProvider | added in master
+  gamAdServerVideo | added in master
+  gamAdpod | added in master
+  storageControl | added in master
+  targetVideoAdServerVideo | added in master
+
+User ID Modules - Added (still present) (4 modules):
+  mobkoi | added in master
+  openPair | added in master
+  permutiveIdentityManager | added in master
+  rewardedInterest | added in master

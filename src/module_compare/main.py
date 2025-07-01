@@ -10,6 +10,7 @@ from src.shared_utilities.github_client import GitHubClient
 from src.shared_utilities.repository_config import RepositoryConfigManager
 
 from .comparator import ModuleComparator
+from .data_models import CumulativeComparisonResult
 from .output_formatter import ModuleCompareOutputFormatter
 
 logger = get_logger(__name__)
@@ -299,9 +300,14 @@ def main(
 
         for fmt in formats_to_generate:
             # Format output
-            formatted_output = formatter.format_output(
-                result, fmt, show_unchanged=show_unchanged
-            )
+            try:
+                formatted_output = formatter.format_output(
+                    result, fmt, show_unchanged=show_unchanged
+                )
+            except Exception as e:
+                logger.error(f"Error formatting {fmt}: {e}")
+                click.echo(f"Error formatting {fmt}: {e}", err=True)
+                continue
 
             # Determine extension
             extension = fmt if fmt != "table" else "txt"
@@ -383,16 +389,28 @@ def main(
 
         # Print summary statistics if not quiet
         if not quiet and format != "table":
-            stats = result.get_statistics()
             click.echo("\n" + "-" * 40)
 
-            if result.comparison_mode.value == "version":
-                click.echo(f"Total changes: {stats.total_added + stats.total_removed}")
-                click.echo(f"Net change: {stats.net_change:+d} modules")
+            # Handle different result types
+            if isinstance(result, CumulativeComparisonResult):
+                # Cumulative comparison statistics
+                click.echo(f"Total modules added: {len(result.all_added_modules)}")
+                click.echo(f"Still present: {len(result.permanently_added_modules)}")
+                click.echo(f"Removed: {len(result.removed_modules)}")
+                click.echo(f"Transient: {len(result.transient_modules)}")
+                click.echo(f"Versions analyzed: {len(result.versions_analyzed)}")
             else:
-                click.echo(f"Common modules: {stats.total_in_both}")
-                click.echo(f"Unique to {source_repo}: {stats.total_only_in_source}")
-                click.echo(f"Unique to {target_repo}: {stats.total_only_in_target}")
+                # Regular comparison statistics
+                stats = result.get_statistics()
+                if result.comparison_mode.value == "version":
+                    click.echo(
+                        f"Total changes: {stats.total_added + stats.total_removed}"
+                    )
+                    click.echo(f"Net change: {stats.net_change:+d} modules")
+                else:
+                    click.echo(f"Common modules: {stats.total_in_both}")
+                    click.echo(f"Unique to {source_repo}: {stats.total_only_in_source}")
+                    click.echo(f"Unique to {target_repo}: {stats.total_only_in_target}")
 
     except click.Abort:
         sys.exit(130)  # User interrupted

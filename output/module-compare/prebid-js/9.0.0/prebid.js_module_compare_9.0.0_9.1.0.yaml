@@ -1,0 +1,48 @@
+header: "Cumulative Module Comparison: prebid-js (v9.0.0 \u2192 v9.1.0)"
+items:
+- category: Real-Time Data Modules - Added (still present)
+  count: 1
+  modules:
+  - mobian (added in v9.1.0)
+- category: Bid Adapters - Added (still present)
+  count: 1
+  modules:
+  - richaudience (added in v9.1.0)
+metadata:
+  Comparison Type: Cumulative
+  From Version: v9.0.0
+  Repository: prebid-js
+  To Version: v9.1.0
+  Versions Analyzed: 3
+statistics:
+  by_category:
+  - category: Real-Time Data Modules
+    removed: 0
+    still_present: 1
+    total_added: 1
+  - category: Bid Adapters
+    removed: 0
+    still_present: 1
+    total_added: 1
+  overall:
+    removed: 0
+    still_present: 2
+    total_modules_added: 2
+    transient: 0
+  versions_analyzed:
+  - v9.0.0
+  - 9.0.0
+  - v9.1.0
+summary:
+  permanently_added:
+    percentage: null
+    value: 2
+  removed:
+    percentage: null
+    value: 0
+  total_changes:
+    percentage: null
+    value: 2
+  transient:
+    percentage: null
+    value: 0

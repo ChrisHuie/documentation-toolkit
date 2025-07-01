@@ -1,0 +1,97 @@
+{
+  "items": [
+    {
+      "category": "Bid Adapters - Added",
+      "count": 1,
+      "modules": [
+        "fwssp"
+      ]
+    },
+    {
+      "category": "Real-Time Data Modules - Added",
+      "count": 1,
+      "modules": [
+        "adlane"
+      ]
+    }
+  ],
+  "metadata": {
+    "comparison_type": "Version",
+    "source_repo": "prebid-js",
+    "source_version": "v9.50.0",
+    "target_repo": "prebid-js",
+    "target_version": "v9.51.0"
+  },
+  "statistics": {
+    "by_category": [
+      {
+        "added": 0,
+        "category": "Analytics Adapters",
+        "net": 0,
+        "removed": 0
+      },
+      {
+        "added": 1,
+        "category": "Bid Adapters",
+        "net": 1,
+        "removed": 0
+      },
+      {
+        "added": 0,
+        "category": "Other Modules",
+        "net": 0,
+        "removed": 0
+      },
+      {
+        "added": 1,
+        "category": "Real-Time Data Modules",
+        "net": 1,
+        "removed": 0
+      },
+      {
+        "added": 0,
+        "category": "User ID Modules",
+        "net": 0,
+        "removed": 0
+      }
+    ],
+    "overall": {
+      "categories": 5,
+      "net_change": 2,
+      "source_total": 658,
+      "target_total": 660,
+      "total_changes": 2
+    },
+    "top_changes": [
+      {
+        "category": "Bid Adapters",
+        "changes": 1
+      },
+      {
+        "category": "Real-Time Data Modules",
+        "changes": 1
+      },
+      {
+        "category": "Analytics Adapters",
+        "changes": 0
+      },
+      {
+        "category": "Other Modules",
+        "changes": 0
+      },
+      {
+        "category": "User ID Modules",
+        "changes": 0
+      }
+    ]
+  },
+  "summary": {
+    "added": 2,
+    "categories": 5,
+    "net_change": 2,
+    "removed": 0,
+    "renamed": 0,
+    "source_total": 658,
+    "target_total": 660
+  }
+}

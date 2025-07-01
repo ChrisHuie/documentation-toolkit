@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "category": "Real-Time Data Modules - Added (still present)",
+      "count": 1,
+      "modules": [
+        "mobian (added in v9.1.0)"
+      ]
+    },
+    {
+      "category": "Bid Adapters - Added (still present)",
+      "count": 1,
+      "modules": [
+        "richaudience (added in v9.1.0)"
+      ]
+    }
+  ],
+  "metadata": {
+    "comparison_type": "Cumulative",
+    "source_repo": "prebid-js",
+    "source_version": "v9.0.0",
+    "target_repo": "prebid-js",
+    "target_version": "v9.1.0",
+    "versions_analyzed": 3
+  },
+  "statistics": {
+    "by_category": [
+      {
+        "category": "Real-Time Data Modules",
+        "removed": 0,
+        "still_present": 1,
+        "total_added": 1
+      },
+      {
+        "category": "Bid Adapters",
+        "removed": 0,
+        "still_present": 1,
+        "total_added": 1
+      }
+    ],
+    "overall": {
+      "removed": 0,
+      "still_present": 2,
+      "total_modules_added": 2,
+      "transient": 0
+    },
+    "versions_analyzed": [
+      "v9.0.0",
+      "9.0.0",
+      "v9.1.0"
+    ]
+  },
+  "summary": {
+    "permanently_added": 2,
+    "removed": 0,
+    "total_changes": 2,
+    "transient": 0
+  }
+}

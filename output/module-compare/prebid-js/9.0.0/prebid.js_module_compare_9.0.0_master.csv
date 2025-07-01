@@ -1,0 +1,96 @@
+category,module,added_in_version,removed_in_version,change_type
+Bid Adapters,360playvid,master,,added_still_present
+Bid Adapters,adgrid,master,,added_still_present
+Bid Adapters,adipolo,master,,added_still_present
+Bid Adapters,ads_interactive,master,,added_still_present
+Bid Adapters,advertising,master,,added_still_present
+Bid Adapters,adverxo,master,,added_still_present
+Bid Adapters,akcelo,master,,added_still_present
+Bid Adapters,bidtheatre,master,,added_still_present
+Bid Adapters,bitmedia,master,,added_still_present
+Bid Adapters,blockthrough,master,,added_still_present
+Bid Adapters,blue,master,,added_still_present
+Bid Adapters,bms,master,,added_still_present
+Bid Adapters,bmtm,master,,added_still_present
+Bid Adapters,brainx,master,,added_still_present
+Bid Adapters,cadent_aperture_mx,master,,added_still_present
+Bid Adapters,condorx,master,,added_still_present
+Bid Adapters,copper6ssp,master,,added_still_present
+Bid Adapters,dexerto,master,,added_still_present
+Bid Adapters,digitalMatter,master,,added_still_present
+Bid Adapters,djax,master,,added_still_present
+Bid Adapters,dochase,master,,added_still_present
+Bid Adapters,dvgroup,master,,added_still_present
+Bid Adapters,eclick,master,,added_still_present
+Bid Adapters,ehealthcaresolutions,master,,added_still_present
+Bid Adapters,epom_dsp,master,,added_still_present
+Bid Adapters,equativ,master,,added_still_present
+Bid Adapters,escalax,master,,added_still_present
+Bid Adapters,exco,master,,added_still_present
+Bid Adapters,fan,master,,added_still_present
+Bid Adapters,fwssp,master,,added_still_present
+Bid Adapters,growads,master,,added_still_present
+Bid Adapters,incrementx,master,,added_still_present
+Bid Adapters,inmobi,master,,added_still_present
+Bid Adapters,intenze,master,,added_still_present
+Bid Adapters,lane4,master,,added_still_present
+Bid Adapters,loopme,master,,added_still_present
+Bid Adapters,madsense,master,,added_still_present
+Bid Adapters,mediaConsortium,master,,added_still_present
+Bid Adapters,mediaeyes,master,,added_still_present
+Bid Adapters,michao,master,,added_still_present
+Bid Adapters,mobilefuse,master,,added_still_present
+Bid Adapters,mobkoi,master,,added_still_present
+Bid Adapters,nativery,master,,added_still_present
+Bid Adapters,nexverse,master,,added_still_present
+Bid Adapters,omnidex,master,,added_still_present
+Bid Adapters,opaMarketplace,master,,added_still_present
+Bid Adapters,oraki,master,,added_still_present
+Bid Adapters,ownadx,master,,added_still_present
+Bid Adapters,pinkLion,master,,added_still_present
+Bid Adapters,programmaticX,master,,added_still_present
+Bid Adapters,pubrise,master,,added_still_present
+Bid Adapters,pwbid,master,,added_still_present
+Bid Adapters,rediads,master,,added_still_present
+Bid Adapters,responsiveAds,master,,added_still_present
+Bid Adapters,richaudience,master,,added_still_present
+Bid Adapters,robusta,master,,added_still_present
+Bid Adapters,rocketlab,master,,added_still_present
+Bid Adapters,smoot,master,,added_still_present
+Bid Adapters,sonarads,master,,added_still_present
+Bid Adapters,ssp_geniee,master,,added_still_present
+Bid Adapters,stackadapt,master,,added_still_present
+Bid Adapters,startio,master,,added_still_present
+Bid Adapters,suim,master,,added_still_present
+Bid Adapters,tapnative,master,,added_still_present
+Bid Adapters,teal,master,,added_still_present
+Bid Adapters,uniquest,master,,added_still_present
+Bid Adapters,valuad,master,,added_still_present
+Bid Adapters,viant,master,,added_still_present
+Bid Adapters,vistars,master,,added_still_present
+Bid Adapters,zeta_global,master,,added_still_present
+Real-Time Data Modules,adlane,master,,added_still_present
+Real-Time Data Modules,chromeAi,master,,added_still_present
+Real-Time Data Modules,gamera,master,,added_still_present
+Real-Time Data Modules,humansecurity,master,,added_still_present
+Real-Time Data Modules,mobian,master,,added_still_present
+Real-Time Data Modules,nodalsAi,master,,added_still_present
+Real-Time Data Modules,overtone,master,,added_still_present
+Real-Time Data Modules,raveltech,master,,added_still_present
+Real-Time Data Modules,semantiq,master,,added_still_present
+Real-Time Data Modules,symitriDap,master,,added_still_present
+Real-Time Data Modules,wurfl,master,,added_still_present
+Analytics Adapters,advRed,master,,added_still_present
+Analytics Adapters,mobkoi,master,,added_still_present
+Analytics Adapters,symitri,master,,added_still_present
+Analytics Adapters,uniquest,master,,added_still_present
+Other Modules,_moduleMetadata,master,,added_still_present
+Other Modules,adplayerproVideoProvider,master,,added_still_present
+Other Modules,gamAdServerVideo,master,,added_still_present
+Other Modules,gamAdpod,master,,added_still_present
+Other Modules,storageControl,master,,added_still_present
+Other Modules,targetVideoAdServerVideo,master,,added_still_present
+User ID Modules,mobkoi,master,,added_still_present
+User ID Modules,openPair,master,,added_still_present
+User ID Modules,permutiveIdentityManager,master,,added_still_present
+User ID Modules,rewardedInterest,master,,added_still_present

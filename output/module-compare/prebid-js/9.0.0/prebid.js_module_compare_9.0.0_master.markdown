@@ -1,0 +1,148 @@
+# Cumulative Module Comparison: prebid-js (v9.0.0 → master)
+
+## Metadata
+- **Repository**: prebid-js
+- **From Version**: v9.0.0
+- **To Version**: master
+- **Comparison Type**: Cumulative
+- **Versions Analyzed**: 2
+
+## Summary
+- **Total Changes**: 95
+- **Permanently Added**: 95
+- **Removed**: 0
+- **Transient**: 0
+
+## Detailed Statistics
+
+### By Category
+
+| Category | Total Added | Still Present | Removed |
+|----------|-------------|---------------|---------|
+| Bid Adapters | 70 | 70 | 0 |
+| Real-Time Data Modules | 11 | 11 | 0 |
+| Analytics Adapters | 4 | 4 | 0 |
+| Other Modules | 6 | 6 | 0 |
+| User ID Modules | 4 | 4 | 0 |
+
+## Module Changes
+
+### Bid Adapters - Added (still present) (70 modules)
+
+| Module | Added In |
+|--------|----------|
+| 360playvid | master |
+| adgrid | master |
+| adipolo | master |
+| ads_interactive | master |
+| advertising | master |
+| adverxo | master |
+| akcelo | master |
+| bidtheatre | master |
+| bitmedia | master |
+| blockthrough | master |
+| blue | master |
+| bms | master |
+| bmtm | master |
+| brainx | master |
+| cadent_aperture_mx | master |
+| condorx | master |
+| copper6ssp | master |
+| dexerto | master |
+| digitalMatter | master |
+| djax | master |
+| dochase | master |
+| dvgroup | master |
+| eclick | master |
+| ehealthcaresolutions | master |
+| epom_dsp | master |
+| equativ | master |
+| escalax | master |
+| exco | master |
+| fan | master |
+| fwssp | master |
+| growads | master |
+| incrementx | master |
+| inmobi | master |
+| intenze | master |
+| lane4 | master |
+| loopme | master |
+| madsense | master |
+| mediaConsortium | master |
+| mediaeyes | master |
+| michao | master |
+| mobilefuse | master |
+| mobkoi | master |
+| nativery | master |
+| nexverse | master |
+| omnidex | master |
+| opaMarketplace | master |
+| oraki | master |
+| ownadx | master |
+| pinkLion | master |
+| programmaticX | master |
+| pubrise | master |
+| pwbid | master |
+| rediads | master |
+| responsiveAds | master |
+| richaudience | master |
+| robusta | master |
+| rocketlab | master |
+| smoot | master |
+| sonarads | master |
+| ssp_geniee | master |
+| stackadapt | master |
+| startio | master |
+| suim | master |
+| tapnative | master |
+| teal | master |
+| uniquest | master |
+| valuad | master |
+| viant | master |
+| vistars | master |
+| zeta_global | master |
+
+### Real-Time Data Modules - Added (still present) (11 modules)
+
+| Module | Added In |
+|--------|----------|
+| adlane | master |
+| chromeAi | master |
+| gamera | master |
+| humansecurity | master |
+| mobian | master |
+| nodalsAi | master |
+| overtone | master |
+| raveltech | master |
+| semantiq | master |
+| symitriDap | master |
+| wurfl | master |
+
+### Analytics Adapters - Added (still present) (4 modules)
+
+| Module | Added In |
+|--------|----------|
+| advRed | master |
+| mobkoi | master |
+| symitri | master |
+| uniquest | master |
+
+### Other Modules - Added (still present) (6 modules)
+
+| Module | Added In |
+|--------|----------|
+| _moduleMetadata | master |
+| adplayerproVideoProvider | master |
+| gamAdServerVideo | master |
+| gamAdpod | master |
+| storageControl | master |
+| targetVideoAdServerVideo | master |
+
+### User ID Modules - Added (still present) (4 modules)
+
+| Module | Added In |
+|--------|----------|
+| mobkoi | master |
+| openPair | master |
+| permutiveIdentityManager | master |
+| rewardedInterest | master |

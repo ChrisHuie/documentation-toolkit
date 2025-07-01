@@ -1,0 +1,140 @@
+Module Comparison: prebid-js (v8.0.0 → v9.0.0)
+==============================================
+
+Source: prebid-js @ v8.0.0
+Target: prebid-js @ v9.0.0
+Comparison Type: Version
+
+SUMMARY
+----------------------------------------
+Source Total: 490
+Target Total: 570
+Categories: 5
+Added: 106
+Removed: 26
+Renamed: 4
+Net Change: 80
+
+DETAILED STATISTICS
+----------------------------------------
+
+Changes by Category:
+Category                          Added  Removed      Net
+--------------------------------------------------------
+Analytics Adapters                    9        8        1
+Bid Adapters                         65       11       54
+Other Modules                        10        4        6
+Real-Time Data Modules               14        1       13
+User ID Modules                       8        2        6
+
+Categories with Most Changes:
+1. Bid Adapters: 76 changes
+2. Analytics Adapters: 17 changes
+3. Real-Time Data Modules: 15 changes
+4. Other Modules: 14 changes
+5. User ID Modules: 10 changes
+
+MODULE CHANGES
+----------------------------------------
+
+Analytics Adapters - Added (9 modules):
+  33across                                 AsteriobidPbm
+  agma                                     asteriobid
+  automatad                                eightPod
+  nobid                                    smartyads
+  yandex
+
+Analytics Adapters - Removed (8 modules):
+  adomik                                   eplanning
+  marsmedia                                prebidmanager
+  sigmoid                                  sonobi
+  sovrn                                    staq
+
+Bid Adapters - Added (65 modules):
+  a1Media                                  ad2iction
+  adbutler                                 adfusion
+  adspirit                                 adstir
+  ampliffy                                 anyclip
+  axis                                     bidmatic
+  blasto                                   brid
+  colombia                                 connatix
+  dailymotion                              docereeAdManager
+  driftpixel                               dsp_geniee
+  dxkulture                                edge226
+  eightPod                                 exads
+  flipp                                    freepass
+  illumin                                  iqx
+  jwplayer                                 kimberlite
+  kiviads                                  lm_kiviads
+  loyal                                    lucead
+  mediabrama                               mediaimpact
+  mgidX                                    oms
+  opsco                                    optable
+  pangle                                   performax
+  pgamssp                                  playdigo
+  preciso                                  programmatica
+  pstudio                                  pubCircle
+  publir                                   qt
+  r2b2                                     relay
+  relevatehealth                           rixengine
+  setupad                                  shinezRtb
+  silvermob                                sparteo
+  ssmas                                    stn
+  tagoras                                  themoneytizer
+  twistDigital                             viantOrtb
+  yahooAds                                 yieldlove
+  zmaticoo
+
+Bid Adapters - Removed (11 modules):
+  adbookpsp                                bizzclick
+  bluebillywig                             brightcom
+  ebdr                                     iqm
+  kulturemedia                             minutemediaplus
+  richaudience                             spotx
+  yahoossp
+
+Bid Adapters - Renamed (3 modules):
+  acuityAds → acuityads [substr]           brightcomSSP → BT [abbrev]
+  ras → ringieraxelspringer [abbrev]
+
+Other Modules - Added (10 modules):
+  anPspParamsConverter                     dfpAdpod
+  dsaControl                               gppControl_usnat
+  gppControl_usstates                      nativeRendering
+  paapi                                    paapiForGpt
+  tcfControl                               topLevelPaapi
+
+Other Modules - Removed (4 modules):
+  enrichmentFpdModule                      fledgeForGpt
+  gdprEnforcement                          utiqSystem
+
+Other Modules - Renamed (1 modules):
+  consentManagement → consentManagementTcf [substr]
+
+Real-Time Data Modules - Added (14 modules):
+  51Degrees                                a1Media
+  adagio                                   anonymised
+  azerionedge                              contxtful
+  dynamicAdBoost                           experian
+  geolocation                              goldfishAds
+  mediafilter                              pubxai
+  qortex                                   rayn
+
+Real-Time Data Modules - Removed (1 modules):
+  idWard
+
+User ID Modules - Added (8 modules):
+  cee                                      lmp
+  lockrAIM                                 mygaru
+  operaads                                 utiq
+  utiqMtp                                  yandex
+
+User ID Modules - Removed (2 modules):
+  britepool                                parrable
+
+Rename Detection Methods:
+  [CONFIRMED] - Verified via git history/PRs
+  [case] - Case change (e.g., camelCase to snake_case)
+  [abbrev] - Abbreviation detected
+  [substr] - Substring match
+  [similar] - Character similarity
