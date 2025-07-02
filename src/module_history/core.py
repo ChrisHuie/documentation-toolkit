@@ -139,7 +139,7 @@ class ModuleHistoryTracker:
             return (0, 0, 0)
 
     def _get_modules_for_version(
-        self, config: HistoryConfig, version: str
+        self, config: HistoryConfig, version: str, module_type: str | None = None
     ) -> dict[str, list[str]]:
         """Get modules for a specific version using configured parser."""
         try:
@@ -174,6 +174,19 @@ class ModuleHistoryTracker:
                 else:
                     # Fallback for parsers without categorization
                     parsed_modules = {"modules": data["files"]}
+
+                # Filter by module type if specified
+                if module_type and module_type in parsed_modules:
+                    filtered_modules = {module_type: parsed_modules[module_type]}
+                    self.logger.debug(
+                        f"Filtered to {module_type}: {len(filtered_modules[module_type])} modules"
+                    )
+                    return filtered_modules
+                elif module_type and module_type not in parsed_modules:
+                    self.logger.warning(
+                        f"Module type '{module_type}' not found in parsed modules"
+                    )
+                    return {}
 
                 self.logger.debug(
                     f"Fetched modules for {version}",
@@ -265,10 +278,212 @@ class ModuleHistoryTracker:
         }
         return corrections.get(module_name.lower(), module_name)
 
+    def _analyze_module_introduction_for_version(
+        self,
+        config: HistoryConfig,
+        current_modules: dict[str, list[str]],
+        version_cache: Any,
+        update_progress: Callable[[int, int, str], None],
+        module_type_filter: str | None = None,
+    ) -> dict[str, ModuleHistoryEntry]:
+        """
+        Analyze when each module in the current version was first introduced.
+
+        This method gets the modules from a specific version and then uses
+        existing history cache or GitHub API to find when each was first introduced.
+        """
+        module_history = {}
+
+        # Try to load existing history cache
+        history_cache_path = (
+            Path(__file__).parent.parent.parent
+            / "cache"
+            / "history"
+            / f"{config.repo_name.replace('/', '_')}_history.json"
+        )
+        existing_history = {}
+
+        if history_cache_path.exists():
+            try:
+                with open(history_cache_path) as f:
+                    existing_history = json.load(f)
+                self.logger.info(
+                    f"Loaded existing history cache with {len(existing_history)} entries"
+                )
+            except Exception as e:
+                self.logger.warning(f"Failed to load history cache: {e}")
+
+        # Process each module
+        total_processed = 0
+        for category, modules in current_modules.items():
+            for module_name in modules:
+                total_processed += 1
+                progress = 40 + (
+                    total_processed
+                    * 40
+                    // sum(len(m) for m in current_modules.values())
+                )
+                update_progress(progress, 100, f"Processing {module_name}")
+
+                file_path = self._guess_file_path(module_name, category, config)
+
+                # Check if we have this module in the existing history cache
+                first_commit_date = None
+                first_commit_sha = None
+
+                if module_name in existing_history:
+                    history_data = existing_history[module_name]
+                    first_commit_date = history_data.get("first_commit_date")
+                    first_commit_sha = history_data.get("first_commit_sha")
+
+                    # Find which version this commit date belongs to
+                    if first_commit_date:
+                        # Parse the date
+                        from datetime import datetime
+
+                        commit_date = datetime.fromisoformat(
+                            first_commit_date.replace("Z", "+00:00")
+                        )
+
+                        # Find the appropriate version based on date
+                        first_version = self._find_version_by_date(
+                            commit_date, version_cache
+                        )
+                        first_major = self._parse_version_number(first_version)[0]
+                    else:
+                        first_version = "master"
+                        first_major = 0
+                else:
+                    # Module not in cache, need to fetch from GitHub
+                    self.logger.debug(
+                        f"Module {module_name} not in history cache, fetching from GitHub"
+                    )
+
+                    first_commit_info = self._get_first_commit_for_file(
+                        config.repo_name, file_path
+                    )
+
+                    if first_commit_info:
+                        first_commit_date = (
+                            first_commit_info["date"].isoformat()
+                            if hasattr(first_commit_info["date"], "isoformat")
+                            else str(first_commit_info["date"])
+                        )
+                        first_commit_sha = first_commit_info["sha"]
+                        first_version = self._find_version_by_date(
+                            first_commit_info["date"], version_cache
+                        )
+                        first_major = self._parse_version_number(first_version)[0]
+                    else:
+                        first_version = "master"
+                        first_major = 0
+
+                entry = ModuleHistoryEntry(
+                    module_name=module_name,
+                    module_type=category,
+                    first_version=first_version,
+                    first_major_version=first_major,
+                    file_path=file_path,
+                    first_commit_date=first_commit_date,
+                    first_commit_sha=first_commit_sha,
+                )
+
+                module_history[module_name] = entry
+
+        return module_history
+
+    def _find_version_by_date(self, commit_date: Any, version_cache: Any) -> str:
+        """Find which version a commit belongs to based on its date."""
+        # This is a simplified implementation
+        # In reality, we'd need to check actual release dates
+        # For now, we'll just use major version boundaries
+
+        # If we have version cache with dates, use that
+        # Otherwise default to a simple heuristic
+
+        # Simple heuristic based on year
+        from datetime import datetime
+
+        if isinstance(commit_date, str):
+            commit_date = datetime.fromisoformat(commit_date.replace("Z", "+00:00"))
+
+        year = commit_date.year
+
+        # Rough mapping based on Prebid.js release history
+        if year < 2017:
+            return "v0.1.0"
+        elif year == 2017:
+            return "v1.0.0"
+        elif year == 2018:
+            return "v2.0.0"
+        elif year == 2019:
+            return "v3.0.0"
+        elif year == 2020:
+            return "v4.0.0"
+        elif year == 2021:
+            return "v5.0.0"
+        elif year == 2022:
+            return "v6.0.0"
+        elif year == 2023:
+            return "v7.0.0"
+        elif year == 2024:
+            return "v8.0.0"
+        else:
+            return "v9.0.0"
+
+    def _get_first_commit_for_file(self, repo_name: str, file_path: str) -> dict | None:
+        """Get the first commit that introduced a file."""
+        try:
+            # Apply rate limiting before making request
+            self.rate_limit_manager.wait_if_needed(tool_name="module_history")
+            
+            # Use GitHub API to get commit history for the file
+            repo = self.client.github.get_repo(repo_name)
+
+            # Get commits for this file, starting from the oldest
+            commits = repo.get_commits(path=file_path)
+
+            # Get the last page (oldest commits)
+            if commits.totalCount > 0:
+                # Navigate to last page to get oldest commit
+                last_page = (commits.totalCount - 1) // 30  # GitHub uses 30 per page
+                oldest_commits = commits.get_page(last_page)
+
+                if oldest_commits:
+                    first_commit = oldest_commits[-1]  # Last item is oldest
+                    return {
+                        "sha": first_commit.sha,
+                        "date": first_commit.commit.author.date,
+                        "message": first_commit.commit.message,
+                    }
+
+            return None
+
+        except Exception as e:
+            self.logger.warning(f"Failed to get commit history for {file_path}: {e}")
+            return None
+
+    def _find_version_for_commit(
+        self, commit_sha: str, commit_date: Any, version_cache: Any
+    ) -> str:
+        """Find which version a commit belongs to based on date."""
+        # For now, use a simple approach based on major versions
+        # In a more complete implementation, we'd check tags
+
+        for major in sorted(version_cache.major_versions.keys()):
+            version_info = version_cache.major_versions[major]
+            # This is a simplification - ideally we'd check actual release dates
+            # For now, just return the first version of the major version
+            return version_info.first_version
+
+        return "master"
+
     @trace_function("analyze_module_history", include_args=True)
     def analyze_module_history(
         self,
         repo_id: str,
+        version: str | None = None,
+        module_type: str | None = None,
         force_refresh: bool = False,
         progress_callback: Callable[[int, int, str], None] | None = None,
     ) -> ModuleHistoryResult:
@@ -277,6 +492,8 @@ class ModuleHistoryTracker:
 
         Args:
             repo_id: Repository ID from configuration
+            version: Specific version to analyze (default: master)
+            module_type: Filter to specific module type (e.g., 'analytics_adapters')
             force_refresh: Force refresh even if cache exists
             progress_callback: Optional progress callback
 
@@ -321,56 +538,45 @@ class ModuleHistoryTracker:
 
         update_progress(10, 100, "Version cache loaded")
 
-        # Collect modules for each major version
-        modules_by_version = {}
-        total_versions = len(version_cache.major_versions)
+        # Determine which version to analyze
+        target_version = version or config.version_override or "master"
 
-        for i, (major, version_info) in enumerate(
-            sorted(version_cache.major_versions.items())
-        ):
-            first_version = version_info.first_version
-            update_progress(
-                10 + (i * 60 // total_versions),
-                100,
-                f"Analyzing major version {major}",
-            )
+        update_progress(20, 100, f"Fetching modules from {target_version}")
 
-            # Rate limiting
-            time.sleep(0.5)
+        # Get modules from the specified version
+        current_modules = self._get_modules_for_version(
+            config, target_version, module_type
+        )
 
-            modules = self._get_modules_for_version(config, first_version)
-            if modules:
-                modules_by_version[first_version] = modules
-            else:
-                self.logger.warning(f"No modules found for version {first_version}")
-
-        if not modules_by_version:
+        if not current_modules:
             raise ModuleHistoryError(
-                f"No module data could be retrieved for {config.repo_name}"
+                f"No modules found in {target_version} for {config.repo_name}"
             )
 
-        update_progress(70, 100, "Analyzing module timeline")
+        self.logger.info(
+            f"Found {sum(len(m) for m in current_modules.values())} modules in {target_version}"
+        )
 
-        # Analyze introduction timeline
-        module_history = self._analyze_module_introduction(config, modules_by_version)
+        update_progress(40, 100, "Analyzing module introduction timeline")
+
+        # Now analyze when each current module was first introduced
+        # by checking historical versions
+        module_history = self._analyze_module_introduction_for_version(
+            config, current_modules, version_cache, update_progress, module_type
+        )
 
         update_progress(85, 100, "Saving cache")
 
         # Create and save cache
-        latest_version = max(
-            version_cache.major_versions.values(),
-            key=lambda v: self._parse_version_number(v.first_version),
-        ).last_version
-
         cache = HistoryCache(
             repo_name=config.repo_name,
-            last_analyzed_version=latest_version,
+            last_analyzed_version=target_version,
             modules=module_history,
             metadata={
                 "analysis_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "analyzed_versions": list(modules_by_version.keys()),
+                "analyzed_version": target_version,
                 "total_modules": len(module_history),
-                "version_count": len(modules_by_version),
+                "version_count": len(version_cache.major_versions),
                 "repo_id": repo_id,
             },
         )

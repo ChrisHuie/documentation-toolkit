@@ -349,4 +349,4 @@ Other project directories:
 - `OTEL_EXPORTER_OTLP_ENDPOINT` - OpenTelemetry endpoint for distributed tracing (optional)
 - `OTEL_SERVICE_NAME` - Service name for telemetry identification (optional)
 
-Last updated: 2025-07-01 13:00:21
+Last updated: 2025-07-02 10:18:33

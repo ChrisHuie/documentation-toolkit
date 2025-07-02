@@ -1,0 +1,463 @@
+{
+  "repo_name": "prebid/Prebid.js",
+  "last_analyzed_version": "master",
+  "modules": {
+    "33across": {
+      "module_name": "33across",
+      "module_type": "analytics_adapters",
+      "first_version": "v1.0.0",
+      "first_major_version": 1,
+      "file_path": "modules/33acrossAnalyticsAdapter.js",
+      "first_commit_date": "2017-11-09T15:19:43Z",
+      "first_commit_sha": "1895cb3ce6045199f5150f6b9820cdf4bc1c2a0d"
+    },
+    "AsteriobidPbm": {
+      "module_name": "AsteriobidPbm",
+      "module_type": "analytics_adapters",
+      "first_version": "v8.0.0",
+      "first_major_version": 8,
+      "file_path": "modules/AsteriobidPbmAnalyticsAdapter.js",
+      "first_commit_date": "2024-06-13T22:41:25+00:00",
+      "first_commit_sha": "c3a594d0718769b8f53b3e48abaa6c9eba4f4e35"
+    },
+    "adWMG": {
+      "module_name": "adWMG",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/adWMGAnalyticsAdapter.js",
+      "first_commit_date": "2020-12-09T13:40:23Z",
+      "first_commit_sha": "dd51f245abe600801703c70ca688fb55181a8d78"
+    },
+    "adagio": {
+      "module_name": "adagio",
+      "module_type": "analytics_adapters",
+      "first_version": "v2.0.0",
+      "first_major_version": 2,
+      "file_path": "modules/adagioAnalyticsAdapter.js",
+      "first_commit_date": "2018-10-01T21:58:02Z",
+      "first_commit_sha": "d81dfd2be314e115e2323bffcf8a79bdfe165d0d"
+    },
+    "adkernelAdn": {
+      "module_name": "adkernelAdn",
+      "module_type": "analytics_adapters",
+      "first_version": "v1.0.0",
+      "first_major_version": 1,
+      "file_path": "modules/adkernelAdnAnalyticsAdapter.js",
+      "first_commit_date": "2017-11-07T16:15:20Z",
+      "first_commit_sha": "a2b5cfa68fff56d72db649b63364239b6aec85f6"
+    },
+    "adloox": {
+      "module_name": "adloox",
+      "module_type": "analytics_adapters",
+      "first_version": "v5.0.0",
+      "first_major_version": 5,
+      "file_path": "modules/adlooxAnalyticsAdapter.js",
+      "first_commit_date": "2021-04-05T20:17:45+00:00",
+      "first_commit_sha": "dee10c361fb8ac52fc406b7a07b309e0d2bb3bfb"
+    },
+    "adnuntius": {
+      "module_name": "adnuntius",
+      "module_type": "analytics_adapters",
+      "first_version": "v9.0.0",
+      "first_major_version": 9,
+      "file_path": "modules/adnuntiusAnalyticsAdapter.js",
+      "first_commit_date": "2025-02-24T19:58:04+00:00",
+      "first_commit_sha": "882a9920700d5435a28cfe6e46be98c6d3c8a0af"
+    },
+    "advRed": {
+      "module_name": "advRed",
+      "module_type": "analytics_adapters",
+      "first_version": "v8.0.0",
+      "first_major_version": 8,
+      "file_path": "modules/advRedAnalyticsAdapter.js",
+      "first_commit_date": "2024-07-10T02:12:14+00:00",
+      "first_commit_sha": "4343dda4f8608e7e74965e9ba60f3661785e7ac2"
+    },
+    "adxcg": {
+      "module_name": "adxcg",
+      "module_type": "analytics_adapters",
+      "first_version": "v1.0.0",
+      "first_major_version": 1,
+      "file_path": "modules/adxcgAnalyticsAdapter.js",
+      "first_commit_date": "2017-10-03T17:04:37+00:00",
+      "first_commit_sha": "e508a649bb615ac952ddccf12c3f77b7117b8910"
+    },
+    "adxpremium": {
+      "module_name": "adxpremium",
+      "module_type": "analytics_adapters",
+      "first_version": "v3.0.0",
+      "first_major_version": 3,
+      "file_path": "modules/adxpremiumAnalyticsAdapter.js",
+      "first_commit_date": "2019-09-16T19:02:13+00:00",
+      "first_commit_sha": "c4564723ff127410935c4386a39b8d170bffc36e"
+    },
+    "agma": {
+      "module_name": "agma",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/agmaAnalyticsAdapter.js",
+      "first_commit_date": "2023-11-01T00:28:52+00:00",
+      "first_commit_sha": "9630925de7dac26ce22e544345e55efce591e9ac"
+    },
+    "appier": {
+      "module_name": "appier",
+      "module_type": "analytics_adapters",
+      "first_version": "v3.0.0",
+      "first_major_version": 3,
+      "file_path": "modules/appierAnalyticsAdapter.js",
+      "first_commit_date": "2019-06-10T16:08:41+00:00",
+      "first_commit_sha": "3cb73424b5b815ffa2d3cc43773f8397a53372fc"
+    },
+    "asteriobid": {
+      "module_name": "asteriobid",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/asteriobidAnalyticsAdapter.js",
+      "first_commit_date": "2023-11-16T20:57:07+00:00",
+      "first_commit_sha": "879b9be7f0284ce9d1958065ecaf981efe428106"
+    },
+    "ats": {
+      "module_name": "ats",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/atsAnalyticsAdapter.js",
+      "first_commit_date": "2020-03-05T10:48:15+00:00",
+      "first_commit_sha": "8fa8facc9cd86faadd6f081aa22ffc4abff08b3d"
+    },
+    "automatad": {
+      "module_name": "automatad",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/automatadAnalyticsAdapter.js",
+      "first_commit_date": "2023-07-31T11:01:49+00:00",
+      "first_commit_sha": "f74a4b34349d824653e4f28c40fba5f01a01e4af"
+    },
+    "browsi": {
+      "module_name": "browsi",
+      "module_type": "analytics_adapters",
+      "first_version": "v9.0.0",
+      "first_major_version": 9,
+      "file_path": "modules/browsiAnalyticsAdapter.js",
+      "first_commit_date": "2025-03-21T17:07:37+00:00",
+      "first_commit_sha": "6b3b1fbef201e0f6f232c6abc4b8ab8d9ee46219"
+    },
+    "byData": {
+      "module_name": "byData",
+      "module_type": "analytics_adapters",
+      "first_version": "v5.0.0",
+      "first_major_version": 5,
+      "file_path": "modules/byDataAnalyticsAdapter.js",
+      "first_commit_date": "2021-08-31T14:46:01+00:00",
+      "first_commit_sha": "ad8f4cc2ebf3e575b97746035498077ffccdfa3b"
+    },
+    "concert": {
+      "module_name": "concert",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/concertAnalyticsAdapter.js",
+      "first_commit_date": "2020-08-20T17:38:22Z",
+      "first_commit_sha": "b4c6b47bf90f48e6ffcab8f7e5aa287de0119a57"
+    },
+    "datablocks": {
+      "module_name": "datablocks",
+      "module_type": "analytics_adapters",
+      "first_version": "v3.0.0",
+      "first_major_version": 3,
+      "file_path": "modules/datablocksAnalyticsAdapter.js",
+      "first_commit_date": "2019-09-06T14:58:52+00:00",
+      "first_commit_sha": "f828b84f90eee79befa0266d2c562cbb6aebf120"
+    },
+    "eightPod": {
+      "module_name": "eightPod",
+      "module_type": "analytics_adapters",
+      "first_version": "v8.0.0",
+      "first_major_version": 8,
+      "file_path": "modules/eightPodAnalyticsAdapter.js",
+      "first_commit_date": "2024-05-02T14:38:22+00:00",
+      "first_commit_sha": "5cfae1b34bd28d41e89c29f005b7abebe26a8c48"
+    },
+    "finteza": {
+      "module_name": "finteza",
+      "module_type": "analytics_adapters",
+      "first_version": "v3.0.0",
+      "first_major_version": 3,
+      "file_path": "modules/fintezaAnalyticsAdapter.js",
+      "first_commit_date": "2019-03-15T18:37:07+00:00",
+      "first_commit_sha": "879789ba4e2c8ee988f4c368d3e1e94bc112e6ec"
+    },
+    "greenbids": {
+      "module_name": "greenbids",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/greenbidsAnalyticsAdapter.js",
+      "first_commit_date": "2023-04-04T17:17:16+00:00",
+      "first_commit_sha": "50c93ff5290044ed75bd5a1daacf74febe5bc07f"
+    },
+    "growthCode": {
+      "module_name": "growthCode",
+      "module_type": "analytics_adapters",
+      "first_version": "v6.0.0",
+      "first_major_version": 6,
+      "file_path": "modules/growthCodeAnalyticsAdapter.js",
+      "first_commit_date": "2022-11-28T16:22:00+00:00",
+      "first_commit_sha": "b0413b2225801317d0eb20040fc57c1cc25c9eaa"
+    },
+    "hadron": {
+      "module_name": "hadron",
+      "module_type": "analytics_adapters",
+      "first_version": "v6.0.0",
+      "first_major_version": 6,
+      "file_path": "modules/hadronAnalyticsAdapter.js",
+      "first_commit_date": "2022-05-12T01:41:38+00:00",
+      "first_commit_sha": "7a80c65135a5f53592c89ddcd9d57ff2a90c1a81"
+    },
+    "id5": {
+      "module_name": "id5",
+      "module_type": "analytics_adapters",
+      "first_version": "v5.0.0",
+      "first_major_version": 5,
+      "file_path": "modules/id5AnalyticsAdapter.js",
+      "first_commit_date": "2021-06-04T13:33:41+00:00",
+      "first_commit_sha": "3aeab296d95a517810d045db16fcf0a8f3a6e061"
+    },
+    "intentIq": {
+      "module_name": "intentIq",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/intentIqAnalyticsAdapter.js",
+      "first_commit_date": "2023-03-30T15:33:52+00:00",
+      "first_commit_sha": "67184b035a46e042cd86049f2b5fec70bfce8cdf"
+    },
+    "invisibly": {
+      "module_name": "invisibly",
+      "module_type": "analytics_adapters",
+      "first_version": "v3.0.0",
+      "first_major_version": 3,
+      "file_path": "modules/invisiblyAnalyticsAdapter.js",
+      "first_commit_date": "2019-12-02T16:51:17+00:00",
+      "first_commit_sha": "c4d9d07369754885718b41e5654e3bd755fe74e3"
+    },
+    "kargo": {
+      "module_name": "kargo",
+      "module_type": "analytics_adapters",
+      "first_version": "v2.0.0",
+      "first_major_version": 2,
+      "file_path": "modules/kargoAnalyticsAdapter.js",
+      "first_commit_date": "2018-08-13T17:54:18+00:00",
+      "first_commit_sha": "aa2860095b210f982013c720cd245424c0662dcb"
+    },
+    "liveIntent": {
+      "module_name": "liveIntent",
+      "module_type": "analytics_adapters",
+      "first_version": "v6.0.0",
+      "first_major_version": 6,
+      "file_path": "modules/liveIntentAnalyticsAdapter.js",
+      "first_commit_date": "2022-09-12T08:16:11+00:00",
+      "first_commit_sha": "cac090277da07226b14feda599d272bcd302f81b"
+    },
+    "livewrapped": {
+      "module_name": "livewrapped",
+      "module_type": "analytics_adapters",
+      "first_version": "v2.0.0",
+      "first_major_version": 2,
+      "file_path": "modules/livewrappedAnalyticsAdapter.js",
+      "first_commit_date": "2018-10-09T14:50:54+00:00",
+      "first_commit_sha": "95ab4a05e1b24afbc7440cc34db0719fde08b726"
+    },
+    "magnite": {
+      "module_name": "magnite",
+      "module_type": "analytics_adapters",
+      "first_version": "v6.0.0",
+      "first_major_version": 6,
+      "file_path": "modules/magniteAnalyticsAdapter.js",
+      "first_commit_date": "2022-10-12T19:08:16+00:00",
+      "first_commit_sha": "c0f8bc9248435398809a675b11f6ef556101c7d7"
+    },
+    "malltv": {
+      "module_name": "malltv",
+      "module_type": "analytics_adapters",
+      "first_version": "v5.0.0",
+      "first_major_version": 5,
+      "file_path": "modules/malltvAnalyticsAdapter.js",
+      "first_commit_date": "2021-08-17T13:45:53+00:00",
+      "first_commit_sha": "2eb70e14febed98a9261dff5e151f9be106efcd5"
+    },
+    "medianet": {
+      "module_name": "medianet",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/medianetAnalyticsAdapter.js",
+      "first_commit_date": "2020-03-26T04:54:18+00:00",
+      "first_commit_sha": "7c456268913024c77b72aa0d0b0230b0d509aba4"
+    },
+    "mobkoi": {
+      "module_name": "mobkoi",
+      "module_type": "analytics_adapters",
+      "first_version": "v9.0.0",
+      "first_major_version": 9,
+      "file_path": "modules/mobkoiAnalyticsAdapter.js",
+      "first_commit_date": "2025-02-24T19:49:04+00:00",
+      "first_commit_sha": "f86d267a655bee722cac6bafbcc9ae6f35efa305"
+    },
+    "nobid": {
+      "module_name": "nobid",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/nobidAnalyticsAdapter.js",
+      "first_commit_date": "2023-08-25T20:09:16+00:00",
+      "first_commit_sha": "45762079e5fa594ef4cc796c3c469d5eb45630a9"
+    },
+    "oolo": {
+      "module_name": "oolo",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/ooloAnalyticsAdapter.js",
+      "first_commit_date": "2020-10-15T10:10:33+00:00",
+      "first_commit_sha": "f545a56b63b9e5138f08d6c2909a7981d24d2400"
+    },
+    "optimon": {
+      "module_name": "optimon",
+      "module_type": "analytics_adapters",
+      "first_version": "v5.0.0",
+      "first_major_version": 5,
+      "file_path": "modules/optimonAnalyticsAdapter.js",
+      "first_commit_date": "2021-03-24T17:21:23+00:00",
+      "first_commit_sha": "f03e95a736a7289d8d11d79d9d9c91212136ec49"
+    },
+    "oxxion": {
+      "module_name": "oxxion",
+      "module_type": "analytics_adapters",
+      "first_version": "v7.0.0",
+      "first_major_version": 7,
+      "file_path": "modules/oxxionAnalyticsAdapter.js",
+      "first_commit_date": "2023-02-15T19:58:26+00:00",
+      "first_commit_sha": "23fe08397668f252c774213a3be14617264a4e8d"
+    },
+    "pianoDmp": {
+      "module_name": "pianoDmp",
+      "module_type": "analytics_adapters",
+      "first_version": "v6.0.0",
+      "first_major_version": 6,
+      "file_path": "modules/pianoDmpAnalyticsAdapter.js",
+      "first_commit_date": "2022-06-10T15:15:46+00:00",
+      "first_commit_sha": "5584057e96fd073306c91bd8f99b12780a6e1046"
+    },
+    "pubmatic": {
+      "module_name": "pubmatic",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/pubmaticAnalyticsAdapter.js",
+      "first_commit_date": "2020-03-30T17:35:20+00:00",
+      "first_commit_sha": "4aca8e857d01e48310532106699e581fe36ffeaa"
+    },
+    "pubperf": {
+      "module_name": "pubperf",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/pubperfAnalyticsAdapter.js",
+      "first_commit_date": "2020-08-03T04:46:48+00:00",
+      "first_commit_sha": "a0cc8e6c8be3b1ac01b1129365a669292fc2a797"
+    },
+    "pubstack": {
+      "module_name": "pubstack",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/pubstackAnalyticsAdapter.js",
+      "first_commit_date": "2020-04-27T17:06:27+00:00",
+      "first_commit_sha": "0eeaccb41b42b2bd6a5e478a5d63dc8bc0c7ac03"
+    },
+    "pubwise": {
+      "module_name": "pubwise",
+      "module_type": "analytics_adapters",
+      "first_version": "v1.0.0",
+      "first_major_version": 1,
+      "file_path": "modules/pubwiseAnalyticsAdapter.js",
+      "first_commit_date": "2017-06-26T21:45:30+00:00",
+      "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305"
+    },
+    "pubxai": {
+      "module_name": "pubxai",
+      "module_type": "analytics_adapters",
+      "first_version": "v4.0.0",
+      "first_major_version": 4,
+      "file_path": "modules/pubxaiAnalyticsAdapter.js",
+      "first_commit_date": "2020-11-19T08:33:00+00:00",
+      "first_commit_sha": "d5a08ce227b94f79d98c25a0adf0c10e4436fc17"
+    },
+    "pulsepoint": {
+      "module_name": "pulsepoint",
+      "module_type": "analytics_adapters",
+      "first_version": "v1.0.0",
+      "first_major_version": 1,
+      "file_path": "modules/pulsepointAnalyticsAdapter.js",
+      "first_commit_date": "2017-06-26T21:45:30+00:00",
+      "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305"
+    },
+    "r2b2": {
+      "module_name": "r2b2",
+      "module_type": "analytics_adapters",
+      "first_version": "v9.0.0",
+      "first_major_version": 9,
+      "file_path": "modules/r2b2AnalyticsAdapter.js",
+      "first_commit_date": "2025-02-08T15:41:07+00:00",
+      "first_commit_sha": "f298144593650ba658e8ad6690f8e5b09c0a2f71"
+    },
+    "relevant": {
+      "module_name": "relevant",
+      "module_type": "analytics_adapters",
+      "first_version": "v5.0.0",
+      "first_major_version": 5,
+      "file_path": "modules/relevantAnalyticsAdapter.js",
+      "first_commit_date": "2021-01-28T16:27:43+00:00",
+      "first_commit_sha": "524efda0ec579d82ee29848b77bd829aead76107"
+    },
+    "rivr": {
+      "module_name": "rivr",
+      "module_type": "analytics_adapters",
+      "first_version": "v2.0.0",
+      "first_major_version": 2,
+      "file_path": "modules/rivrAnalyticsAdapter.js",
+      "first_commit_date": "2018-11-05T15:23:40+00:00",
+      "first_commit_sha": "432c656fb59765702be79eec473052a0b09c3d75"
+    },
+    "roxot": {
+      "module_name": "roxot",
+      "module_type": "analytics_adapters",
+      "first_version": "v1.0.0",
+      "first_major_version": 1,
+      "file_path": "modules/roxotAnalyticsAdapter.js",
+      "first_commit_date": "2017-06-26T21:45:30+00:00",
+      "first_commit_sha": "f6449d6e73cc61dedc0a4d017eb226e2e00fa305"
+    },
+    "scaleable": {
+      "module_name": "scaleable",
+      "module_type": "analytics_adapters",
+      "first_version": "v3.0.0",
+      "first_major_version": 3,
+      "file_path": "modules/scaleableAnalyticsAdapter.js",
+      "first_commit_date": "2019-06-13T18:00:16+00:00",
+      "first_commit_sha": "b617aa3e4153c0bd1c9d8db80987cd3972501560"
+    }
+  },
+  "metadata": {
+    "analysis_date": "2025-07-02 10:42:54",
+    "analyzed_version": "master",
+    "total_modules": 50,
+    "version_count": 10,
+    "repo_id": "prebid-js"
+  }
+}

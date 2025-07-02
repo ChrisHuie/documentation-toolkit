@@ -3,11 +3,15 @@ Main CLI entry point for module history analysis.
 """
 
 import click
+from dotenv import load_dotenv
 
 from ..shared_utilities import cleanup_active_tools, get_logger
 from ..shared_utilities.telemetry import trace_function
 from .core import ModuleHistoryError, ModuleHistoryTracker
 from .output_formatter import ModuleHistoryFormatter
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 class ProgressIndicator:
@@ -63,6 +67,10 @@ class ProgressIndicator:
     help="Filter by module type",
 )
 @click.option(
+    "--version",
+    help="Version to analyze (e.g., v9.51.0, master). Default: master",
+)
+@click.option(
     "--major-version",
     type=int,
     help="Filter by major version (e.g., 2 for v2.x.x)",
@@ -110,6 +118,7 @@ def main(
     repo: str,
     output_format: str,
     module_type: str | None,
+    version: str | None,
     major_version: int | None,
     output_file: str | None,
     force_refresh: bool,
@@ -203,6 +212,8 @@ def main(
         try:
             result = tracker.analyze_module_history(
                 repo_id=repo,
+                version=version,
+                module_type=module_type,
                 force_refresh=force_refresh,
                 progress_callback=progress.update,
             )

@@ -238,12 +238,39 @@ class GitHubClient:
             try:
                 with open(checkpoint_file) as f:
                     checkpoint_data = json.load(f)
-                    files_data = checkpoint_data.get("files_data", {})
+                    
+                    # Handle both dict and array formats for compatibility
+                    files_data_raw = checkpoint_data.get("files_data", {})
+                    
+                    if isinstance(files_data_raw, list):
+                        # Convert array format to dict format
+                        files_data = {}
+                        for item in files_data_raw:
+                            if isinstance(item, dict) and "path" in item:
+                                files_data[item["path"]] = ""
+                        self.logger.warning(
+                            "Converted checkpoint from array to dict format",
+                            num_files=len(files_data)
+                        )
+                    elif isinstance(files_data_raw, dict):
+                        files_data = files_data_raw
+                    else:
+                        self.logger.error(
+                            "Unknown checkpoint format",
+                            data_type=type(files_data_raw).__name__
+                        )
+                        files_data = {}
+                    
                     processed_files = set(checkpoint_data.get("processed_files", []))
+                    # If processed_files is empty but files_data exists, rebuild it
+                    if not processed_files and files_data:
+                        processed_files = set(files_data.keys())
+                        
                     print(
                         f"Loaded checkpoint with {len(files_data)} files already processed"
                     )
             except Exception as e:
+                self.logger.error("Failed to load checkpoint", error=str(e))
                 print(f"Warning: Could not load checkpoint: {e}")
                 files_data = {}
                 processed_files = set()
@@ -480,7 +507,7 @@ class GitHubClient:
                 return
 
             if dir_path in processed_dirs:
-                print(f"  Skipping already processed directory: {dir_path}")
+                self.logger.debug(f"  Skipping already processed directory: {dir_path}")
                 return
 
             try:
