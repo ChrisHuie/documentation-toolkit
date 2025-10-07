@@ -100,7 +100,7 @@ class MediaTypeExtractor:
         This looks for various patterns indicating media type support:
         1. supportedMediaTypes array
         2. mediaTypes imports from src/mediaTypes.js
-        3. References to BANNER, VIDEO, NATIVE constants
+        3. References to BANNER, VIDEO, NATIVE, AUDIO constants
         4. isBidRequestValid or buildRequests logic checking mediaTypes
         """
         media_types = set()
@@ -110,13 +110,15 @@ class MediaTypeExtractor:
         match = re.search(supported_pattern, code, re.DOTALL)
         if match:
             types_str = match.group(1)
-            # Extract BANNER, VIDEO, NATIVE from the array
+            # Extract BANNER, VIDEO, NATIVE, AUDIO from the array
             if "BANNER" in types_str:
                 media_types.add("banner")
             if "VIDEO" in types_str:
                 media_types.add("video")
             if "NATIVE" in types_str:
                 media_types.add("native")
+            if "AUDIO" in types_str:
+                media_types.add("audio")
 
         # Pattern 2: Import statements from mediaTypes
         import_pattern = (
@@ -131,14 +133,18 @@ class MediaTypeExtractor:
                 media_types.add("video")
             if "NATIVE" in imports:
                 media_types.add("native")
+            if "AUDIO" in imports:
+                media_types.add("audio")
 
-        # Pattern 3: Direct references to mediaTypes.banner/video/native
+        # Pattern 3: Direct references to mediaTypes.banner/video/native/audio
         if re.search(r"mediaTypes\s*\.\s*banner", code, re.IGNORECASE):
             media_types.add("banner")
         if re.search(r"mediaTypes\s*\.\s*video", code, re.IGNORECASE):
             media_types.add("video")
         if re.search(r"mediaTypes\s*\.\s*native", code, re.IGNORECASE):
             media_types.add("native")
+        if re.search(r"mediaTypes\s*\.\s*audio", code, re.IGNORECASE):
+            media_types.add("audio")
 
         # Pattern 4: Check for specific media type handling in isBidRequestValid
         if re.search(
@@ -153,6 +159,10 @@ class MediaTypeExtractor:
             r"isBidRequestValid.*?mediaTypes.*?native", code, re.DOTALL | re.IGNORECASE
         ):
             media_types.add("native")
+        if re.search(
+            r"isBidRequestValid.*?mediaTypes.*?audio", code, re.DOTALL | re.IGNORECASE
+        ):
+            media_types.add("audio")
 
         # Pattern 5: Check spec object for supportedMediaTypes
         spec_pattern = (
@@ -167,6 +177,8 @@ class MediaTypeExtractor:
                 media_types.add("video")
             if "NATIVE" in spec_content:
                 media_types.add("native")
+            if "AUDIO" in spec_content:
+                media_types.add("audio")
 
         # If no explicit media types found but adapter exists, check for banner as default
         # Many older adapters only support banner without explicitly declaring it
@@ -181,7 +193,7 @@ class MediaTypeExtractor:
         """Generate summary statistics of media type usage."""
         summary: dict[str, Any] = {
             "total_adapters": len(adapters_data),
-            "by_media_type": {"banner": 0, "video": 0, "native": 0},
+            "by_media_type": {"banner": 0, "video": 0, "native": 0, "audio": 0},
             "by_combination": {},
         }
 

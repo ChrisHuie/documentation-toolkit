@@ -2,6 +2,8 @@
 Media type specific output formatting
 """
 
+import csv
+import io
 from typing import Any
 
 from ..shared_utilities.data_normalizer import DataNormalizer
@@ -26,6 +28,18 @@ class MediaTypeOutputFormatter(ReportFormatter):
         # Use ANSI bold for adapter name
         return f"\033[1m{name}\033[0m: {media_types_str}"
 
+    def _format_csv(self, data: dict[str, Any], **kwargs) -> str:
+        """Format data as clean CSV (no headers or summary statistics)."""
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        # Write items only - no metadata, no summary
+        items_key = self._get_items_key(data)
+        if items_key and data.get(items_key):
+            self._write_csv_items(writer, data[items_key])
+
+        return output.getvalue()
+
     def _write_csv_items(self, writer, items: dict[str, Any]) -> None:
         """Write adapter data to CSV with media type columns."""
         # Write headers
@@ -35,6 +49,7 @@ class MediaTypeOutputFormatter(ReportFormatter):
                 "Banner",
                 "Video",
                 "Native",
+                "Audio",
                 "File Path",
             ]
         )
@@ -47,6 +62,7 @@ class MediaTypeOutputFormatter(ReportFormatter):
             has_banner = "Yes" if "banner" in media_types else "No"
             has_video = "Yes" if "video" in media_types else "No"
             has_native = "Yes" if "native" in media_types else "No"
+            has_audio = "Yes" if "audio" in media_types else "No"
 
             writer.writerow(
                 [
@@ -54,6 +70,7 @@ class MediaTypeOutputFormatter(ReportFormatter):
                     has_banner,
                     has_video,
                     has_native,
+                    has_audio,
                     adapter_data.get("file", ""),
                 ]
             )
